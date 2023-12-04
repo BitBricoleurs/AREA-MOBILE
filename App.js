@@ -1,35 +1,48 @@
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useFonts, Outfit_500Medium } from '@expo-google-fonts/outfit';
-import MyText from './utils/MyText';
+import * as SplashScreen from 'expo-splash-screen';
+
+import { AuthContextProvider } from './contexts/AuthContext';
+import MyText from './utils/myText';
+import {dark} from './utils/colors';
+import Navigation from './screens/Navigation';
+import CustomSplashScreen from './screens/splashscreen/CustomSplashScreen';
+
 
 export default function App() {
-  [loaded] = useFonts({
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [fontsLoaded] = useFonts({
     Outfit_500Medium,
   });
 
+  useEffect(() => {
+    async function prepare() {
+      try {
+        if (fontsLoaded) {
+          setAppIsReady(true);
+        }
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+        }
+      }
+    }
+
+    prepare();
+  }, [fontsLoaded]);
+
+  if (!appIsReady || !fontsLoaded) {
+    return <CustomSplashScreen />;
+  }
+
   return (
-    <>
-      {loaded ? (
-        <View style={styles.container}>
-          <MyText>Open up App.js to start working on your app!</MyText>
-          <StatusBar style="auto" />
-        </View>
-      ) : (
-        <View>
-          <Text>Loading...</Text>
-        </View>
-      )}
-    </>
+    <AuthContextProvider>
+      <Navigation />
     
+    </AuthContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
