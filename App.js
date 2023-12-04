@@ -1,12 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFonts, Outfit_500Medium } from '@expo-google-fonts/outfit';
+import MyText from './utils/MyText';
 
 export default function App() {
+  [loaded] = useFonts({
+    Outfit_500Medium,
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      {loaded ? (
+        <View style={styles.container}>
+          <MyText>Open up App.js to start working on your app!</MyText>
+          <StatusBar style="auto" />
+        </View>
+      ) : (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      )}
+    </>
+    
   );
 }
 
