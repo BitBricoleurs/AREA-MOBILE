@@ -17,7 +17,7 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const ChoiceEntry = ({ data }) => {
   const { trigger, setTrigger } = useWorkflowContext();
-  const [selectedChoice, setSelectedChoice] = useState(0);
+  const [selectedChoice, setSelectedChoice] = useState(1);
 
   const displayRevealComponent = () => {
     switch (data?.options[selectedChoice]?.reveal) {
@@ -31,34 +31,43 @@ const ChoiceEntry = ({ data }) => {
   };
 
   const handleChoicePress = (index) => {
-    if (index === selectedChoice) {
+    let newIndex = index;
+    console.log("handleChoicePress", index);
+    if (data.required === "true" && index === selectedChoice) {
       return;
+    } else if (data.required === "multi" && index === selectedChoice) {
+      delete trigger.params[data.variableName];
+      newIndex = null;
     }
     const variableNames = data.options.map((option) => option.variableName);
-
-    const newParams = Object.keys(trigger.params).reduce((acc, key) => {
+    const triggerParams = trigger.params || {};
+    const newParams = Object.keys(triggerParams).reduce((acc, key) => {
       if (
         !variableNames.includes(key) ||
         key === data.options[index].variableName
       ) {
-        acc[key] = trigger.params[key];
+        acc[key] = trigger?.params[key];
       }
       return acc;
     }, {});
 
-    if (data.options[index].variableName) {
-      newParams[data.options[index].variableName] =
-        data.options[index].label.toLowerCase();
+    if (
+      data.required === "true" ||
+      (data.required === "multi" && index !== selectedChoice)
+    ) {
+      if (data.options[index].variableName) {
+        newParams[data.options[index].variableName] =
+          data.options[index].label.toLowerCase();
+      }
+
+      newParams[data.variableName] = data.options[index].label.toLowerCase();
     }
-
-    newParams[data.variableName] = data.options[index].label.toLowerCase();
-
     setTrigger({
       ...trigger,
       params: newParams,
     });
 
-    setSelectedChoice(index);
+    setSelectedChoice(newIndex);
   };
 
   useEffect(() => {
