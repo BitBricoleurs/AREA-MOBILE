@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import DateTimePicker from "react-native-ui-datepicker";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 
 import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
@@ -125,6 +118,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
+    marginTop: 10,
+    marginBottom: 6,
   },
   sectionTitle: {
     fontSize: 16,

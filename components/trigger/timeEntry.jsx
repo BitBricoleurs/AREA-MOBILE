@@ -89,6 +89,10 @@ const TimeEntry = ({ data }) => {
 export default TimeEntry;
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+    marginBottom: 6,
+  },
   timeContainer: {
     flexDirection: "row",
     alignItems: "center",

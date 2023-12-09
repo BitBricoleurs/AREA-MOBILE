@@ -1,11 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { useState } from "react";
+import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
@@ -16,7 +10,6 @@ const TextArrayEntry = ({ data }) => {
   const { trigger, setTrigger } = useWorkflowContext();
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
-  const inputHeight = useRef(new Animated.Value(0)).current;
 
   const updateTriggerParams = (newEntries) => {
     const emails = newEntries.filter((entry) => entry.trim() !== "");
@@ -82,14 +75,6 @@ const TextArrayEntry = ({ data }) => {
     updateTriggerParams(updatedEntries);
   };
 
-  useEffect(() => {
-    Animated.timing(inputHeight, {
-      toValue: selected ? 48 : 0,
-      duration: 250,
-      useNativeDriver: false,
-    }).start();
-  }, [selected, inputHeight]);
-
   return (
     <View style={styles.container}>
       {data?.sectionTitle && (
@@ -147,7 +132,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: dark.secondary,
     borderRadius: 10,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 6,
   },
   inputContainer: {
     justifyContent: "space-between",

@@ -241,57 +241,338 @@
     ]
   },
   {
-    "serviceId": "3",
-    "name": "Files",
-    "eg": "When a file is uploaded",
-    "icon": "file-o"
+    "name": "Jira",
+    "triggers": [
+      {
+        "name": "Ticket",
+        "eg": "When a ticket is updated",
+        "icon": "file",
+        "sections": [
+          {
+            "name": "choice",
+            "sectionTitle": "",
+            "type": "Single",
+            "label": "",
+            "variableName": "ticket",
+            "required": "multi",
+            "options": [
+              {
+                "label": "Created",
+                "reveal": ""
+              },
+              {
+                "label": "Edited",
+                "reveal": ""
+              },
+              {
+                "label": "Deleted",
+                "reveal": ""
+              }
+            ]
+          },
+          {
+            "name": "choiceTextEntry",
+            "sectionTitle": "Status",
+            "type": "text",
+            "label": "Updated",
+            "placeholder": "Name",
+            "variableName": "status",
+            "required": "multi"
+          },
+          {
+            "name": "choiceTextEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Commented",
+            "placeholder": "Anything",
+            "variableName": "commented",
+            "required": "multi"
+          }
+        ],
+        "exposes": [
+          {
+            "name": ""
+          }
+        ]
+      }
+    ]
   },
   {
-    "serviceId": "4",
-    "name": "Ticket",
-    "eg": "When a new ticket is added",
-    "icon": "ticket"
+    "name": "Github",
+    "triggers": [
+      {
+        "name": "Commit",
+        "eg": "When a new commit is pushed",
+        "icon": "commit",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "Repository",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "repository",
+            "required": "true"
+          },
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Author",
+            "placeholder": "email",
+            "variableName": "authors",
+            "required": "false"
+          },
+          {
+            "name": "choiceTextEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Content contains",
+            "placeholder": "Anything",
+            "variableName": "content",
+            "required": "false"
+          }
+        ]
+      },
+      {
+        "name": "Pull Request",
+        "eg": "When a new PR is opened",
+        "icon": "pull-request",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "Repository",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "repository",
+            "required": "true"
+          },
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Author",
+            "placeholder": "email",
+            "variableName": "authors",
+            "required": "false"
+          },
+          {
+            "name": "choiceTextEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Content contains",
+            "placeholder": "Anything",
+            "variableName": "content",
+            "required": "false"
+          },
+          {
+            "name": "choice",
+            "sectionTitle": "",
+            "type": "Single",
+            "label": "",
+            "variableName": "pr",
+            "required": "true",
+            "options": [
+              {
+                "label": "Opened",
+                "reveal": ""
+              },
+              {
+                "label": "Closed",
+                "reveal": ""
+              },
+              {
+                "label": "Merged",
+                "reveal": ""
+              },
+              {
+                "label": "Drafted",
+                "reveal": ""
+              },
+              {
+                "label": "Assigned",
+                "reveal": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Issue",
+        "eg": "When a new issue is created",
+        "icon": "issue",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "Repository",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "repository",
+            "required": "true"
+          },
+          {
+            "name": "textEntry",
+            "sectionTitle": "Issue",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "issue",
+            "required": "false"
+          },
+          {
+            "name": "choice",
+            "sectionTitle": "",
+            "type": "Single",
+            "label": "",
+            "variableName": "issue",
+            "required": "true",
+            "options": [
+              {
+                "label": "Created",
+                "reveal": ""
+              },
+              {
+                "label": "Edited",
+                "reveal": ""
+              },
+              {
+                "label": "Deleted",
+                "reveal": ""
+              },
+              {
+                "label": "Commented",
+                "reveal": ""
+              },
+              {
+                "label": "Assigned",
+                "reveal": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Star",
+        "eg": "When your repo is starred",
+        "icon": "star",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "Repository",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "repository",
+            "required": "true"
+          }
+        ]
+      }
+    ]
   },
   {
-    "serviceId": "5",
-    "name": "Commit",
-    "eg": "When a new commit is pushed",
-    "icon": "git-square"
+    "name": "Jenkins",
+    "triggers": [
+      {
+        "name": "Build",
+        "eg": "When a build is completed",
+        "icon": "player",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "Job path",
+            "type": "text",
+            "label": "",
+            "placeholder": "Url",
+            "variableName": "job",
+            "required": "true"
+          },
+          {
+            "name": "choice",
+            "sectionTitle": "",
+            "type": "Single",
+            "label": "",
+            "variableName": "build",
+            "required": "true",
+            "options": [
+              {
+                "label": "Started",
+                "reveal": ""
+              },
+              {
+                "label": "Ends",
+                "reveal": ""
+              },
+              {
+                "label": "Succeeds",
+                "reveal": ""
+              },
+              {
+                "label": "Fails",
+                "reveal": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Server status",
+        "eg": "When the server is down",
+        "icon": "globe",
+        "sections": {
+          "name": "choice",
+          "sectionTitle": "",
+          "type": "Single",
+          "label": "",
+          "variableName": "status",
+          "required": "true",
+          "options": [
+            {
+              "label": "Up",
+              "reveal": ""
+            },
+            {
+              "label": "Down",
+              "reveal": ""
+            }
+          ]
+        }
+      }
+    ]
   },
   {
-    "serviceId": "5",
-    "name": "Pull Request",
-    "eg": "When a new PR is opened",
-    "icon": "code-fork"
-  },
-  {
-    "serviceId": "5",
-    "name": "Issue",
-    "eg": "When a new issue is created",
-    "icon": "exclamation-circle"
-  },
-  {
-    "serviceId": "5",
-    "name": "Star",
-    "eg": "When your repo is starred",
-    "icon": "star-o"
-  },
-  {
-    "serviceId": "6",
-    "name": "Build",
-    "eg": "When a build is completed",
-    "icon": "cogs"
-  },
-  {
-    "serviceId": "6",
-    "name": "Server Status",
-    "eg": "When the server is down",
-    "icon": "server"
-  },
-  {
-    "serviceId": "7",
-    "name": "Health",
-    "eg": "When Azure’s services are back up",
-    "icon": "heartbeat"
+    "name": "Azure",
+    "triggers": [
+      {
+        "name": "Health",
+        "eg": "When the server is down",
+        "icon": "heart",
+        "sections": [
+          {
+            "name": "choice",
+            "sectionTitle": "Server status",
+            "type": "Single",
+            "label": "",
+            "variableName": "blob",
+            "required": "true",
+            "options": [
+              {
+                "label": "Good",
+                "reveal": ""
+              },
+              {
+                "label": "Warning",
+                "reveal": ""
+              },
+              {
+                "label": "Critical",
+                "reveal": ""
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

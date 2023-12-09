@@ -16,7 +16,7 @@ import { dark } from "../../utils/colors";
 
 import TimeEntry from "../../components/trigger/timeEntry";
 import ChoiceEntry from "../../components/trigger/choiceEntry";
-import ChoiceTextEntry from "../../components/trigger/textEntry";
+import ChoiceTextEntry from "../../components/trigger/choiceTextEntry";
 import TextArrayEntry from "../../components/trigger/textArrayEntry";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 

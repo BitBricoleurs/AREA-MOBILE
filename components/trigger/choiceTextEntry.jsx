@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Pressable,
   Animated,
 } from "react-native";
 
@@ -96,9 +94,9 @@ export default ChoiceTextEntry;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: dark.secondary,
     borderRadius: 10,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 6,
   },
   inputContainer: {
     justifyContent: "space-between",
