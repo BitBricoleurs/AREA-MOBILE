@@ -1,0 +1,283 @@
+[
+  {
+    "name": "System",
+    "triggers": [
+      {
+        "name": "Date & Time",
+        "eg": "Every day at 8:00 AM",
+        "icon": "clock",
+        "sections": [
+          {
+            "name": "timeEntry",
+            "sectionTitle": "",
+            "type": "time",
+            "default": "current",
+            "label": "Time of day",
+            "required": "true"
+          },
+          {
+            "name": "choice",
+            "sectionTitle": "Repeat",
+            "type": "Single",
+            "placeholder": "",
+            "label": "",
+            "required": "true",
+            "options": [
+              {
+                "label": "Once",
+                "reveal": "Calendar"
+              },
+              {
+                "label": "Daily",
+                "reveal": ""
+              },
+              {
+                "label": "Weekly",
+                "reveal": "Weekdays"
+              },
+              {
+                "label": "Monthly",
+                "reveal": "Calendar"
+              }
+            ]
+          }
+        ],
+        "exposes": [
+          {
+            "name": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Outlook",
+    "triggers": [
+      {
+        "name": "Email",
+        "eg": "When I get an email from Jane",
+        "icon": "mail",
+        "sections": [
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "email",
+            "label": "Sender",
+            "placeholder": "Email",
+            "maxEntries": 0,
+            "required": "multi"
+          },
+          {
+            "name": "textEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Subject contains",
+            "placeholder": "Anything",
+            "required": "multi"
+          },
+          {
+            "name": "textEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Content contains",
+            "placeholder": "Anything",
+            "required": "multi"
+          }
+        ],
+        "exposes": [
+          {
+            "name": "Content"
+          },
+          {
+            "name": "Subject"
+          },
+          {
+            "name": "Sender"
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "eg": "When a new event is created",
+        "icon": "calendar",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Title contains",
+            "placeholder": "Anything",
+            "required": "multi"
+          },
+          {
+            "name": "Choice",
+            "sectionTitle": "Event",
+            "type": "Single",
+            "label": "",
+            "required": "multi",
+            "options": [
+              {
+                "label": "Created",
+                "reveal": ""
+              },
+              {
+                "label": "Edited",
+                "reveal": ""
+              },
+              {
+                "label": "Deleted",
+                "reveal": ""
+              }
+            ]
+          }
+        ],
+        "exposes": [
+          {
+            "name": "Title"
+          },
+          {
+            "name": "Start"
+          },
+          {
+            "name": "End"
+          },
+          {
+            "name": "Location"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Teams",
+    "triggers": [
+      {
+        "name": "Message",
+        "eg": "When I receive a message",
+        "icon": "message",
+        "sections": [
+          {
+            "name": "textEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Channel",
+            "placeholder": "Channel name",
+            "required": "multi"
+          },
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "email",
+            "label": "Sender",
+            "placeholder": "Email",
+            "maxEntries": 0,
+            "required": "multi"
+          },
+          {
+            "name": "textEntry",
+            "sectionTitle": "",
+            "type": "text",
+            "label": "Content contains",
+            "placeholder": "Anything",
+            "required": "multi"
+          }
+        ],
+        "exposes": [
+          {
+            "name": "Content"
+          },
+          {
+            "name": "Sender"
+          }
+        ]
+      },
+      {
+        "name": "Mention",
+        "eg": "When I'm mentioned in group",
+        "icon": "bell",
+        "sections": [
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "email",
+            "label": "User",
+            "placeholder": "Email",
+            "maxEntries": 0,
+            "required": "multi"
+          },
+          {
+            "name": "textArrayEntry",
+            "sectionTitle": "",
+            "type": "email",
+            "label": "Channel",
+            "placeholder": "Channel name",
+            "maxEntries": 0,
+            "required": "multi"
+          }
+        ],
+        "exposes": [
+          {
+            "name": "Content"
+          },
+          {
+            "name": "Sender"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceId": "3",
+    "name": "Files",
+    "eg": "When a file is uploaded",
+    "icon": "file-o"
+  },
+  {
+    "serviceId": "4",
+    "name": "Ticket",
+    "eg": "When a new ticket is added",
+    "icon": "ticket"
+  },
+  {
+    "serviceId": "5",
+    "name": "Commit",
+    "eg": "When a new commit is pushed",
+    "icon": "git-square"
+  },
+  {
+    "serviceId": "5",
+    "name": "Pull Request",
+    "eg": "When a new PR is opened",
+    "icon": "code-fork"
+  },
+  {
+    "serviceId": "5",
+    "name": "Issue",
+    "eg": "When a new issue is created",
+    "icon": "exclamation-circle"
+  },
+  {
+    "serviceId": "5",
+    "name": "Star",
+    "eg": "When your repo is starred",
+    "icon": "star-o"
+  },
+  {
+    "serviceId": "6",
+    "name": "Build",
+    "eg": "When a build is completed",
+    "icon": "cogs"
+  },
+  {
+    "serviceId": "6",
+    "name": "Server Status",
+    "eg": "When the server is down",
+    "icon": "server"
+  },
+  {
+    "serviceId": "7",
+    "name": "Health",
+    "eg": "When Azure’s services are back up",
+    "icon": "heartbeat"
+  }
+]

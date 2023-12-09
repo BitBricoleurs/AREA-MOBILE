@@ -5,16 +5,20 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { dark } from "../utils/colors";
+import { useAuthContext } from "../contexts/AuthContext";
+import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 
 import LandingScreen from "./auth/LandingScreen";
 import EmailScreen from "./auth/EmailScreen";
 import PasswordScreen from "./auth/PasswordScreen";
 import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
-import { useAuthContext } from "../contexts/AuthContext";
+import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
+import TriggerConfigScreen from "./Workflow/TriggerConfigScreen";
 
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
+const WorkflowStack = createNativeStackNavigator();
 
 const Authentification = () => {
   return (
@@ -35,6 +39,25 @@ const Authentification = () => {
         options={{ headerShown: false }}
       />
     </AuthStack.Navigator>
+  );
+};
+
+const Workflow = () => {
+  return (
+    <WorkflowContextProvider>
+      <WorkflowStack.Navigator>
+        <WorkflowStack.Screen
+          name="ChooseTrigger"
+          component={ChooseTriggerScreen}
+          options={{ headerShown: false }}
+        />
+        <WorkflowStack.Screen
+          name="TriggerConfig"
+          component={TriggerConfigScreen}
+          options={{ headerShown: false }}
+        />
+      </WorkflowStack.Navigator>
+    </WorkflowContextProvider>
   );
 };
 
@@ -71,6 +94,11 @@ const MainStack = () => {
       <MainTab.Screen
         name="Home"
         component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <MainTab.Screen
+        name="Create"
+        component={Workflow}
         options={{ headerShown: false }}
       />
       <MainTab.Screen name="Settings" component={SettingsScreen} />
