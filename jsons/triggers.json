@@ -118,7 +118,7 @@
             "required": "multi"
           },
           {
-            "name": "Choice",
+            "name": "choice",
             "sectionTitle": "Event",
             "type": "Single",
             "label": "",
