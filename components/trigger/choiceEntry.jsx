@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: dark.secondary,
     borderRadius: 8,
     paddingLeft: 16,
+    marginBottom: 16,
   },
   choice: {
     flexDirection: "row",
@@ -156,8 +157,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   checkIcon: {
-    width: 18,
-    height: 18,
+    width: 24,
+    height: 24,
     resizeMode: "contain",
     marginHorizontal: 8,
     margin: 12,
