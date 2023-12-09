@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, View, Platform } from "react-native";
 import DateTimePicker, {
   DateTimePickerAndroid,
@@ -6,13 +6,15 @@ import DateTimePicker, {
 
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
+import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const TimeEntry = ({ data }) => {
   const [time, setTime] = useState(new Date());
+  const { trigger, setTrigger } = useWorkflowContext();
 
-  const timeTo24h = () => {
-    let hours = time.getHours();
-    let minutes = time.getMinutes();
+  const timeTo24h = (dateTime) => {
+    let hours = dateTime.getHours();
+    let minutes = dateTime.getMinutes();
     if (hours < 10) {
       hours = `0${hours}`;
     }
@@ -25,6 +27,23 @@ const TimeEntry = ({ data }) => {
     }
     return `${hours}:${minutes}`;
   };
+
+  const handleTimeChange = (e, selectedTime) => {
+    setTime(selectedTime);
+  };
+
+  useEffect(() => {
+    const newTime = timeTo24h(time);
+    const newParams = {
+      ...trigger.params,
+      [data.variableName]: newTime,
+    };
+    const newTrigger = {
+      ...trigger,
+      params: newParams,
+    };
+    setTrigger(newTrigger);
+  }, [time]);
 
   return (
     <View style={styles.container}>
@@ -41,14 +60,12 @@ const TimeEntry = ({ data }) => {
                 mode: "time",
                 display: "spinner",
                 is24Hour: true,
-                onChange: (e, selectedTime) => {
-                  setTime(selectedTime);
-                },
+                onChange: handleTimeChange,
               });
             }}
             style={styles.adroidTimePicker}
           >
-            <MyText style={styles.timeText}>{timeTo24h()}</MyText>
+            <MyText style={styles.timeText}>{timeTo24h(time)}</MyText>
           </TouchableOpacity>
         ) : (
           <>
@@ -59,9 +76,7 @@ const TimeEntry = ({ data }) => {
                 display="inline"
                 textColor={dark.white}
                 themeVariant="dark"
-                onChange={(e, selectedTime) => {
-                  setTime(selectedTime);
-                }}
+                onChange={handleTimeChange}
               />
             )}
           </>

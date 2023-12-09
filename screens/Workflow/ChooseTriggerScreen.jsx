@@ -18,7 +18,6 @@ import TriggerChoice from "../../components/trigger/triggerChoice";
 import services from "../../jsons/triggers.json";
 
 const ChooseTriggerScreen = ({ navigation }) => {
-  const [trigger, setTrigger] = useState(0);
   const [search, setSearch] = useState("");
   return (
     <SafeAreaView style={styles.container}>

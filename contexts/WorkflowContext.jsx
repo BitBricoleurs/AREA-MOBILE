@@ -3,7 +3,9 @@ import { useContext, useState, createContext } from "react";
 const WorkflowContext = createContext();
 
 export const WorkflowContextProvider = ({ children }) => {
-  const [trigger, setTrigger] = useState(null);
+  const [trigger, setTrigger] = useState({});
+
+  console.log("trigger: ", trigger);
 
   return (
     <WorkflowContext.Provider

@@ -1,15 +1,4 @@
-import { useEffect, useState } from "react";
-import {
-  Animated,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  Image,
-} from "react-native";
+import { TouchableOpacity, View, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
@@ -29,7 +18,7 @@ const TriggerChoice = ({ service }) => {
     });
     navigation.navigate("TriggerConfig", {
       service,
-      trigger: index,
+      triggerIndex: index,
     });
   };
 
