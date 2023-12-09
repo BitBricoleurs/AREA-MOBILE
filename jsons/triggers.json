@@ -73,7 +73,7 @@
             "required": "multi"
           },
           {
-            "name": "textEntry",
+            "name": "choiceTextEntry",
             "sectionTitle": "",
             "type": "text",
             "label": "Subject contains",
@@ -82,7 +82,7 @@
             "required": "multi"
           },
           {
-            "name": "textEntry",
+            "name": "choiceTextEntry",
             "sectionTitle": "",
             "type": "text",
             "variableName": "content",
@@ -109,7 +109,7 @@
         "icon": "calendar",
         "sections": [
           {
-            "name": "textEntry",
+            "name": "choiceTextEntry",
             "sectionTitle": "",
             "type": "text",
             "variableName": "titleContains",
@@ -166,7 +166,7 @@
         "icon": "message",
         "sections": [
           {
-            "name": "textEntry",
+            "name": "choiceTextEntry",
             "sectionTitle": "",
             "type": "text",
             "label": "Channel",
@@ -185,7 +185,7 @@
             "required": "multi"
           },
           {
-            "name": "textEntry",
+            "name": "choiceTextEntry",
             "sectionTitle": "",
             "type": "text",
             "label": "Content contains",

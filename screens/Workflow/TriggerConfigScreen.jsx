@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -5,6 +6,8 @@ import {
   SafeAreaView,
   Pressable,
   ScrollView,
+  Platform,
+  StatusBar,
 } from "react-native";
 
 import MyText from "../../utils/myText";
@@ -13,7 +16,7 @@ import { dark } from "../../utils/colors";
 
 import TimeEntry from "../../components/trigger/timeEntry";
 import ChoiceEntry from "../../components/trigger/choiceEntry";
-import { useEffect, useState } from "react";
+import ChoiceTextEntry from "../../components/trigger/textEntry";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const TriggerConfigScreen = ({ route, navigation }) => {
@@ -28,12 +31,12 @@ const TriggerConfigScreen = ({ route, navigation }) => {
         return <TimeEntry data={section} key={index} />;
       case "choice":
         return <ChoiceEntry data={section} key={index} />;
-      case "textEntry":
-        return <Text>{section.name}</Text>;
+      case "choiceTextEntry":
+        return <ChoiceTextEntry data={section} key={index} />;
       case "textArrayEntry":
-        return <Text>{section.name}</Text>;
+        return <Text key={index}>{section.name}</Text>;
       default:
-        return <Text>{section.name}</Text>;
+        return null;
     }
   };
 
@@ -89,7 +92,9 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             </Pressable>
             <View style={styles.title}>
               <IconComponent name={service?.name} style={styles.icon} />
-              <MyText style={styles.titleText}>{service?.name}</MyText>
+              <MyText style={styles.titleText}>
+                {service?.triggers[triggerIndex].name}
+              </MyText>
             </View>
             <View style={{ width: 34 }} />
           </View>
@@ -133,6 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   scrollView: {
     flex: 1,
