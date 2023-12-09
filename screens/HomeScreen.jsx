@@ -10,6 +10,8 @@ import {
   StyleSheet,
   SafeAreaView,
   Animated,
+  Platform,
+  StatusBar,
 } from "react-native";
 
 const WorkflowsContent = () => {
@@ -55,7 +57,13 @@ const HomeScreen = () => {
   }, [width]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: dark.primary }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: dark.primary,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      }}
+    >
       <ScrollView
         style={styles.container}
         contentInsetAdjustmentBehavior="automatic"

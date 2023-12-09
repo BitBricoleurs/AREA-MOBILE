@@ -9,6 +9,8 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  Platform,
+  StatusBar,
 } from "react-native";
 
 import { dark } from "../../utils/colors";
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   scrollView: {
     flex: 1,
