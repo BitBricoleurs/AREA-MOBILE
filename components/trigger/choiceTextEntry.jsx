@@ -14,7 +14,7 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextEntry = ({ data }) => {
+const ChoiceTextEntry = ({ data }) => {
   const { trigger, setTrigger } = useWorkflowContext();
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
@@ -91,7 +91,7 @@ const TextEntry = ({ data }) => {
   );
 };
 
-export default TextEntry;
+export default ChoiceTextEntry;
 
 const styles = StyleSheet.create({
   container: {
