@@ -1,14 +1,12 @@
-// import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
 import MyText from "../utils/myText";
 import { dark } from "../utils/colors";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   ScrollView,
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
   StyleSheet,
   SafeAreaView,
   Animated,
@@ -51,58 +49,79 @@ const HomeScreen = () => {
     }).start();
   };
 
+  useEffect(() => {
+    const initialPosition = (0 * width) / 2 + (width / 4 - 75 / 2);
+    indicatorPosition.setValue(initialPosition);
+  }, [width]);
+
   return (
-    <ScrollView style={styles.container}>
-      <SafeAreaView />
-      <View style={styles.logoContainer}>
-        <MyText style={styles.logoText}>BotButler</MyText>
-      </View>
-      <View style={styles.tabBar}>
-        <View style={{ flex: 1, flexDirection: "row" }} onLayout={handleWidth}>
-          <TouchableOpacity
-            onPress={() => handleTabPress(0)}
-            style={[styles.tab, activeTab === 0 && styles.activeTab]}
-          >
-            <MyText
-              style={[styles.tabText, activeTab === 0 && styles.activeTabText]}
-            >
-              Workflows
-            </MyText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleTabPress(1)}
-            style={[styles.tab, activeTab === 1 && styles.activeTab]}
-          >
-            <MyText
-              style={[styles.tabText, activeTab === 1 && styles.activeTabText]}
-            >
-              Analytics
-            </MyText>
-          </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1, backgroundColor: dark.primary }}>
+      <ScrollView
+        style={styles.container}
+        contentInsetAdjustmentBehavior="automatic"
+        stickyHeaderIndices={[1]}
+      >
+        <View style={styles.logoContainer}>
+          <MyText style={styles.logoText}>BotButler</MyText>
         </View>
-        <Animated.View
-          style={[
-            styles.indicator,
-            {
-              transform: [
-                {
-                  translateX: indicatorPosition,
-                },
-              ],
-            },
-          ]}
-        />
-      </View>
-      {activeTab === 0 ? <WorkflowsContent /> : <AnalyticsContent />}
-    </ScrollView>
+        <View style={styles.tabBar}>
+          <View
+            style={{ flex: 1, flexDirection: "row" }}
+            onLayout={handleWidth}
+          >
+            <TouchableOpacity
+              onPress={() => handleTabPress(0)}
+              style={[styles.tab, activeTab === 0 && styles.activeTab]}
+            >
+              <MyText
+                style={[
+                  styles.tabText,
+                  activeTab === 0 && styles.activeTabText,
+                ]}
+              >
+                Workflows
+              </MyText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleTabPress(1)}
+              style={[styles.tab, activeTab === 1 && styles.activeTab]}
+            >
+              <MyText
+                style={[
+                  styles.tabText,
+                  activeTab === 1 && styles.activeTabText,
+                ]}
+              >
+                Analytics
+              </MyText>
+            </TouchableOpacity>
+          </View>
+          <Animated.View
+            style={[
+              styles.indicator,
+              {
+                transform: [
+                  {
+                    translateX: indicatorPosition,
+                  },
+                ],
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.body}>
+          {activeTab === 0 ? <WorkflowsContent /> : <AnalyticsContent />}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: dark.primary, // Assuming a dark theme from your screenshot
-    padding: 20,
+    backgroundColor: dark.primary,
+    // padding: 20,
   },
   logoContainer: {
     justifyContent: "center",
@@ -114,8 +133,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   tabBar: {
-    paddingTop: 16,
-    marginBottom: 24,
+    paddingVertical: 16,
+    marginBottom: 16,
+    width: "100%",
+    backgroundColor: dark.primary,
   },
   tab: {
     flex: 1,
@@ -128,16 +149,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   activeTabText: {
-    color: "#39F0BA", // Active color
+    color: "#39F0BA",
   },
   indicator: {
     backgroundColor: "#39F0BA",
     height: 4,
     width: 75,
     borderRadius: 100,
-    position: "absolute", // Position absolutely within the tabBar
-    bottom: 0, // Positioned at the bottom of the tabBar
+    position: "absolute",
+    bottom: 0,
     borderRadius: 100,
+  },
+  body: {
+    flex: 1,
+    paddingHorizontal: 20,
   },
 });
 
