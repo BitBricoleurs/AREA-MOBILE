@@ -4,5 +4,6 @@ export const dark = {
   outline: "#3F3F3F",
   text: "#fff",
   white: "#fff",
+  purple: "#974FEE",
   border: "#fff",
 };
