@@ -17,6 +17,7 @@ export const icons = {
   "chevron-right": require("../assets/chevron-right.png"),
   "arrow-left": require("../assets/arrow-left.png"),
   check: require("../assets/check.png"),
+  minus: require("../assets/minus.png"),
 
   Azure: require("../assets/services/azure.png"),
   Github: require("../assets/services/github.png"),
