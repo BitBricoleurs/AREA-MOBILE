@@ -23,7 +23,7 @@ const TriggerChoice = ({ service }) => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.title}>
         <IconComponent name={service.name} style={styles.icon} />
         <MyText style={styles.titleText}>{service.name} triggers</MyText>
@@ -58,13 +58,17 @@ const TriggerChoice = ({ service }) => {
             </View>
           ))}
       </View>
-    </>
+    </View>
   );
 };
 
 export default TriggerChoice;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 10,
+  },
   title: {
     flexDirection: "row",
     alignItems: "center",
@@ -74,10 +78,10 @@ const styles = StyleSheet.create({
     color: dark.white,
   },
   icon: {
-    width: 34,
-    height: 34,
+    width: 38,
+    height: 38,
     resizeMode: "contain",
-    marginHorizontal: 8,
+    marginHorizontal: 4,
   },
   triggersContainer: {
     flex: 1,

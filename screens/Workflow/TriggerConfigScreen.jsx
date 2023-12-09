@@ -18,6 +18,7 @@ import TimeEntry from "../../components/trigger/timeEntry";
 import ChoiceEntry from "../../components/trigger/choiceEntry";
 import ChoiceTextEntry from "../../components/trigger/choiceTextEntry";
 import TextArrayEntry from "../../components/trigger/textArrayEntry";
+import TextEntry from "../../components/trigger/textEntry";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const TriggerConfigScreen = ({ route, navigation }) => {
@@ -36,6 +37,8 @@ const TriggerConfigScreen = ({ route, navigation }) => {
         return <ChoiceTextEntry data={section} key={index} />;
       case "textArrayEntry":
         return <TextArrayEntry data={section} key={index} />;
+      case "textEntry":
+        return <TextEntry data={section} key={index} />;
       default:
         return null;
     }
@@ -117,8 +120,8 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             borderColor: dark.outline,
           },
         ]}
-        onPress={() => {}}
-        disabled={requirementsMet}
+        onPress={() => navigation.navigate("Workflow")}
+        disabled={!requirementsMet}
       >
         <MyText
           style={[

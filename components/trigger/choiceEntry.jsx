@@ -25,7 +25,6 @@ const ChoiceEntry = ({ data }) => {
 
   const handleChoicePress = (index) => {
     let newIndex = index;
-    console.log("handleChoicePress", index);
     if (data.required === "true" && index === selectedChoice) {
       return;
     } else if (data.required === "multi" && index === selectedChoice) {

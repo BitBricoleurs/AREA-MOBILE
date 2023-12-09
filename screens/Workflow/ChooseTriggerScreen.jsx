@@ -23,7 +23,11 @@ const ChooseTriggerScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} stickyHeaderIndices={[1]}>
+      <ScrollView
+        style={styles.scrollView}
+        stickyHeaderIndices={[1]}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
         <View style={styles.titleContainer}>
           <MyText style={styles.title}>Select a trigger</MyText>
         </View>
@@ -106,6 +110,5 @@ const styles = StyleSheet.create({
   },
   triggerContainer: {
     flex: 1,
-    marginTop: 16,
   },
 });
