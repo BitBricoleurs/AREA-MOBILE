@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   weekdaysContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 16,
     backgroundColor: dark.secondary,
     padding: 16,
     borderRadius: 8,

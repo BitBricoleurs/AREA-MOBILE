@@ -46,42 +46,37 @@ const TimeEntry = ({ data }) => {
   }, [time]);
 
   return (
-    <View style={styles.container}>
-      {data?.sectionTitle && (
-        <MyText style={styles.sectionTitle}>{data.sectionTitle}</MyText>
+    <View style={styles.timeContainer}>
+      <MyText style={styles.timeText}>{data.label}</MyText>
+      {Platform.OS === "android" ? (
+        <TouchableOpacity
+          onPress={() => {
+            DateTimePickerAndroid.open({
+              value: time,
+              mode: "time",
+              display: "spinner",
+              is24Hour: true,
+              onChange: handleTimeChange,
+            });
+          }}
+          style={styles.adroidTimePicker}
+        >
+          <MyText style={styles.timeText}>{timeTo24h(time)}</MyText>
+        </TouchableOpacity>
+      ) : (
+        <>
+          {time && (
+            <DateTimePicker
+              value={time}
+              mode="time"
+              display="inline"
+              textColor={dark.white}
+              themeVariant="dark"
+              onChange={handleTimeChange}
+            />
+          )}
+        </>
       )}
-      <View style={styles.timeContainer}>
-        <MyText style={styles.timeText}>{data.label}</MyText>
-        {Platform.OS === "android" ? (
-          <TouchableOpacity
-            onPress={() => {
-              DateTimePickerAndroid.open({
-                value: time,
-                mode: "time",
-                display: "spinner",
-                is24Hour: true,
-                onChange: handleTimeChange,
-              });
-            }}
-            style={styles.adroidTimePicker}
-          >
-            <MyText style={styles.timeText}>{timeTo24h(time)}</MyText>
-          </TouchableOpacity>
-        ) : (
-          <>
-            {time && (
-              <DateTimePicker
-                value={time}
-                mode="time"
-                display="inline"
-                textColor={dark.white}
-                themeVariant="dark"
-                onChange={handleTimeChange}
-              />
-            )}
-          </>
-        )}
-      </View>
     </View>
   );
 };
@@ -89,10 +84,6 @@ const TimeEntry = ({ data }) => {
 export default TimeEntry;
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    marginBottom: 6,
-  },
   timeContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -101,13 +92,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 8,
     paddingHorizontal: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    color: dark.white,
-    marginTop: 16,
-    marginBottom: 8,
-    marginHorizontal: 12,
   },
   timeText: {
     fontSize: 16,

@@ -17,8 +17,9 @@ const TriggerChoice = ({ service }) => {
       trigger: service.triggers[index].name,
     });
     navigation.navigate("TriggerConfig", {
-      service,
-      triggerIndex: index,
+      serviceName: service.name,
+      triggerName: service.triggers[index].name,
+      previousPage: "ChooseTrigger",
     });
   };
 

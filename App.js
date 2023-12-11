@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { useFonts, Outfit_500Medium } from "@expo-google-fonts/outfit";
+import {
+  useFonts,
+  Outfit_500Medium,
+  Outfit_600SemiBold,
+  Outfit_700Bold,
+} from "@expo-google-fonts/outfit";
 import * as SplashScreen from "expo-splash-screen";
 
 import { AuthContextProvider } from "./contexts/AuthContext";
@@ -10,6 +15,8 @@ export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
     Outfit_500Medium,
+    Outfit_600SemiBold,
+    Outfit_700Bold,
   });
 
   useEffect(() => {

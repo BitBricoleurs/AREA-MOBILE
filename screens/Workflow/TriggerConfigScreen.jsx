@@ -21,11 +21,16 @@ import TextArrayEntry from "../../components/trigger/textArrayEntry";
 import TextEntry from "../../components/trigger/textEntry";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
+import services from "../../jsons/triggers.json";
+
 const TriggerConfigScreen = ({ route, navigation }) => {
-  const { service, triggerIndex } = route.params;
+  const { serviceName, triggerName, previousPage } = route.params;
   const { trigger } = useWorkflowContext();
   const [triggerJson, setTriggerJson] = useState({});
   const [requirementsMet, setRequirementsMet] = useState(true);
+  const [service, setService] = useState(null);
+  const [triggerIndex, setTriggerIndex] = useState(0);
+  const [fromWorkflow, setFromWorkflow] = useState(false);
 
   const sectionDispatch = (section, index) => {
     switch (section.name) {
@@ -45,9 +50,13 @@ const TriggerConfigScreen = ({ route, navigation }) => {
   };
 
   const checkRequirements = () => {
-    const triggerData = service.triggers[triggerIndex];
+    const triggerData = service?.triggers[triggerIndex];
 
-    for (const section of triggerData.sections) {
+    if (!triggerData) {
+      return false;
+    }
+
+    for (const section of triggerData?.sections) {
       const paramValue =
         trigger?.params && trigger?.params[section.variableName];
       if (section.required === "true") {
@@ -65,15 +74,34 @@ const TriggerConfigScreen = ({ route, navigation }) => {
           return false;
         }
       }
-      return true;
     }
+    return true;
   };
+
+  useEffect(() => {
+    const serviceIndex = services.findIndex(
+      (service) => service.name === serviceName
+    );
+    setService(services[serviceIndex]);
+    const triggerIndex = services[serviceIndex].triggers.findIndex(
+      (trigger) => trigger.name === triggerName
+    );
+    setTriggerIndex(triggerIndex);
+  }, []);
 
   useEffect(() => {
     if (service) {
       setTriggerJson(service.triggers[triggerIndex]);
     }
-  }, [service, triggerIndex]);
+  }, [service]);
+
+  useEffect(() => {
+    if (route.params?.fromWorkflow) {
+      setFromWorkflow(route.params.fromWorkflow);
+    } else {
+      setFromWorkflow(false);
+    }
+  }, [route.params]);
 
   useEffect(() => {
     setRequirementsMet(checkRequirements());
@@ -83,13 +111,16 @@ const TriggerConfigScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
+        contentContainerStyle={[
+          styles.scrollViewContent,
+          fromWorkflow && { paddingBottom: 12 },
+        ]}
         stickyHeaderIndices={[0]}
       >
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <Pressable
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate(previousPage)}
               style={styles.backButton}
             >
               <IconComponent name="arrow-left" style={styles.arrow} />
@@ -97,7 +128,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             <View style={styles.title}>
               <IconComponent name={service?.name} style={styles.icon} />
               <MyText style={styles.titleText}>
-                {service?.triggers[triggerIndex].name}
+                {(service && service?.triggers[triggerIndex]?.name) || ""}
               </MyText>
             </View>
             <View style={{ width: 34 }} />
@@ -107,31 +138,47 @@ const TriggerConfigScreen = ({ route, navigation }) => {
           <MyText style={styles.whenText}>When</MyText>
           {triggerJson &&
             triggerJson?.sections?.map((section, index) => {
-              return sectionDispatch(section, index);
+              console.log(section);
+              return (
+                <View style={styles.section} key={index}>
+                  {section?.sectionTitle && (
+                    <MyText style={styles.sectionTitle}>
+                      {section?.sectionTitle}
+                    </MyText>
+                  )}
+                  <View style={styles.blockContainer}>
+                    {section?.block?.map((blockItems, index2) => {
+                      return sectionDispatch(blockItems, index2);
+                    })}
+                  </View>
+                </View>
+              );
             })}
         </View>
       </ScrollView>
-      <Pressable
-        style={[
-          styles.floatingButton,
-          !requirementsMet && {
-            backgroundColor: dark.secondary,
-            borderWidth: 2,
-            borderColor: dark.outline,
-          },
-        ]}
-        onPress={() => navigation.navigate("Workflow")}
-        disabled={!requirementsMet}
-      >
-        <MyText
+      {!fromWorkflow && (
+        <Pressable
           style={[
-            styles.floatingButtonText,
-            !requirementsMet && { opacity: 0.5 },
+            styles.floatingButton,
+            !requirementsMet && {
+              backgroundColor: dark.secondary,
+              borderWidth: 2,
+              borderColor: dark.outline,
+            },
           ]}
+          onPress={() => navigation.navigate("Workflow")}
+          disabled={!requirementsMet}
         >
-          Next
-        </MyText>
-      </Pressable>
+          <MyText
+            style={[
+              styles.floatingButtonText,
+              !requirementsMet && { opacity: 0.5 },
+            ]}
+          >
+            Next
+          </MyText>
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 };
@@ -192,19 +239,35 @@ const styles = StyleSheet.create({
     color: dark.white,
     marginBottom: 8,
   },
+  section: {
+    marginTop: 10,
+    marginBottom: 6,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    color: dark.white,
+    marginTop: 16,
+    marginBottom: 8,
+    marginHorizontal: 12,
+  },
+  blockContainer: {
+    backgroundColor: dark.secondary,
+    borderRadius: 10,
+  },
   floatingButton: {
     position: "absolute",
     left: 20,
     right: 20,
     bottom: 20,
     backgroundColor: dark.purple,
-    padding: 20,
+    padding: 12,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
   },
   floatingButtonText: {
-    color: "white", // Text color
-    fontSize: 24, // Text size
+    color: "white",
+    fontSize: 18,
+    fontFamily: "Outfit_700Bold",
   },
 });

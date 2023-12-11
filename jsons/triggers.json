@@ -8,47 +8,51 @@
         "icon": "clock",
         "sections": [
           {
-            "name": "timeEntry",
             "sectionTitle": "",
-            "variableName": "time",
-            "default": "current",
-            "label": "Time of day",
-            "required": "true"
-          },
-          {
-            "name": "choice",
-            "sectionTitle": "Repeat",
-            "variableName": "repeat",
-            "type": "Single",
-            "placeholder": "",
-            "label": "",
-            "required": "true",
-            "options": [
+            "block": [
               {
-                "label": "Once",
-                "reveal": "Calendar",
-                "variableName": "date"
-              },
-              {
-                "label": "Daily",
-                "reveal": ""
-              },
-              {
-                "label": "Weekly",
-                "reveal": "Weekdays",
-                "variableName": "weekdays"
-              },
-              {
-                "label": "Monthly",
-                "reveal": "Calendar",
-                "variableName": "date"
+                "name": "timeEntry",
+                "sectionTitle": "",
+                "variableName": "time",
+                "default": "current",
+                "label": "Time of day",
+                "required": "true"
               }
             ]
-          }
-        ],
-        "exposes": [
+          },
           {
-            "name": ""
+            "sectionTitle": "Repeat",
+            "block": [
+              {
+                "name": "choice",
+                "variableName": "repeat",
+                "type": "Single",
+                "placeholder": "",
+                "label": "",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Once",
+                    "reveal": "Calendar",
+                    "variableName": "date"
+                  },
+                  {
+                    "label": "Daily",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Weekly",
+                    "reveal": "Weekdays",
+                    "variableName": "weekdays"
+                  },
+                  {
+                    "label": "Monthly",
+                    "reveal": "Calendar",
+                    "variableName": "date"
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -63,43 +67,44 @@
         "icon": "mail",
         "sections": [
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "email",
-            "label": "Sender",
-            "placeholder": "Email",
-            "variableName": "sender",
-            "maxEntries": 0,
-            "required": "multi"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "Sender",
+                "placeholder": "Email",
+                "variableName": "sender",
+                "maxEntries": 0,
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Subject contains",
-            "variableName": "subject",
-            "placeholder": "Anything",
-            "required": "multi"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Subject contains",
+                "variableName": "subject",
+                "placeholder": "Anything",
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "variableName": "content",
-            "label": "Content contains",
-            "placeholder": "Anything",
-            "required": "multi"
-          }
-        ],
-        "exposes": [
-          {
-            "name": "Content"
-          },
-          {
-            "name": "Subject"
-          },
-          {
-            "name": "Sender"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Content contains",
+                "variableName": "content",
+                "placeholder": "Anything",
+                "required": "multi"
+              }
+            ]
           }
         ]
       },
@@ -109,49 +114,43 @@
         "icon": "calendar",
         "sections": [
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "variableName": "titleContains",
-            "label": "Title contains",
-            "placeholder": "Anything",
-            "required": "multi"
-          },
-          {
-            "name": "choice",
-            "sectionTitle": "Event",
-            "type": "Single",
-            "label": "",
-            "variableName": "event",
-            "required": "multi",
-            "options": [
+            "block": [
               {
-                "label": "Created",
-                "reveal": ""
-              },
-              {
-                "label": "Edited",
-                "reveal": ""
-              },
-              {
-                "label": "Deleted",
-                "reveal": ""
+                "name": "choiceTextEntry",
+                "type": "text",
+                "variableName": "titleContains",
+                "label": "Title contains",
+                "placeholder": "Anything",
+                "required": "multi"
               }
             ]
-          }
-        ],
-        "exposes": [
-          {
-            "name": "Title"
           },
           {
-            "name": "Start"
-          },
-          {
-            "name": "End"
-          },
-          {
-            "name": "Location"
+            "sectionTitle": "Event",
+            "block": [
+              {
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "event",
+                "required": "multi",
+                "options": [
+                  {
+                    "label": "Created",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Edited",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Deleted",
+                    "reveal": ""
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -166,40 +165,44 @@
         "icon": "message",
         "sections": [
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Channel",
-            "variableName": "channel",
-            "placeholder": "Channel name",
-            "required": "multi"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Channel",
+                "variableName": "channel",
+                "placeholder": "Channel name",
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "email",
-            "label": "Sender",
-            "placeholder": "Email",
-            "maxEntries": 0,
-            "variableName": "sender",
-            "required": "multi"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "Sender",
+                "placeholder": "Email",
+                "maxEntries": 0,
+                "variableName": "sender",
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Content contains",
-            "placeholder": "Anything",
-            "variableName": "content",
-            "required": "multi"
-          }
-        ],
-        "exposes": [
-          {
-            "name": "Content"
-          },
-          {
-            "name": "Sender"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Content contains",
+                "placeholder": "Anything",
+                "variableName": "content",
+                "required": "multi"
+              }
+            ]
           }
         ]
       },
@@ -209,32 +212,32 @@
         "icon": "bell",
         "sections": [
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "email",
-            "label": "User",
-            "placeholder": "Email",
-            "maxEntries": 0,
-            "variableName": "user",
-            "required": "multi"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "User",
+                "placeholder": "Email",
+                "maxEntries": 0,
+                "variableName": "user",
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "email",
-            "label": "Channel",
-            "placeholder": "Channel name",
-            "variableName": "channel",
-            "maxEntries": 0,
-            "required": "multi"
-          }
-        ],
-        "exposes": [
-          {
-            "name": "Content"
-          },
-          {
-            "name": "Sender"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "Channel",
+                "placeholder": "Channel name",
+                "variableName": "channel",
+                "maxEntries": 0,
+                "required": "multi"
+              }
+            ]
           }
         ]
       }
@@ -249,49 +252,56 @@
         "icon": "file",
         "sections": [
           {
-            "name": "choice",
             "sectionTitle": "",
-            "type": "Single",
-            "label": "",
-            "variableName": "ticket",
-            "required": "multi",
-            "options": [
+            "block": [
               {
-                "label": "Created",
-                "reveal": ""
-              },
-              {
-                "label": "Edited",
-                "reveal": ""
-              },
-              {
-                "label": "Deleted",
-                "reveal": ""
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "ticket",
+                "required": "multi",
+                "options": [
+                  {
+                    "label": "Created",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Edited",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Deleted",
+                    "reveal": ""
+                  }
+                ]
               }
             ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "Status",
-            "type": "text",
-            "label": "Updated",
-            "placeholder": "Name",
-            "variableName": "status",
-            "required": "multi"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Updated",
+                "placeholder": "Name",
+                "variableName": "status",
+                "required": "multi"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
-            "sectionTitle": "",
-            "type": "text",
-            "label": "Commented",
-            "placeholder": "Anything",
-            "variableName": "commented",
-            "required": "multi"
-          }
-        ],
-        "exposes": [
-          {
-            "name": ""
+            "sectionTitle": "Status",
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Commented",
+                "placeholder": "Anything",
+                "variableName": "commented",
+                "required": "multi"
+              }
+            ]
           }
         ]
       }
@@ -306,31 +316,44 @@
         "icon": "commit",
         "sections": [
           {
-            "name": "textEntry",
             "sectionTitle": "Repository",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "repository",
-            "required": "true"
+            "block": [
+              {
+                "name": "textEntry",
+                "sectionTitle": "Repository",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "repository",
+                "required": "true"
+              }
+            ]
           },
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Author",
-            "placeholder": "email",
-            "variableName": "authors",
-            "required": "false"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "text",
+                "label": "Author",
+                "placeholder": "email",
+                "variableName": "authors",
+                "required": "false"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Content contains",
-            "placeholder": "Anything",
-            "variableName": "content",
-            "required": "false"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Content contains",
+                "placeholder": "Anything",
+                "variableName": "content",
+                "required": "false"
+              }
+            ]
           }
         ]
       },
@@ -340,59 +363,75 @@
         "icon": "pull-request",
         "sections": [
           {
-            "name": "textEntry",
             "sectionTitle": "Repository",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "repository",
-            "required": "true"
+            "block": [
+              {
+                "name": "textEntry",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "repository",
+                "required": "true"
+              }
+            ]
           },
           {
-            "name": "textArrayEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Author",
-            "placeholder": "email",
-            "variableName": "authors",
-            "required": "false"
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "text",
+                "label": "Author",
+                "placeholder": "email",
+                "variableName": "authors",
+                "required": "false"
+              }
+            ]
           },
           {
-            "name": "choiceTextEntry",
             "sectionTitle": "",
-            "type": "text",
-            "label": "Content contains",
-            "placeholder": "Anything",
-            "variableName": "content",
-            "required": "false"
+            "block": [
+              {
+                "name": "choiceTextEntry",
+                "type": "text",
+                "label": "Content contains",
+                "placeholder": "Anything",
+                "variableName": "content",
+                "required": "false"
+              }
+            ]
           },
           {
-            "name": "choice",
             "sectionTitle": "",
-            "type": "Single",
-            "label": "",
-            "variableName": "pr",
-            "required": "true",
-            "options": [
+            "block": [
               {
-                "label": "Opened",
-                "reveal": ""
-              },
-              {
-                "label": "Closed",
-                "reveal": ""
-              },
-              {
-                "label": "Merged",
-                "reveal": ""
-              },
-              {
-                "label": "Drafted",
-                "reveal": ""
-              },
-              {
-                "label": "Assigned",
-                "reveal": ""
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "pr",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Opened",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Closed",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Merged",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Drafted",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Assigned",
+                    "reveal": ""
+                  }
+                ]
               }
             ]
           }
@@ -404,50 +443,62 @@
         "icon": "issue",
         "sections": [
           {
-            "name": "textEntry",
             "sectionTitle": "Repository",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "repository",
-            "required": "true"
+            "block": [
+              {
+                "name": "textEntry",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "repository",
+                "required": "true"
+              }
+            ]
           },
           {
-            "name": "textEntry",
             "sectionTitle": "Issue",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "issue",
-            "required": "false"
+            "block": [
+              {
+                "name": "textEntry",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "issue",
+                "required": "false"
+              }
+            ]
           },
           {
-            "name": "choice",
             "sectionTitle": "",
-            "type": "Single",
-            "label": "",
-            "variableName": "issue",
-            "required": "true",
-            "options": [
+            "block": [
               {
-                "label": "Created",
-                "reveal": ""
-              },
-              {
-                "label": "Edited",
-                "reveal": ""
-              },
-              {
-                "label": "Deleted",
-                "reveal": ""
-              },
-              {
-                "label": "Commented",
-                "reveal": ""
-              },
-              {
-                "label": "Assigned",
-                "reveal": ""
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "issue_action",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Created",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Edited",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Deleted",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Commented",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Assigned",
+                    "reveal": ""
+                  }
+                ]
               }
             ]
           }
@@ -459,13 +510,17 @@
         "icon": "star",
         "sections": [
           {
-            "name": "textEntry",
             "sectionTitle": "Repository",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "repository",
-            "required": "true"
+            "block": [
+              {
+                "name": "textEntry",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "repository",
+                "required": "true"
+              }
+            ]
           }
         ]
       }
@@ -477,40 +532,48 @@
       {
         "name": "Build",
         "eg": "When a build is completed",
-        "icon": "player",
+        "icon": "build",
         "sections": [
           {
-            "name": "textEntry",
             "sectionTitle": "Job path",
-            "type": "text",
-            "label": "",
-            "placeholder": "Url",
-            "variableName": "job",
-            "required": "true"
+            "block": [
+              {
+                "name": "textEntry",
+                "type": "text",
+                "label": "",
+                "placeholder": "Url",
+                "variableName": "job_path",
+                "required": "true"
+              }
+            ]
           },
           {
-            "name": "choice",
-            "sectionTitle": "",
-            "type": "Single",
-            "label": "",
-            "variableName": "build",
-            "required": "true",
-            "options": [
+            "sectionTitle": "Build result",
+            "block": [
               {
-                "label": "Started",
-                "reveal": ""
-              },
-              {
-                "label": "Ends",
-                "reveal": ""
-              },
-              {
-                "label": "Succeeds",
-                "reveal": ""
-              },
-              {
-                "label": "Fails",
-                "reveal": ""
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "build_result",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Started",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Completed",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Succeeded",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Failed",
+                    "reveal": ""
+                  }
+                ]
               }
             ]
           }
@@ -520,24 +583,30 @@
         "name": "Server status",
         "eg": "When the server is down",
         "icon": "globe",
-        "sections": {
-          "name": "choice",
-          "sectionTitle": "",
-          "type": "Single",
-          "label": "",
-          "variableName": "status",
-          "required": "true",
-          "options": [
-            {
-              "label": "Up",
-              "reveal": ""
-            },
-            {
-              "label": "Down",
-              "reveal": ""
-            }
-          ]
-        }
+        "sections": [
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "status",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Up",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Down",
+                    "reveal": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -546,28 +615,32 @@
     "triggers": [
       {
         "name": "Health",
-        "eg": "When the server is down",
+        "eg": "When the server health is poor",
         "icon": "heart",
         "sections": [
           {
-            "name": "choice",
             "sectionTitle": "Server status",
-            "type": "Single",
-            "label": "",
-            "variableName": "blob",
-            "required": "true",
-            "options": [
+            "block": [
               {
-                "label": "Good",
-                "reveal": ""
-              },
-              {
-                "label": "Warning",
-                "reveal": ""
-              },
-              {
-                "label": "Critical",
-                "reveal": ""
+                "name": "choice",
+                "type": "Single",
+                "label": "",
+                "variableName": "server_health",
+                "required": "true",
+                "options": [
+                  {
+                    "label": "Good",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Warning",
+                    "reveal": ""
+                  },
+                  {
+                    "label": "Critical",
+                    "reveal": ""
+                  }
+                ]
               }
             ]
           }

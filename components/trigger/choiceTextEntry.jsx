@@ -59,32 +59,24 @@ const ChoiceTextEntry = ({ data }) => {
   }, [selected, inputHeight]);
 
   return (
-    <View style={styles.container}>
-      {data?.sectionTitle && (
-        <MyText style={styles.sectionTitle}>{data.sectionTitle}</MyText>
+    <View style={styles.inputContainer}>
+      <TouchableOpacity style={styles.selectButton} onPress={handleSelectPress}>
+        <MyText style={styles.text}>{data.label}</MyText>
+        {selected && <IconComponent name="check" style={styles.checkIcon} />}
+      </TouchableOpacity>
+      {selected && (
+        <View style={{ height: 1, backgroundColor: dark.outline }} />
       )}
-      <View style={styles.inputContainer}>
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={handleSelectPress}
-        >
-          <MyText style={styles.text}>{data.label}</MyText>
-          {selected && <IconComponent name="check" style={styles.checkIcon} />}
-        </TouchableOpacity>
+      <Animated.View style={{ height: inputHeight }}>
         {selected && (
-          <View style={{ height: 1, backgroundColor: dark.outline }} />
+          <TextInput
+            style={[styles.textInput, { height: "100%" }]} // Remove height from textInput style and use it here
+            onChangeText={handleChange}
+            placeholder={data.placeholder}
+            placeholderTextColor={"#969696"}
+          />
         )}
-        <Animated.View style={{ height: inputHeight }}>
-          {selected && (
-            <TextInput
-              style={[styles.textInput, { height: "100%" }]} // Remove height from textInput style and use it here
-              onChangeText={handleChange}
-              placeholder={data.placeholder}
-              placeholderTextColor={"#969696"}
-            />
-          )}
-        </Animated.View>
-      </View>
+      </Animated.View>
     </View>
   );
 };
@@ -94,9 +86,7 @@ export default ChoiceTextEntry;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 6,
+    borderWidth: 1,
   },
   inputContainer: {
     justifyContent: "space-between",

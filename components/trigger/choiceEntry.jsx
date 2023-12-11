@@ -67,10 +67,7 @@ const ChoiceEntry = ({ data }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {data?.sectionTitle && (
-        <MyText style={styles.sectionTitle}>{data.sectionTitle}</MyText>
-      )}
+    <>
       <View style={styles.choiceContainer}>
         {data?.options &&
           data?.options?.map((option, index) => {
@@ -107,31 +104,17 @@ const ChoiceEntry = ({ data }) => {
           })}
       </View>
       {displayRevealComponent()}
-    </View>
+    </>
   );
 };
 
 export default ChoiceEntry;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: dark.primary,
-    marginTop: 10,
-    marginBottom: 6,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    color: dark.white,
-    marginTop: 16,
-    marginBottom: 8,
-    marginHorizontal: 12,
-  },
   choiceContainer: {
     backgroundColor: dark.secondary,
     borderRadius: 8,
     paddingLeft: 16,
-    marginBottom: 16,
   },
   choice: {
     flexDirection: "row",

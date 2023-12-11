@@ -76,51 +76,43 @@ const TextArrayEntry = ({ data }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {data?.sectionTitle && (
-        <MyText style={styles.sectionTitle}>{data.sectionTitle}</MyText>
-      )}
-      <View style={styles.inputContainer}>
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={handleSelectPress}
-        >
-          <MyText style={styles.text}>{data.label}</MyText>
-          {selected && <IconComponent name="check" style={styles.checkIcon} />}
-        </TouchableOpacity>
-        {selected && (
-          <>
-            <View style={{ height: 1, backgroundColor: dark.outline }} />
-            {emailEntries.map((entry, index) => (
-              <View key={index} style={styles.inputRow}>
-                <View style={styles.inputLine}>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={(text) => handleChange(text, index)}
-                    value={entry}
-                    placeholder="Email"
-                    placeholderTextColor={dark.outline}
-                  />
-                  {index < emailEntries.length - 1 && (
-                    <TouchableOpacity
-                      onPress={() => handleRemoveEntry(index)}
-                      style={{ alignSelf: "center" }}
-                    >
-                      <IconComponent
-                        name="minus"
-                        style={[styles.checkIcon, { tintColor: dark.white }]}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-                {index !== emailEntries.length - 1 && (
-                  <View style={{ height: 1, backgroundColor: dark.outline }} />
+    <View style={styles.inputContainer}>
+      <TouchableOpacity style={styles.selectButton} onPress={handleSelectPress}>
+        <MyText style={styles.text}>{data.label}</MyText>
+        {selected && <IconComponent name="check" style={styles.checkIcon} />}
+      </TouchableOpacity>
+      {selected && (
+        <>
+          <View style={{ height: 1, backgroundColor: dark.outline }} />
+          {emailEntries.map((entry, index) => (
+            <View key={index} style={styles.inputRow}>
+              <View style={styles.inputLine}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(text) => handleChange(text, index)}
+                  value={entry}
+                  placeholder="Email"
+                  placeholderTextColor={dark.outline}
+                />
+                {index < emailEntries.length - 1 && (
+                  <TouchableOpacity
+                    onPress={() => handleRemoveEntry(index)}
+                    style={{ alignSelf: "center" }}
+                  >
+                    <IconComponent
+                      name="minus"
+                      style={[styles.checkIcon, { tintColor: dark.white }]}
+                    />
+                  </TouchableOpacity>
                 )}
               </View>
-            ))}
-          </>
-        )}
-      </View>
+              {index !== emailEntries.length - 1 && (
+                <View style={{ height: 1, backgroundColor: dark.outline }} />
+              )}
+            </View>
+          ))}
+        </>
+      )}
     </View>
   );
 };
@@ -128,26 +120,12 @@ const TextArrayEntry = ({ data }) => {
 export default TextArrayEntry;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: dark.secondary,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 6,
-  },
   inputContainer: {
     justifyContent: "space-between",
     backgroundColor: dark.secondary,
     flex: 1,
     borderRadius: 8,
     paddingLeft: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    color: dark.white,
-    marginTop: 16,
-    marginBottom: 8,
-    marginHorizontal: 12,
   },
   selectButton: {
     flex: 1,
