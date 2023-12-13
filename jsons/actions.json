@@ -226,5 +226,29 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Openai",
+    "actions": [
+      {
+        "name": "Generate",
+        "eg": "Sum these emails up",
+        "icon": "up-rectangle",
+        "sections": [
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Prompt",
+                "variableName": "prompt",
+                "required": "true"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

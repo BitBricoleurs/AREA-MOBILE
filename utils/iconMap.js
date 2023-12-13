@@ -13,6 +13,7 @@ export const icons = {
   player: require("../assets/triggers/player.png"),
   "pull-request": require("../assets/triggers/pull-request.png"),
   star: require("../assets/triggers/star.png"),
+  "up-rectangle": require("../assets/triggers/up-rectangle.png"),
 
   "chevron-right": require("../assets/chevron-right.png"),
   "arrow-left": require("../assets/arrow-left.png"),
@@ -27,6 +28,7 @@ export const icons = {
   Outlook: require("../assets/services/outlook.png"),
   Teams: require("../assets/services/teams.png"),
   System: require("../assets/services/system.png"),
+  Openai: require("../assets/services/openai.png"),
 
   // Add more mappings as needed
 };
