@@ -90,7 +90,7 @@
         "icon": "calendar",
         "options": [
           {
-            "name": "create",
+            "name": "Create",
             "sections": [
               {
                 "sectionTitle": "",
