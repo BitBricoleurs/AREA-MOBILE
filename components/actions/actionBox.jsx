@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Pressable, Animated } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Animated,
+  Modal,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 import actions from "../../jsons/actions";
 import { dark, colorMap } from "../../utils/colors";
@@ -18,14 +28,15 @@ const ActionBox = ({ nodeId }) => {
   const { workflow, setWorkflow } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
+  const [currentOption, setCurrentOption] = useState(0);
   const [currentAction, setCurrentAction] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const contentRef = useRef();
+  const pickerRef = useRef();
   const rotateAnim = useState(new Animated.Value(0))[0];
 
-  console.log("ref", contentRef.current);
-
   const sectionDispatch = (section, index) => {
-    console.log("sectionDispatch", section);
+    // console.log("sectionDispatch", section);
     switch (section.name) {
       case "timeEntry":
         return (
@@ -117,6 +128,87 @@ const ActionBox = ({ nodeId }) => {
     );
   };
 
+  const renderForm = () => {
+    return (
+      <>
+        {actionForm.options && (
+          <>
+            <Pressable
+              style={styles.optionSelectButton}
+              onPress={() => {
+                setShowModal(true);
+                // Platform.OS === "android" && pickerRef.current.focus();
+              }}
+            >
+              <MyText style={styles.optionText}>
+                {actionForm.options[currentOption].name}
+              </MyText>
+            </Pressable>
+            <Modal visible={showModal} transparent={true} animationType="slide">
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                onPress={() => setShowModal(false)}
+              />
+              <View style={[styles.modalContent, { paddingTop: 8 }]}>
+                {Platform.OS === "ios" ? (
+                  <Picker
+                    ref={pickerRef}
+                    selectedValue={currentOption}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setCurrentOption(itemValue);
+                      setShowModal(false);
+                    }}
+                    style={styles.picker}
+                    itemStyle={styles.pickerStyleType}
+                  >
+                    {actionForm.options.map((option, index) => (
+                      <Picker.Item
+                        label={option.name}
+                        value={index}
+                        key={index}
+                      />
+                    ))}
+                  </Picker>
+                ) : (
+                  <>
+                    {actionForm.options.map((option, index) => (
+                      <>
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.optionSelectButton}
+                          onPress={() => {
+                            setCurrentOption(index);
+                            setShowModal(false);
+                          }}
+                        >
+                          <MyText style={styles.optionText}>
+                            {option.name}
+                          </MyText>
+                        </TouchableOpacity>
+                        {index !== actionForm.options.length - 1 && (
+                          <View
+                            style={{
+                              height: 1,
+                              backgroundColor: dark.outline,
+                              marginLeft: 16,
+                            }}
+                          />
+                        )}
+                      </>
+                    ))}
+                  </>
+                )}
+              </View>
+            </Modal>
+          </>
+        )}
+        {actionForm.sections && renderSections(actionForm.sections)}
+        {actionForm.options &&
+          renderSections(actionForm.options[currentOption].sections)}
+      </>
+    );
+  };
+
   const rotate = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "90deg"],
@@ -187,7 +279,7 @@ const ActionBox = ({ nodeId }) => {
       </Pressable>
       {unfold && (
         <View ref={contentRef} style={styles.formContainer}>
-          {renderSections(actionForm?.sections)}
+          {renderForm()}
         </View>
       )}
     </View>
@@ -202,6 +294,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     marginBottom: 12,
+    overflow: "hidden",
+    backgroundColor: "transparent",
   },
   action: {
     flexDirection: "row",
@@ -238,5 +332,31 @@ const styles = StyleSheet.create({
     // backgroundColor: dark.secondary,
     borderRadius: 8,
     marginTop: 8,
+  },
+  optionSelectButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 48,
+    backgroundColor: dark.secondary,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  optionText: {
+    fontSize: 22,
+    color: dark.white,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0)", // This adds a semi-transparent overlay
+  },
+  modalContent: {
+    backgroundColor: dark.secondary, // Replace 'dark.white' with your theme's white color
+    borderRadius: 8,
+    paddingBottom: 8,
+  },
+  pickerStyleType: {
+    color: dark.white,
   },
 });
