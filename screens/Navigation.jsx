@@ -109,10 +109,14 @@ const MainStack = () => {
         tabBarActiveTintColor: "black",
         tabBarInactiveTintColor: "gray",
         tabBarShowLabel: false,
+        keyboardHidesTabBar: true,
         tabBarStyle: {
           height: 90,
           borderTopWidth: 0.5,
           backgroundColor: dark.primary,
+        },
+        style: {
+          position: "absolute",
         },
       })}
     >
