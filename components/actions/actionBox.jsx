@@ -107,7 +107,7 @@ const ActionBox = ({ nodeId }) => {
                 {section?.block &&
                   section.block.map((field, fieldIndex) => {
                     return (
-                      <>
+                      <View key={fieldIndex}>
                         {fieldIndex !== 0 && (
                           <View
                             style={{
@@ -118,7 +118,7 @@ const ActionBox = ({ nodeId }) => {
                           />
                         )}
                         {sectionDispatch(field, fieldIndex)}
-                      </>
+                      </View>
                     );
                   })}
               </View>
