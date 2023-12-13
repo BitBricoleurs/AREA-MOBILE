@@ -14,18 +14,18 @@ import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { dark } from "../../utils/colors";
 
-import TimeEntry from "../../components/trigger/timeEntry";
-import ChoiceEntry from "../../components/trigger/choiceEntry";
-import ChoiceTextEntry from "../../components/trigger/choiceTextEntry";
-import TextArrayEntry from "../../components/trigger/textArrayEntry";
-import TextEntry from "../../components/trigger/textEntry";
+import TimeEntry from "../../components/form/timeEntry";
+import ChoiceEntry from "../../components/form/choiceEntry";
+import ChoiceTextEntry from "../../components/form/choiceTextEntry";
+import TextArrayEntry from "../../components/form/textArrayEntry";
+import TextEntry from "../../components/form/textEntry";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 import services from "../../jsons/triggers.json";
 
 const TriggerConfigScreen = ({ route, navigation }) => {
   const { serviceName, triggerName, previousPage } = route.params;
-  const { trigger } = useWorkflowContext();
+  const { trigger, setTrigger } = useWorkflowContext();
   const [triggerJson, setTriggerJson] = useState({});
   const [requirementsMet, setRequirementsMet] = useState(true);
   const [service, setService] = useState(null);
@@ -33,48 +33,85 @@ const TriggerConfigScreen = ({ route, navigation }) => {
   const [fromWorkflow, setFromWorkflow] = useState(false);
 
   const sectionDispatch = (section, index) => {
+    // console.log("sectionDispatch", section);
     switch (section.name) {
       case "timeEntry":
-        return <TimeEntry data={section} key={index} />;
+        return (
+          <TimeEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+          />
+        );
       case "choice":
-        return <ChoiceEntry data={section} key={index} />;
+        return (
+          <ChoiceEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+          />
+        );
       case "choiceTextEntry":
-        return <ChoiceTextEntry data={section} key={index} />;
+        return (
+          <ChoiceTextEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+          />
+        );
       case "textArrayEntry":
-        return <TextArrayEntry data={section} key={index} />;
+        return (
+          <TextArrayEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+          />
+        );
       case "textEntry":
-        return <TextEntry data={section} key={index} />;
+        return (
+          <TextEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+          />
+        );
       default:
         return null;
     }
   };
 
   const checkRequirements = () => {
-    const triggerData = service?.triggers[triggerIndex];
+    // TODO handle oneOf, true false and multi with different depth levels
+    // const triggerData = service?.triggers[triggerIndex];
 
-    if (!triggerData) {
-      return false;
-    }
+    // if (!triggerData) {
+    //   return false;
+    // }
 
-    for (const section of triggerData?.sections) {
-      const paramValue =
-        trigger?.params && trigger?.params[section.variableName];
-      if (section.required === "true") {
-        if (!paramValue || paramValue === "") {
-          return false;
-        }
-      } else if (section.required === "multi") {
-        const multiRequiredSections = triggerData.sections.filter(
-          (s) => s.required === "multi"
-        );
-        const isAnyMultiRequiredFilled = multiRequiredSections.some(
-          (s) => trigger?.params && trigger?.params[s.variableName]
-        );
-        if (!isAnyMultiRequiredFilled) {
-          return false;
-        }
-      }
-    }
+    // for (const section of triggerData?.sections) {
+    //   const paramValue =
+    //     trigger?.params && trigger?.params[section.variableName];
+    //   if (section.required === "true") {
+    //     if (!paramValue || paramValue === "") {
+    //       return false;
+    //     }
+    //   } else if (section.required === "multi") {
+    //     const multiRequiredSections = triggerData.sections.filter(
+    //       (s) => s.required === "multi"
+    //     );
+    //     const isAnyMultiRequiredFilled = multiRequiredSections.some(
+    //       (s) => trigger?.params && trigger?.params[s.variableName]
+    //     );
+    //     if (!isAnyMultiRequiredFilled) {
+    //       return false;
+    //     }
+    //   }
+    // }
     return true;
   };
 
@@ -138,7 +175,6 @@ const TriggerConfigScreen = ({ route, navigation }) => {
           <MyText style={styles.whenText}>When</MyText>
           {triggerJson &&
             triggerJson?.sections?.map((section, index) => {
-              console.log(section);
               return (
                 <View style={styles.section} key={index}>
                   {section?.sectionTitle && (
