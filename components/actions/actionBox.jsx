@@ -22,6 +22,8 @@ const ActionBox = ({ nodeId }) => {
   const contentRef = useRef();
   const rotateAnim = useState(new Animated.Value(0))[0];
 
+  console.log("ref", contentRef.current);
+
   const sectionDispatch = (section, index) => {
     console.log("sectionDispatch", section);
     switch (section.name) {
@@ -97,7 +99,11 @@ const ActionBox = ({ nodeId }) => {
                       <>
                         {fieldIndex !== 0 && (
                           <View
-                            style={{ height: 1, backgroundColor: dark.outline }}
+                            style={{
+                              height: 1,
+                              backgroundColor: dark.outline,
+                              marginLeft: 16,
+                            }}
                           />
                         )}
                         {sectionDispatch(field, fieldIndex)}
@@ -165,15 +171,15 @@ const ActionBox = ({ nodeId }) => {
         { backgroundColor: colorMap[currentAction.service] },
       ]}
     >
-      <Pressable style={styles.trigger} onPress={() => setUnfold(!unfold)}>
-        <View style={styles.triggerServiceIcon}>
+      <Pressable style={styles.action} onPress={() => setUnfold(!unfold)}>
+        <View style={styles.actionServiceIcon}>
           <IconComponent
             name={currentAction?.service}
             style={styles.serviceIcon}
           />
         </View>
         <View style={{ flex: 1 }}>
-          <MyText style={styles.triggerText}>{currentAction?.action}</MyText>
+          <MyText style={styles.actionText}>{currentAction?.action}</MyText>
         </View>
         <Animated.View style={{ transform: [{ rotate }] }}>
           <IconComponent name="chevron-right" style={styles.chevronIcon} />
@@ -197,13 +203,13 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 12,
   },
-  trigger: {
+  action: {
     flexDirection: "row",
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "space-between",
   },
-  triggerServiceIcon: {
+  actionServiceIcon: {
     width: 42,
     height: 42,
     borderRadius: 100,
@@ -216,7 +222,7 @@ const styles = StyleSheet.create({
     height: 42,
     resizeMode: "contain",
   },
-  triggerText: {
+  actionText: {
     fontSize: 18,
     color: dark.white,
     marginHorizontal: 16,
