@@ -12,43 +12,92 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const ChoiceTextEntry = ({ data }) => {
-  const { trigger, setTrigger } = useWorkflowContext();
+const ChoiceTextEntry = ({ data, object, setObject }) => {
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
+  const { variables } = useWorkflowContext();
+
+  console.log("data in choiceTextEntry", data);
 
   const handleSelectPress = () => {
     setSelected(!selected);
+    const element = data.type === "parameter" ? "params" : "conditions";
+    let elementData = data.type === "parameter" ? {} : [];
     if (!selected === false) {
-      const newParams = { ...trigger.params };
-      delete newParams[data.variableName];
-      setTrigger({
-        ...trigger,
-        params: newParams,
+      if (element === "params") {
+        elementData = { ...object.params };
+        delete elementData[data.variableName];
+      } else {
+        const variableId = variables.find(
+          (variable) => variable.name === data.variableName
+        ).id;
+        elementData = [...object.conditions];
+        const index = elementData.findIndex(
+          (condition) => condition.key === variableId
+        );
+        elementData.splice(index, 1);
+      }
+      setObject({
+        ...object,
+        [element]: elementData,
       });
-      return;
     }
   };
 
   const handleChange = (text) => {
+    let element = data.type === "parameter" ? "params" : "conditions";
+    let elementData = data.type === "parameter" ? {} : [];
     if (text === "") {
-      const newParams = { ...trigger.params };
-      delete newParams[data.variableName];
-      setTrigger({
-        ...trigger,
-        params: newParams,
-      });
-      return;
+      if (element === "params") {
+        elementData = { ...object.params };
+        elementData[data.variableName];
+      } else {
+        const variableId = variables.find(
+          (variable) => variable.name === data.variableName
+        ).id;
+        elementData = [...object.conditions];
+        const index = elementData.findIndex(
+          (condition) => condition.key === variableId
+        );
+        elementData.splice(index, 1);
+      }
+    } else {
+      if (element === "params") {
+        elementData = {
+          ...object.params,
+          [data.variableName]: text,
+        };
+      } else {
+        const variableId = variables.find(
+          (variable) => variable.name === data.variableName
+        ).id;
+        elementData = [...object.conditions];
+
+        const conditionIndex = elementData.findIndex(
+          (condition) => condition.key === variableId
+        );
+
+        if (conditionIndex !== -1) {
+          elementData[conditionIndex] = {
+            ...elementData[conditionIndex],
+            value: text,
+          };
+        } else {
+          elementData.push({
+            key: variableId,
+            type: data.conditionType,
+            value: text,
+          });
+        }
+      }
     }
-    const newParams = {
-      ...trigger.params,
-      [data.variableName]: text,
-    };
-    setTrigger({
-      ...trigger,
-      params: newParams,
+    setObject({
+      ...object,
+      [element]: elementData,
     });
   };
+
+  console.log("object", object);
 
   useEffect(() => {
     Animated.timing(inputHeight, {

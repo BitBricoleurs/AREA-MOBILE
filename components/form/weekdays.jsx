@@ -5,10 +5,11 @@ import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const Weekdays = () => {
+const Weekdays = ({ object, setObject }) => {
   const [selectedDays, setSelectedDays] = useState([1]);
-  const { trigger, setTrigger } = useWorkflowContext();
   const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
+
+  // console.log("object in weekdays", object);
 
   const handlePress = (index) => {
     if (selectedDays.includes(index)) {
@@ -23,11 +24,11 @@ const Weekdays = () => {
 
   useEffect(() => {
     const newParams = {
-      ...trigger.params,
+      ...object.params,
       weekdays: selectedDays,
     };
-    setTrigger({
-      ...trigger,
+    setObject({
+      ...object,
       params: newParams,
     });
   }, [selectedDays]);

@@ -1,0 +1,230 @@
+[
+  {
+    "name": "System",
+    "actions": [
+      {
+        "name": "Notification",
+        "eg": "Send me a notification",
+        "icon": "bell",
+        "sections": [
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "sectionTitle": "",
+                "type": "text",
+                "placeholder": "Title",
+                "variableName": "title",
+                "required": "true"
+              },
+              {
+                "name": "basicTextEntry",
+                "sectionTitle": "",
+                "type": "text",
+                "placeholder": "Content",
+                "variableName": "content",
+                "required": "true"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Outlook",
+    "actions": [
+      {
+        "name": "Email",
+        "eg": "Send an email to Jane",
+        "icon": "mail",
+        "sections": [
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "Recipients",
+                "placeholder": "Email",
+                "variableName": "recipients",
+                "maxEntries": 0,
+                "required": "true"
+              },
+              {
+                "name": "textArrayEntry",
+                "type": "email",
+                "label": "Cc Recipients",
+                "placeholder": "Email",
+                "variableName": "ccRecipients",
+                "maxEntries": 0,
+                "required": "false"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Subject",
+                "variableName": "subject",
+                "required": "true"
+              },
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Content",
+                "variableName": "content",
+                "required": "true"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "eg": "Create an event",
+        "icon": "calendar",
+        "options": [
+          {
+            "name": "create",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Title",
+                    "variableName": "title",
+                    "required": "true"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Content",
+                    "variableName": "content",
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "dateEntry",
+                    "type": "date",
+                    "placeholder": "Start",
+                    "variableName": "start",
+                    "required": "true"
+                  },
+                  {
+                    "name": "dateEntry",
+                    "type": "date",
+                    "placeholder": "End",
+                    "variableName": "end",
+                    "required": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Location",
+                    "variableName": "location",
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "email",
+                    "label": "Attendees",
+                    "placeholder": "Email",
+                    "variableName": "attendees",
+                    "maxEntries": 0,
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Accept",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Event id",
+                    "variableName": "id",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Decline",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Event id",
+                    "variableName": "id",
+                    "required": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Comment",
+                    "variableName": "comment",
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "Propose new time",
+                "block": [
+                  {
+                    "name": "dateEntry",
+                    "type": "date",
+                    "placeholder": "Start",
+                    "variableName": "start",
+                    "required": "true"
+                  },
+                  {
+                    "name": "dateEntry",
+                    "type": "date",
+                    "placeholder": "End",
+                    "variableName": "end",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

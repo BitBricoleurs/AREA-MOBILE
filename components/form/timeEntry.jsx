@@ -8,9 +8,10 @@ import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const TimeEntry = ({ data }) => {
+const TimeEntry = ({ data, object, setObject }) => {
   const [time, setTime] = useState(new Date());
-  const { trigger, setTrigger } = useWorkflowContext();
+
+  // console.log("object in timeEntry", object);
 
   const timeTo24h = (dateTime) => {
     let hours = dateTime.getHours();
@@ -35,14 +36,14 @@ const TimeEntry = ({ data }) => {
   useEffect(() => {
     const newTime = timeTo24h(time);
     const newParams = {
-      ...trigger.params,
+      ...object.params,
       [data.variableName]: newTime,
     };
     const newTrigger = {
-      ...trigger,
+      ...object,
       params: newParams,
     };
-    setTrigger(newTrigger);
+    setObject(newTrigger);
   }, [time]);
 
   return (

@@ -1,0 +1,87 @@
+{
+  "name_workflow": "Nom du Workflow",
+  "description": "Description du Workflow",
+  "workflow": [
+    {
+      "id": 1,
+      "type": "trigger",
+      "type_action": "recevoir un email",
+      "service": "Outlook",
+      "conditions": [
+        {
+          "key": "${id}", // l'id de la variable 1
+          "value": "test@gmail.com",
+          "type": "contain"
+        }
+      ],
+      "next_id": 2
+    },
+    {
+      "id": 2,
+      "type": "action",
+      "type_action": "Envoyer un message sur Teams",
+      "details_action": "",
+      "service": "Teams",
+      "transformation": {
+        "destination": "alex@gmail.com, ${id}", // l'id de la variable 2
+        "message": "Bonjour, voici un message de test ${id}" // donc ici c'est 1 pour l'id
+      },
+      "next_id": 3
+    },
+    {
+      "id": 3,
+      "type": "condition",
+      "key": "${id}", // l'id de la variable 1
+      "value": "${id}", // l'id de la variable 3
+      "type_condition": "contain",
+      "next_id_src_success": 4,
+      "next_id_src_fail": 5
+    },
+    {
+      "id": 4,
+      "type": "action",
+      "type_action": "Envoyer un message sur Teams",
+      "details_action": "",
+      "service": "Teams",
+      "transformation": {
+        "team_id": "test",
+        "channel_id": "test",
+        "message": "Bonjour, voici un message de test SUCCESS"
+      },
+      "next_id": -1
+    },
+    {
+      "id": 5,
+      "type": "action",
+      "type_action": "Envoyer un message sur Teams",
+      "details_action": "",
+      "service": "Teams",
+      "transformation": {
+        "team_id": "test",
+        "channel_id": "test",
+        "message": "Bonjour, voici un message de test FAILLL"
+      },
+      "next_id": -1
+    }
+  ],
+  "variables": [
+    {
+      "id": 1,
+      "name": "body",
+      "type": "output",
+      "value": 1 // lorsque le type est ouput alors c'est un id qui fait référence à un id du worjflow
+    },
+    {
+      "id": 2,
+      "name": "test_variables",
+      "type": "input",
+      "value": "Harry" // lorsque le type est input alors la valeur est en dur comme ici, je peux donc le réutiliser dans le workflow
+    },
+    {
+      "id": 3,
+      "name": "test_variables2",
+      "type": "input",
+      "value": "Potter" // lorsque le type est input alors la valeur est en dur comme ici, je peux donc le réutiliser dans le workflow
+    }
+  ]
+}

@@ -5,10 +5,11 @@ import DateTimePicker from "react-native-ui-datepicker";
 import { dark } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const Calendar = ({ update }) => {
+const Calendar = ({ update, object, setObject }) => {
   const todaysDate = new Date();
   const [date, setDate] = useState(todaysDate.toISOString().split("T")[0]);
-  const { trigger, setTrigger } = useWorkflowContext();
+
+  // console.log("object in calendar", object);
 
   const onChange = (newDate) => {
     setDate(newDate.split(" ")[0]);
@@ -16,11 +17,11 @@ const Calendar = ({ update }) => {
 
   useEffect(() => {
     const newParams = {
-      ...trigger.params,
+      ...object.params,
       date: date,
     };
-    setTrigger({
-      ...trigger,
+    setObject({
+      ...object,
       params: newParams,
     });
   }, [date, update]);

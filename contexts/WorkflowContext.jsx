@@ -4,14 +4,22 @@ const WorkflowContext = createContext();
 
 export const WorkflowContextProvider = ({ children }) => {
   const [trigger, setTrigger] = useState({});
+  const [workflow, setWorkflow] = useState([]);
+  const [variables, setVariables] = useState([]);
 
   console.log("trigger: ", trigger);
+  console.log("workflow: ", workflow);
+  console.log("variables: ", variables);
 
   return (
     <WorkflowContext.Provider
       value={{
         trigger,
         setTrigger,
+        workflow,
+        setWorkflow,
+        variables,
+        setVariables,
       }}
     >
       {children}

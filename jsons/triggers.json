@@ -12,6 +12,7 @@
             "block": [
               {
                 "name": "timeEntry",
+                "type": "parameter",
                 "sectionTitle": "",
                 "variableName": "time",
                 "default": "current",
@@ -26,7 +27,8 @@
               {
                 "name": "choice",
                 "variableName": "repeat",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "parameter",
                 "placeholder": "",
                 "label": "",
                 "required": "true",
@@ -71,12 +73,13 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "email",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "Sender",
                 "placeholder": "Email",
                 "variableName": "sender",
                 "maxEntries": 0,
-                "required": "multi"
+                "required": "false"
               }
             ]
           },
@@ -85,11 +88,12 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Subject contains",
                 "variableName": "subject",
                 "placeholder": "Anything",
-                "required": "multi"
+                "required": "false"
               }
             ]
           },
@@ -98,13 +102,28 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Content contains",
                 "variableName": "content",
                 "placeholder": "Anything",
-                "required": "multi"
+                "required": "false"
               }
             ]
+          }
+        ],
+        "exposes": [
+          {
+            "type": "sender",
+            "variableName": "sender"
+          },
+          {
+            "type": "subject",
+            "variableName": "subject"
+          },
+          {
+            "type": "content",
+            "variableName": "content"
           }
         ]
       },
@@ -118,8 +137,9 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
-                "variableName": "titleContains",
+                "type": "condition",
+                "conditionType": "contains",
+                "variableName": "title",
                 "label": "Title contains",
                 "placeholder": "Anything",
                 "required": "multi"
@@ -131,7 +151,8 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "parameter",
                 "label": "",
                 "variableName": "event",
                 "required": "multi",
@@ -152,6 +173,28 @@
               }
             ]
           }
+        ],
+        "exposes": [
+          {
+            "type": "output",
+            "variableName": "creator"
+          },
+          {
+            "type": "output",
+            "variableName": "invitees"
+          },
+          {
+            "type": "output",
+            "variableName": "date"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "description"
+          }
         ]
       }
     ]
@@ -169,11 +212,11 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "Channel",
                 "variableName": "channel",
                 "placeholder": "Channel name",
-                "required": "multi"
+                "required": "true"
               }
             ]
           },
@@ -182,12 +225,13 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "email",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "Sender",
                 "placeholder": "Email",
                 "maxEntries": 0,
                 "variableName": "sender",
-                "required": "multi"
+                "required": "false"
               }
             ]
           },
@@ -196,11 +240,12 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Content contains",
                 "placeholder": "Anything",
                 "variableName": "content",
-                "required": "multi"
+                "required": "false"
               }
             ]
           }
@@ -216,12 +261,13 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "email",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "User",
                 "placeholder": "Email",
                 "maxEntries": 0,
                 "variableName": "user",
-                "required": "multi"
+                "required": "false"
               }
             ]
           },
@@ -230,12 +276,13 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "email",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "Channel",
                 "placeholder": "Channel name",
                 "variableName": "channel",
                 "maxEntries": 0,
-                "required": "multi"
+                "required": "false"
               }
             ]
           }
@@ -256,10 +303,10 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "type": "parameter",
                 "label": "",
                 "variableName": "ticket",
-                "required": "multi",
+                "required": "oneOf",
                 "options": [
                   {
                     "label": "Created",
@@ -282,24 +329,24 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "Updated",
                 "placeholder": "Name",
                 "variableName": "status",
-                "required": "multi"
+                "required": "oneOf"
               }
             ]
           },
           {
-            "sectionTitle": "Status",
+            "sectionTitle": "",
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "Commented",
                 "placeholder": "Anything",
                 "variableName": "commented",
-                "required": "multi"
+                "required": "oneOf"
               }
             ]
           }
@@ -321,7 +368,7 @@
               {
                 "name": "textEntry",
                 "sectionTitle": "Repository",
-                "type": "text",
+                "type": "parameter",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "repository",
@@ -334,7 +381,8 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Author",
                 "placeholder": "email",
                 "variableName": "authors",
@@ -347,7 +395,8 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Content contains",
                 "placeholder": "Anything",
                 "variableName": "content",
@@ -367,7 +416,7 @@
             "block": [
               {
                 "name": "textEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "repository",
@@ -380,7 +429,8 @@
             "block": [
               {
                 "name": "textArrayEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Author",
                 "placeholder": "email",
                 "variableName": "authors",
@@ -393,7 +443,8 @@
             "block": [
               {
                 "name": "choiceTextEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "contains",
                 "label": "Content contains",
                 "placeholder": "Anything",
                 "variableName": "content",
@@ -406,7 +457,9 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "",
                 "variableName": "pr",
                 "required": "true",
@@ -447,7 +500,7 @@
             "block": [
               {
                 "name": "textEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "repository",
@@ -460,11 +513,11 @@
             "block": [
               {
                 "name": "textEntry",
-                "type": "text",
+                "type": "parameter",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "issue",
-                "required": "false"
+                "required": "true"
               }
             ]
           },
@@ -473,7 +526,9 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "",
                 "variableName": "issue_action",
                 "required": "true",
@@ -513,12 +568,12 @@
             "sectionTitle": "Repository",
             "block": [
               {
-                "name": "textEntry",
+                "name": "",
                 "type": "text",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "repository",
-                "required": "true"
+                "required": "false"
               }
             ]
           }
@@ -532,14 +587,15 @@
       {
         "name": "Build",
         "eg": "When a build is completed",
-        "icon": "build",
+        "icon": "player",
         "sections": [
           {
             "sectionTitle": "Job path",
             "block": [
               {
                 "name": "textEntry",
-                "type": "text",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "",
                 "placeholder": "Url",
                 "variableName": "job_path",
@@ -552,7 +608,8 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "parameter",
                 "label": "",
                 "variableName": "build_result",
                 "required": "true",
@@ -589,7 +646,9 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "condition",
+                "conditionType": "is",
                 "label": "",
                 "variableName": "status",
                 "required": "true",
@@ -623,7 +682,8 @@
             "block": [
               {
                 "name": "choice",
-                "type": "Single",
+                "choiceType": "Single",
+                "type": "parameter",
                 "label": "",
                 "variableName": "server_health",
                 "required": "true",

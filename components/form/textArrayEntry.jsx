@@ -6,17 +6,17 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextArrayEntry = ({ data }) => {
-  const { trigger, setTrigger } = useWorkflowContext();
+const TextArrayEntry = ({ data, object, setObject }) => {
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
+  const { variables } = useWorkflowContext();
 
-  const updateTriggerParams = (newEntries) => {
+  const updateObjectParams = (newEntries) => {
     const emails = newEntries.filter((entry) => entry.trim() !== "");
-    setTrigger({
-      ...trigger,
+    setObject({
+      ...object,
       params: {
-        ...trigger.params,
+        ...object.params,
         [data.variableName]: emails,
       },
     });
@@ -24,14 +24,25 @@ const TextArrayEntry = ({ data }) => {
 
   const handleSelectPress = () => {
     setSelected(!selected);
+    const element = data.type === "parameter" ? "params" : "conditions";
+
     if (!selected === false) {
-      const newParams = { ...trigger.params };
-      delete newParams[data.variableName];
-      setTrigger({
-        ...trigger,
-        params: newParams,
+      let newElementData;
+      if (element === "params") {
+        newElementData = { ...object.params };
+        delete newElementData[data.variableName];
+      } else {
+        const variableId = variables.find(
+          (variable) => variable.name === data.variableName
+        ).id;
+        newElementData = object.conditions.filter(
+          (condition) => condition.key !== variableId
+        );
+      }
+      setObject({
+        ...object,
+        [element]: newElementData,
       });
-      return;
     }
   };
 
@@ -49,15 +60,15 @@ const TextArrayEntry = ({ data }) => {
       return;
     }
     setEmailEntries(updatedEntries);
-    updateTriggerParams(updatedEntries);
+    updateObjectParams(updatedEntries);
   };
 
   const handleEmpty = (entries) => {
     if (entries.length === 1 && entries[0] === "") {
-      const newParams = { ...trigger.params };
+      const newParams = { ...object.params };
       delete newParams[data.variableName];
-      setTrigger({
-        ...trigger,
+      setObject({
+        ...object,
         params: newParams,
       });
       setEmailEntries([""]);
@@ -72,7 +83,7 @@ const TextArrayEntry = ({ data }) => {
       return;
     }
     setEmailEntries(updatedEntries);
-    updateTriggerParams(updatedEntries);
+    updateObjectParams(updatedEntries);
   };
 
   return (

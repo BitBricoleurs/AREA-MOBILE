@@ -8,16 +8,23 @@ import Weekdays from "./weekdays";
 import Calendar from "./calendar";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const ChoiceEntry = ({ data }) => {
-  const { trigger, setTrigger } = useWorkflowContext();
+const ChoiceEntry = ({ data, object, setObject }) => {
   const [selectedChoice, setSelectedChoice] = useState(1);
+
+  // console.log("object in choiceEntry", object);
 
   const displayRevealComponent = () => {
     switch (data?.options[selectedChoice]?.reveal) {
       case "Calendar":
-        return <Calendar update={selectedChoice} />;
+        return (
+          <Calendar
+            update={selectedChoice}
+            object={object}
+            setObject={setObject}
+          />
+        );
       case "Weekdays":
-        return <Weekdays />;
+        return <Weekdays object={object} setObject={setObject} />;
       default:
         return null;
     }
@@ -28,17 +35,18 @@ const ChoiceEntry = ({ data }) => {
     if (data.required === "true" && index === selectedChoice) {
       return;
     } else if (data.required === "multi" && index === selectedChoice) {
-      delete trigger.params[data.variableName];
+      delete object.params[data.variableName];
       newIndex = null;
     }
     const variableNames = data.options.map((option) => option.variableName);
-    const triggerParams = trigger.params || {};
-    const newParams = Object.keys(triggerParams).reduce((acc, key) => {
+    const objectParams = object.params || {};
+
+    const newParams = Object.keys(objectParams).reduce((acc, key) => {
       if (
         !variableNames.includes(key) ||
         key === data.options[index].variableName
       ) {
-        acc[key] = trigger?.params[key];
+        acc[key] = object?.params[key];
       }
       return acc;
     }, {});
@@ -54,8 +62,8 @@ const ChoiceEntry = ({ data }) => {
 
       newParams[data.variableName] = data.options[index].label.toLowerCase();
     }
-    setTrigger({
-      ...trigger,
+    setObject({
+      ...object,
       params: newParams,
     });
 
@@ -85,10 +93,10 @@ const ChoiceEntry = ({ data }) => {
                   style={styles.choice}
                   onPress={() => handleChoicePress(index)}
                 >
-                  <View style={styles.triggerInfo}>
+                  <View style={styles.objectInfo}>
                     <MyText
                       style={[
-                        styles.triggerName,
+                        styles.objectName,
                         index === selectedChoice && { color: dark.purple },
                       ]}
                     >
@@ -121,14 +129,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
   },
-  triggerInfo: {
+  objectInfo: {
     flex: 1,
   },
-  triggerName: {
+  objectName: {
     fontSize: 16,
     color: dark.white,
   },
-  triggerEg: {
+  objectEg: {
     fontSize: 12,
     color: dark.white,
     opacity: 0.5,
