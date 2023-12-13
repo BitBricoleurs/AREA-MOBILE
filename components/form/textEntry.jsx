@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 48,
     paddingHorizontal: 16,
+    justifyContent: "center",
   },
   input: {
     color: dark.white,
