@@ -256,8 +256,10 @@ const styles = StyleSheet.create({
   options: {
     width: "100%",
     position: "absolute",
-    bottom: 8,
+    bottom: 0,
+    paddingVertical: 8,
     alignItems: "center",
+    backgroundColor: dark.primary,
   },
   optionsScrollView: {
     paddingHorizontal: 12,

@@ -10,7 +10,7 @@ export const dark = {
 
 export const colorMap = {
   Outlook: "#32A9E7",
-  Github: "#FFF",
+  Github: "#000000",
   Azure: "#007FFF",
   Jira: "#0052CC",
   Jenkins: "#D33833",
