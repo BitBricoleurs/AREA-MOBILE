@@ -11,8 +11,6 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 const ChoiceEntry = ({ data, object, setObject }) => {
   const [selectedChoice, setSelectedChoice] = useState(1);
 
-  // console.log("object in choiceEntry", object);
-
   const displayRevealComponent = () => {
     switch (data?.options[selectedChoice]?.reveal) {
       case "Calendar":

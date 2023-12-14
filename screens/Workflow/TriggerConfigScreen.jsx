@@ -33,7 +33,6 @@ const TriggerConfigScreen = ({ route, navigation }) => {
   const [fromWorkflow, setFromWorkflow] = useState(false);
 
   const sectionDispatch = (section, index) => {
-    // console.log("sectionDispatch", section);
     switch (section.name) {
       case "timeEntry":
         return (

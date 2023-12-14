@@ -11,8 +11,6 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 const TimeEntry = ({ data, object, setObject }) => {
   const [time, setTime] = useState(new Date());
 
-  // console.log("object in timeEntry", object);
-
   const timeTo24h = (dateTime) => {
     let hours = dateTime.getHours();
     let minutes = dateTime.getMinutes();

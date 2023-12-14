@@ -24,9 +24,10 @@ import ActionSection from "../../components/actions/actionSection";
 const WorkflowScreen = ({ navigation }) => {
   const options = ["if", "loop", "delay", "end", "variable"];
   const { trigger, workflow } = useWorkflowContext();
-  const [activeCardId, setActiveCardId] = useState(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [scrollViewOffset, setScrollViewOffset] = useState(0);
   const opacity = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef(null);
   const [prevOutputs, setPrevOutputs] = useState([
     "output 1",
     "output 2",
@@ -66,14 +67,19 @@ const WorkflowScreen = ({ navigation }) => {
     );
   };
 
-  const handleFocus = (nodeId) => {
-    console.log("handleFocus", nodeId);
-    setActiveCardId(nodeId);
-    // get buttons to display
+  const handleScroll = (event) => {
+    setScrollViewOffset(event.nativeEvent.contentOffset.y);
   };
 
-  console.log("previous card id", activeCardId);
-  console.log("height", keyboardHeight);
+  const handleFocus = (nodeId, offset) => {
+    if (offset === null || offset === undefined) return;
+    const adjustedPageY = offset + scrollViewOffset - 300;
+    scrollViewRef.current.scrollTo({
+      x: 0,
+      y: adjustedPageY,
+      animated: true,
+    });
+  };
 
   const handleVariablePress = () => {
     // add variable to workflow variables
@@ -138,8 +144,11 @@ const WorkflowScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
+        contentContainerStyle={{ paddingBottom: 60 + keyboardHeight }}
         stickyHeaderIndices={[0]}
+        ref={scrollViewRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={10}
       >
         <View style={styles.headerContainer}>
           <View style={styles.header}>

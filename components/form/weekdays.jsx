@@ -9,8 +9,6 @@ const Weekdays = ({ object, setObject }) => {
   const [selectedDays, setSelectedDays] = useState([1]);
   const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
 
-  // console.log("object in weekdays", object);
-
   const handlePress = (index) => {
     if (selectedDays.includes(index)) {
       if (selectedDays.length === 1) {

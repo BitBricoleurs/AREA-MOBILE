@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { dark } from "../../utils/colors";
@@ -9,9 +9,8 @@ import IconComponent from "../../utils/iconComponent";
 const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
+  const inputRefs = useRef([]);
   const { variables } = useWorkflowContext();
-
-  console.log("previous node id in TextArrayEntry", nodeId);
 
   const updateObjectParams = (newEntries) => {
     const emails = newEntries.filter((entry) => entry.trim() !== "");
@@ -79,10 +78,11 @@ const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
     return false;
   };
 
-  const handleFocus = () => {
-    if (nodeId !== null) {
-      onFocus(nodeId);
-    }
+  const handleFocus = (index) => {
+    const currentInput = inputRefs.current[index].current;
+    currentInput.measure((x, y, width, height, pageX, pageY) => {
+      onFocus(nodeId, pageY);
+    });
   };
 
   const handleRemoveEntry = (index) => {
@@ -93,6 +93,12 @@ const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
     setEmailEntries(updatedEntries);
     updateObjectParams(updatedEntries);
   };
+
+  useEffect(() => {
+    inputRefs.current = emailEntries.map(
+      (_, i) => inputRefs.current[i] || React.createRef()
+    );
+  }, [emailEntries]);
 
   return (
     <View style={styles.inputContainer}>
@@ -112,7 +118,8 @@ const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
                   value={entry}
                   placeholder="Email"
                   placeholderTextColor={dark.outline}
-                  onFocus={handleFocus}
+                  onFocus={() => handleFocus(index)}
+                  ref={inputRefs.current[index]}
                 />
                 {index < emailEntries.length - 1 && (
                   <TouchableOpacity

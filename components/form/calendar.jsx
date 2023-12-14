@@ -9,8 +9,6 @@ const Calendar = ({ update, object, setObject }) => {
   const todaysDate = new Date();
   const [date, setDate] = useState(todaysDate.toISOString().split("T")[0]);
 
-  // console.log("object in calendar", object);
-
   const onChange = (newDate) => {
     setDate(newDate.split(" ")[0]);
   };

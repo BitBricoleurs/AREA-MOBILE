@@ -8,7 +8,6 @@ import IconComponent from "../../utils/iconComponent";
 import { dark } from "../../utils/colors";
 
 const ActionChoice = ({ service }) => {
-  console.log(service);
   const navigation = useNavigation();
   const { setWorkflow, workflow } = useWorkflowContext();
 

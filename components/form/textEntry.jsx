@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
 import { dark } from "../../utils/colors";
@@ -8,11 +8,11 @@ import IconComponent from "../../utils/iconComponent";
 
 const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const { variables } = useWorkflowContext();
+  const inputRef = useRef(null);
 
-  console.log("previous node id in textEntry", nodeId);
   const handleChange = (text) => {
     const element = data.type === "condition" ? "conditions" : "params";
-    let elementData = data.type === "params" ? {} : [];
+    let elementData = element === "params" ? {} : [];
     if (text === "") {
       if (element === "params") {
         elementData = { ...object.params };
@@ -59,10 +59,9 @@ const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   };
 
   const handleFocus = () => {
-    console.log("handleFocus", nodeId);
-    if (nodeId !== null) {
-      onFocus(nodeId);
-    }
+    inputRef.current.measure((x, y, width, height, pageX, pageY) => {
+      onFocus(nodeId, pageY);
+    });
   };
 
   return (
@@ -76,6 +75,7 @@ const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
         multiline={true}
         numberOfLines={4}
         onFocus={handleFocus}
+        ref={inputRef}
       />
     </View>
   );

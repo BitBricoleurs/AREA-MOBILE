@@ -15,9 +15,8 @@ import IconComponent from "../../utils/iconComponent";
 const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
+  const inputRef = useRef(null);
   const { variables } = useWorkflowContext();
-
-  console.log("previous node id in ChoiceTextEntry", nodeId);
 
   const handleSelectPress = () => {
     setSelected(!selected);
@@ -98,9 +97,9 @@ const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   };
 
   const handleFocus = () => {
-    if (nodeId !== null) {
-      onFocus(nodeId);
-    }
+    inputRef.current.measure((x, y, width, height, pageX, pageY) => {
+      onFocus(nodeId, pageY);
+    });
   };
 
   useEffect(() => {
@@ -128,6 +127,7 @@ const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
             placeholder={data.placeholder}
             placeholderTextColor={"#969696"}
             onFocus={handleFocus}
+            ref={inputRef}
           />
         )}
       </Animated.View>
