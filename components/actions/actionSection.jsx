@@ -3,10 +3,14 @@ import { View, Text, StyleSheet } from "react-native";
 
 import ActionBox from "./actionBox";
 
-const ActionSection = ({ nodeId }) => {
+const ActionSection = ({ nodeId, previousNodeId, onFocus }) => {
   return (
     <>
-      <ActionBox nodeId={nodeId} />
+      <ActionBox
+        nodeId={nodeId}
+        previousNodeId={previousNodeId}
+        onFocus={onFocus}
+      />
       {/* //TODO: find variables related to the id */}
     </>
   );

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Pressable,
   Animated,
   Modal,
   TouchableOpacity,
   Platform,
+  Keyboard,
+  Dimensions,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -23,7 +24,7 @@ import ChoiceTextEntry from "../form/choiceTextEntry";
 import TextArrayEntry from "../form/textArrayEntry";
 import TextEntry from "../form/textEntry";
 
-const ActionBox = ({ nodeId }) => {
+const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
   console.log(nodeId);
   const { workflow, setWorkflow } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
@@ -31,7 +32,6 @@ const ActionBox = ({ nodeId }) => {
   const [currentOption, setCurrentOption] = useState(0);
   const [currentAction, setCurrentAction] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const contentRef = useRef();
   const pickerRef = useRef();
   const rotateAnim = useState(new Animated.Value(0))[0];
 
@@ -63,6 +63,8 @@ const ActionBox = ({ nodeId }) => {
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            nodeId={previousNodeId}
+            onFocus={onFocus}
           />
         );
       case "textArrayEntry":
@@ -72,6 +74,8 @@ const ActionBox = ({ nodeId }) => {
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            nodeId={previousNodeId}
+            onFocus={onFocus}
           />
         );
       case "basicTextEntry":
@@ -81,6 +85,8 @@ const ActionBox = ({ nodeId }) => {
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            nodeId={previousNodeId}
+            onFocus={onFocus}
           />
         );
       default:
@@ -277,11 +283,7 @@ const ActionBox = ({ nodeId }) => {
           <IconComponent name="chevron-right" style={styles.chevronIcon} />
         </Animated.View>
       </Pressable>
-      {unfold && (
-        <View ref={contentRef} style={styles.formContainer}>
-          {renderForm()}
-        </View>
-      )}
+      {unfold && <View style={styles.formContainer}>{renderForm()}</View>}
     </View>
   );
 };

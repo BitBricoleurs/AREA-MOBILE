@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -7,6 +7,11 @@ import {
   Platform,
   Pressable,
   StatusBar,
+  Keyboard,
+  Animated,
+  Dimensions,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -19,11 +24,27 @@ import ActionSection from "../../components/actions/actionSection";
 const WorkflowScreen = ({ navigation }) => {
   const options = ["if", "loop", "delay", "end", "variable"];
   const { trigger, workflow } = useWorkflowContext();
+  const [activeCardId, setActiveCardId] = useState(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const opacity = useRef(new Animated.Value(0)).current;
+  const [prevOutputs, setPrevOutputs] = useState([
+    "output 1",
+    "output 2",
+    "body",
+    "sender",
+    "subject",
+  ]);
 
-  const nodeDispatch = (node) => {
+  const nodeDispatch = (node, previousNodeId) => {
     switch (node.type) {
       case "action":
-        return <ActionSection nodeId={node.id} />;
+        return (
+          <ActionSection
+            nodeId={node.id}
+            previousNodeId={previousNodeId}
+            onFocus={handleFocus}
+          />
+        );
       case "condition":
         return <View style={{ flex: 1 }} />;
       case "delay":
@@ -33,17 +54,85 @@ const WorkflowScreen = ({ navigation }) => {
     }
   };
 
-  const renderNode = (nodeId) => {
+  const renderNode = (nodeId, prevNodeId) => {
     const node = workflow.find((n) => n.id === nodeId);
     if (!node) return null;
 
     return (
       <View key={node.id} style={{ flex: 1, width: "100%" }}>
-        {nodeDispatch(node)}
-        {node.next_id > 0 && renderNode(node.next_id)}
+        {nodeDispatch(node, prevNodeId)}
+        {node.next_id > 0 && renderNode(node.next_id, node.id)}
       </View>
     );
   };
+
+  const handleFocus = (nodeId) => {
+    console.log("handleFocus", nodeId);
+    setActiveCardId(nodeId);
+    // get buttons to display
+  };
+
+  console.log("previous card id", activeCardId);
+  console.log("height", keyboardHeight);
+
+  const handleVariablePress = () => {
+    // add variable to workflow variables
+  };
+
+  const fadeIn = () => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setKeyboardHeight(0));
+  };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+        fadeIn();
+      }
+    );
+
+    const keyboardWillShowListener = Keyboard.addListener(
+      "keyboardWillShow",
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+        fadeIn();
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        fadeOut();
+      }
+    );
+
+    const keyboardWillHideListener = Keyboard.addListener(
+      "keyboardWillHide",
+      () => {
+        fadeOut();
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +193,7 @@ const WorkflowScreen = ({ navigation }) => {
               backgroundColor: dark.outline,
             }}
           />
-          {workflow[0] ? renderNode(workflow[0].id) : null}
+          {workflow[0] ? renderNode(workflow[0].id, 0) : null}
           <View
             style={{ height: 22, width: 2, backgroundColor: dark.outline }}
           />
@@ -124,6 +213,36 @@ const WorkflowScreen = ({ navigation }) => {
           </Pressable>
         </View>
       </ScrollView>
+      {keyboardHeight > 0 && (
+        <Animated.View
+          style={[
+            styles.outputChoiceView,
+            {
+              bottom: keyboardHeight - 90,
+              opacity: opacity,
+            },
+          ]}
+        >
+          <ScrollView
+            style={styles.optionsScrollView}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            {prevOutputs &&
+              prevOutputs.map((output, index) => (
+                <Pressable
+                  key={index}
+                  style={[
+                    styles.option,
+                    index === prevOutputs.length - 1 && { marginRight: 24 },
+                  ]}
+                >
+                  <MyText style={styles.optionText}>{output}</MyText>
+                </Pressable>
+              ))}
+          </ScrollView>
+        </Animated.View>
+      )}
       <View style={styles.options}>
         <ScrollView
           style={styles.optionsScrollView}
@@ -252,6 +371,14 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: "contain",
+  },
+
+  outputChoiceView: {
+    width: "100%",
+    position: "absolute",
+    paddingVertical: 8,
+    alignItems: "center",
+    backgroundColor: dark.primary,
   },
   options: {
     width: "100%",

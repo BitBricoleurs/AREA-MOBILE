@@ -6,10 +6,12 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextArrayEntry = ({ data, object, setObject }) => {
+const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
   const { variables } = useWorkflowContext();
+
+  console.log("previous node id in TextArrayEntry", nodeId);
 
   const updateObjectParams = (newEntries) => {
     const emails = newEntries.filter((entry) => entry.trim() !== "");
@@ -24,7 +26,7 @@ const TextArrayEntry = ({ data, object, setObject }) => {
 
   const handleSelectPress = () => {
     setSelected(!selected);
-    const element = data.type === "parameter" ? "params" : "conditions";
+    const element = data.type === "condition" ? "conditions" : "params";
 
     if (!selected === false) {
       let newElementData;
@@ -77,6 +79,12 @@ const TextArrayEntry = ({ data, object, setObject }) => {
     return false;
   };
 
+  const handleFocus = () => {
+    if (nodeId !== null) {
+      onFocus(nodeId);
+    }
+  };
+
   const handleRemoveEntry = (index) => {
     const updatedEntries = emailEntries.filter((_, i) => i !== index);
     if (handleEmpty(updatedEntries)) {
@@ -104,6 +112,7 @@ const TextArrayEntry = ({ data, object, setObject }) => {
                   value={entry}
                   placeholder="Email"
                   placeholderTextColor={dark.outline}
+                  onFocus={handleFocus}
                 />
                 {index < emailEntries.length - 1 && (
                   <TouchableOpacity
@@ -129,6 +138,11 @@ const TextArrayEntry = ({ data, object, setObject }) => {
 };
 
 export default TextArrayEntry;
+
+TextArrayEntry.defaultProps = {
+  nodeId: null,
+  onFocus: () => {},
+};
 
 const styles = StyleSheet.create({
   inputContainer: {

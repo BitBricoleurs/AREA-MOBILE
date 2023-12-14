@@ -6,12 +6,13 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextEntry = ({ data, object, setObject }) => {
+const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const { variables } = useWorkflowContext();
 
+  console.log("previous node id in textEntry", nodeId);
   const handleChange = (text) => {
-    const element = data.type === "parameter" ? "params" : "conditions";
-    let elementData = data.type === "parameter" ? {} : [];
+    const element = data.type === "condition" ? "conditions" : "params";
+    let elementData = data.type === "params" ? {} : [];
     if (text === "") {
       if (element === "params") {
         elementData = { ...object.params };
@@ -57,6 +58,13 @@ const TextEntry = ({ data, object, setObject }) => {
     });
   };
 
+  const handleFocus = () => {
+    console.log("handleFocus", nodeId);
+    if (nodeId !== null) {
+      onFocus(nodeId);
+    }
+  };
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -67,12 +75,18 @@ const TextEntry = ({ data, object, setObject }) => {
         placeholderTextColor={"#969696"}
         multiline={true}
         numberOfLines={4}
+        onFocus={handleFocus}
       />
     </View>
   );
 };
 
 export default TextEntry;
+
+TextEntry.defaultProps = {
+  nodeId: null,
+  onFocus: () => {},
+};
 
 const styles = StyleSheet.create({
   inputContainer: {

@@ -12,17 +12,17 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const ChoiceTextEntry = ({ data, object, setObject }) => {
+const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
   const { variables } = useWorkflowContext();
 
-  console.log("data in choiceTextEntry", data);
+  console.log("previous node id in ChoiceTextEntry", nodeId);
 
   const handleSelectPress = () => {
     setSelected(!selected);
-    const element = data.type === "parameter" ? "params" : "conditions";
-    let elementData = data.type === "parameter" ? {} : [];
+    const element = data.type === "condition" ? "conditions" : "params";
+    let elementData = element === "params" ? {} : [];
     if (!selected === false) {
       if (element === "params") {
         elementData = { ...object.params };
@@ -45,8 +45,8 @@ const ChoiceTextEntry = ({ data, object, setObject }) => {
   };
 
   const handleChange = (text) => {
-    let element = data.type === "parameter" ? "params" : "conditions";
-    let elementData = data.type === "parameter" ? {} : [];
+    let element = data.type === "condition" ? "conditions" : "params";
+    let elementData = element === "params" ? {} : [];
     if (text === "") {
       if (element === "params") {
         elementData = { ...object.params };
@@ -97,7 +97,11 @@ const ChoiceTextEntry = ({ data, object, setObject }) => {
     });
   };
 
-  console.log("object", object);
+  const handleFocus = () => {
+    if (nodeId !== null) {
+      onFocus(nodeId);
+    }
+  };
 
   useEffect(() => {
     Animated.timing(inputHeight, {
@@ -123,6 +127,7 @@ const ChoiceTextEntry = ({ data, object, setObject }) => {
             onChangeText={handleChange}
             placeholder={data.placeholder}
             placeholderTextColor={"#969696"}
+            onFocus={handleFocus}
           />
         )}
       </Animated.View>
@@ -131,6 +136,11 @@ const ChoiceTextEntry = ({ data, object, setObject }) => {
 };
 
 export default ChoiceTextEntry;
+
+ChoiceTextEntry.defaultProps = {
+  nodeId: null,
+  onFocus: () => {},
+};
 
 const styles = StyleSheet.create({
   container: {
