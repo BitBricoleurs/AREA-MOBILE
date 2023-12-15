@@ -23,9 +23,9 @@ import ChoiceEntry from "../form/choiceEntry";
 import ChoiceTextEntry from "../form/choiceTextEntry";
 import TextArrayEntry from "../form/textArrayEntry";
 import TextEntry from "../form/textEntry";
+import DateRange from "../form/dateRange";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
-  console.log(nodeId);
   const { workflow, setWorkflow } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
@@ -36,7 +36,6 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
   const rotateAnim = useState(new Animated.Value(0))[0];
 
   const sectionDispatch = (section, index) => {
-    // console.log("sectionDispatch", section);
     switch (section.name) {
       case "timeEntry":
         return (
@@ -81,6 +80,15 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
       case "basicTextEntry":
         return (
           <TextEntry
+            data={section}
+            key={index}
+            object={currentAction}
+            setObject={setCurrentAction}
+          />
+        );
+      case "dateRange":
+        return (
+          <DateRange
             data={section}
             key={index}
             object={currentAction}
