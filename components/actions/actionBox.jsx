@@ -1,16 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Animated,
-  Modal,
-  TouchableOpacity,
-  Platform,
-  Keyboard,
-  Dimensions,
-} from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Pressable, Animated } from "react-native";
 
 import actions from "../../jsons/actions";
 import { dark, colorMap } from "../../utils/colors";
@@ -18,224 +7,19 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 
-import TimeEntry from "../form/timeEntry";
-import ChoiceEntry from "../form/choiceEntry";
-import ChoiceTextEntry from "../form/choiceTextEntry";
-import TextArrayEntry from "../form/textArrayEntry";
-import TextEntry from "../form/textEntry";
-import DateRange from "../form/dateRange";
+import ActionForm from "../form/actionForm";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
   const { workflow, setWorkflow } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
-  const [currentOption, setCurrentOption] = useState(0);
   const [currentAction, setCurrentAction] = useState({});
-  const [showModal, setShowModal] = useState(false);
-  const pickerRef = useRef();
   const rotateAnim = useState(new Animated.Value(0))[0];
-
-  const sectionDispatch = (section, index) => {
-    switch (section.name) {
-      case "timeEntry":
-        return (
-          <TimeEntry
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-          />
-        );
-      case "choice":
-        return (
-          <ChoiceEntry
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-          />
-        );
-      case "choiceTextEntry":
-        return (
-          <ChoiceTextEntry
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-            nodeId={previousNodeId}
-            onFocus={onFocus}
-          />
-        );
-      case "textArrayEntry":
-        return (
-          <TextArrayEntry
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-            nodeId={previousNodeId}
-            onFocus={onFocus}
-          />
-        );
-      case "basicTextEntry":
-        return (
-          <TextEntry
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-          />
-        );
-      case "dateRange":
-        return (
-          <DateRange
-            data={section}
-            key={index}
-            object={currentAction}
-            setObject={setCurrentAction}
-            nodeId={previousNodeId}
-            onFocus={onFocus}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
-  const renderSections = (sections) => {
-    return (
-      <>
-        {sections
-          ? sections.map((section, index) => (
-              <View
-                key={index}
-                style={[
-                  {
-                    flex: 1,
-                    backgroundColor: dark.secondary,
-                    borderRadius: 8,
-                  },
-                  index !== sections.length - 1 && { marginBottom: 8 },
-                ]}
-              >
-                {section?.block &&
-                  section.block.map((field, fieldIndex) => {
-                    return (
-                      <View key={fieldIndex}>
-                        {fieldIndex !== 0 && (
-                          <View
-                            style={{
-                              height: 1,
-                              backgroundColor: dark.outline,
-                              marginLeft: 16,
-                            }}
-                          />
-                        )}
-                        {sectionDispatch(field, fieldIndex)}
-                      </View>
-                    );
-                  })}
-              </View>
-            ))
-          : null}
-      </>
-    );
-  };
-
-  const renderForm = () => {
-    return (
-      <>
-        {actionForm.options && (
-          <>
-            <Pressable
-              style={styles.optionSelectButton}
-              onPress={() => {
-                setShowModal(true);
-              }}
-            >
-              <MyText style={styles.optionText}>
-                {actionForm.options[currentOption].name}
-              </MyText>
-            </Pressable>
-            <Modal visible={showModal} transparent={true} animationType="slide">
-              <TouchableOpacity
-                style={styles.modalOverlay}
-                onPress={() => setShowModal(false)}
-              />
-              <View style={[styles.modalContent, { paddingTop: 8 }]}>
-                {Platform.OS === "ios" ? (
-                  <Picker
-                    ref={pickerRef}
-                    selectedValue={currentOption}
-                    onValueChange={(itemValue, itemIndex) => {
-                      handlePickerChange(itemValue);
-                    }}
-                    style={styles.picker}
-                    itemStyle={styles.pickerStyleType}
-                  >
-                    {actionForm.options.map((option, index) => (
-                      <Picker.Item
-                        label={option.name}
-                        value={index}
-                        key={index}
-                      />
-                    ))}
-                  </Picker>
-                ) : (
-                  <>
-                    {actionForm.options.map((option, index) => (
-                      <>
-                        <TouchableOpacity
-                          key={index}
-                          style={styles.optionSelectButton}
-                          onPress={() => {
-                            setCurrentOption(index);
-                            setShowModal(false);
-                          }}
-                        >
-                          <MyText style={styles.optionText}>
-                            {option.name}
-                          </MyText>
-                        </TouchableOpacity>
-                        {index !== actionForm.options.length - 1 && (
-                          <View
-                            style={{
-                              height: 1,
-                              backgroundColor: dark.outline,
-                              marginLeft: 16,
-                            }}
-                          />
-                        )}
-                      </>
-                    ))}
-                  </>
-                )}
-              </View>
-            </Modal>
-          </>
-        )}
-        {actionForm.sections && renderSections(actionForm.sections)}
-        {actionForm.options &&
-          renderSections(actionForm.options[currentOption].sections)}
-      </>
-    );
-  };
 
   const rotate = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "90deg"],
   });
-
-  const handlePickerChange = (itemValue) => {
-    setCurrentOption(itemValue);
-    setShowModal(false);
-    setCurrentAction({
-      ...currentAction,
-      params: {
-        option: actionForm.options[itemValue].name.toLowerCase(),
-      },
-    });
-  };
 
   useEffect(() => {
     Animated.timing(rotateAnim, {
@@ -259,23 +43,6 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     const action = findAction(actionElement.service, actionElement.action);
     if (action) {
       setActionForm(action);
-    }
-
-    if (!action?.options) return;
-
-    if (actionElement.params && actionElement.params.option) {
-      const findCurrentOption = action?.options?.findIndex(
-        (option) => option.name.toLowerCase() === actionElement.params.option
-      );
-      setCurrentOption(findCurrentOption);
-    } else {
-      setCurrentAction({
-        ...actionElement,
-        params: {
-          ...actionElement.params,
-          option: action.options[0].name.toLowerCase(),
-        },
-      });
     }
   }, []);
 
@@ -317,7 +84,17 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
           <IconComponent name="chevron-right" style={styles.chevronIcon} />
         </Animated.View>
       </Pressable>
-      {unfold && <View style={styles.formContainer}>{renderForm()}</View>}
+      {unfold && (
+        <View style={styles.formContainer}>
+          <ActionForm
+            actionForm={actionForm}
+            currentAction={currentAction}
+            setCurrentAction={setCurrentAction}
+            previousNodeId={previousNodeId}
+            onFocus={onFocus}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -368,31 +145,5 @@ const styles = StyleSheet.create({
     // backgroundColor: dark.secondary,
     borderRadius: 8,
     marginTop: 8,
-  },
-  optionSelectButton: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: 48,
-    backgroundColor: dark.secondary,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    marginBottom: 8,
-  },
-  optionText: {
-    fontSize: 22,
-    color: dark.white,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0)", // This adds a semi-transparent overlay
-  },
-  modalContent: {
-    backgroundColor: dark.secondary, // Replace 'dark.white' with your theme's white color
-    borderRadius: 8,
-    paddingBottom: 8,
-  },
-  pickerStyleType: {
-    color: dark.white,
   },
 });
