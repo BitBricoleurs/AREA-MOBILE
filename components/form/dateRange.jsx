@@ -17,57 +17,6 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus }) => {
   const [firstDate, setFirstDate] = useState();
   const [secondDate, setSecondDate] = useState();
 
-  console.log("DateRange data", data);
-  console.log("DateRange object", object);
-
-  // const handleChange = (text) => {
-  //   const element = data.type === "condition" ? "conditions" : "params";
-  //   let elementData = element === "params" ? {} : [];
-  //   if (text === "") {
-  //     if (element === "params") {
-  //       elementData = { ...object.params };
-  //       delete elementData[data.variableName];
-  //     } else {
-  //       const variableId = variables.find(
-  //         (variable) => variable.name === data.variableName
-  //       )?.id;
-  //       if (variableId === undefined) {
-  //         console.warn("No corresponding variableId");
-  //         return;
-  //       }
-  //       elementData = [...object.conditions];
-  //       const index = elementData.findIndex(
-  //         (condition) => condition.key === variableId
-  //       );
-  //       elementData.splice(index, 1);
-  //     }
-  //   } else {
-  //     if (element === "params") {
-  //       elementData = { ...object.params, [data.variableName]: text };
-  //     } else {
-  //       const variableId = variables.find(
-  //         (variable) => variable.name === data.variableName
-  //       )?.id;
-  //       if (variableId === undefined) {
-  //         console.warn("No corresponding variableId");
-  //         return;
-  //       }
-  //       elementData = [...object.conditions];
-  //       const index = elementData.findIndex(
-  //         (condition) => condition.key === variableId
-  //       );
-  //       elementData[index] = {
-  //         ...elementData[index],
-  //         value: text,
-  //       };
-  //     }
-  //   }
-  //   setObject({
-  //     ...object,
-  //     [element]: elementData,
-  //   });
-  // };
-
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
     // setShowModal(false);
