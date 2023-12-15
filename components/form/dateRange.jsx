@@ -19,7 +19,6 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus }) => {
 
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
-    // setShowModal(false);
     if (editedValue === 1) {
       setFirstDate(currentDate);
       setObject({

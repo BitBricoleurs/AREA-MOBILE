@@ -109,6 +109,8 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            nodeId={previousNodeId}
+            onFocus={onFocus}
           />
         );
       case "dateRange":
@@ -118,8 +120,6 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
-            nodeId={previousNodeId}
-            onFocus={onFocus}
           />
         );
       default:
