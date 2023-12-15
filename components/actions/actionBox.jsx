@@ -151,7 +151,6 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
               style={styles.optionSelectButton}
               onPress={() => {
                 setShowModal(true);
-                // Platform.OS === "android" && pickerRef.current.focus();
               }}
             >
               <MyText style={styles.optionText}>
@@ -169,8 +168,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
                     ref={pickerRef}
                     selectedValue={currentOption}
                     onValueChange={(itemValue, itemIndex) => {
-                      setCurrentOption(itemValue);
-                      setShowModal(false);
+                      handlePickerChange(itemValue);
                     }}
                     style={styles.picker}
                     itemStyle={styles.pickerStyleType}
@@ -228,6 +226,17 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     outputRange: ["0deg", "90deg"],
   });
 
+  const handlePickerChange = (itemValue) => {
+    setCurrentOption(itemValue);
+    setShowModal(false);
+    setCurrentAction({
+      ...currentAction,
+      params: {
+        option: actionForm.options[itemValue].name.toLowerCase(),
+      },
+    });
+  };
+
   useEffect(() => {
     Animated.timing(rotateAnim, {
       toValue: unfold ? 1 : 0,
@@ -250,6 +259,23 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     const action = findAction(actionElement.service, actionElement.action);
     if (action) {
       setActionForm(action);
+    }
+
+    if (!action?.options) return;
+
+    if (actionElement.params && actionElement.params.option) {
+      const findCurrentOption = action?.options?.findIndex(
+        (option) => option.name.toLowerCase() === actionElement.params.option
+      );
+      setCurrentOption(findCurrentOption);
+    } else {
+      setCurrentAction({
+        ...actionElement,
+        params: {
+          ...actionElement.params,
+          option: action.options[0].name.toLowerCase(),
+        },
+      });
     }
   }, []);
 
