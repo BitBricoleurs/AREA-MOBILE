@@ -115,17 +115,12 @@
                 "sectionTitle": "",
                 "block": [
                   {
-                    "name": "dateEntry",
+                    "name": "dateRange",
                     "type": "date",
-                    "placeholder": "Start",
-                    "variableName": "start",
-                    "required": "true"
-                  },
-                  {
-                    "name": "dateEntry",
-                    "type": "date",
-                    "placeholder": "End",
-                    "variableName": "end",
+                    "placeholderFirst": "Start",
+                    "placeholderSecond": "End",
+                    "variableNameFirst": "start",
+                    "variableNameSecond": "end",
                     "required": "true"
                   }
                 ]
@@ -206,17 +201,12 @@
                 "sectionTitle": "Propose new time",
                 "block": [
                   {
-                    "name": "dateEntry",
+                    "name": "dateRange",
                     "type": "date",
-                    "placeholder": "Start",
-                    "variableName": "start",
-                    "required": "true"
-                  },
-                  {
-                    "name": "dateEntry",
-                    "type": "date",
-                    "placeholder": "End",
-                    "variableName": "end",
+                    "placeholderFirst": "Start",
+                    "placeholderSecond": "End",
+                    "variableNameFirst": "start",
+                    "variableNameSecond": "end",
                     "required": "true"
                   }
                 ]
