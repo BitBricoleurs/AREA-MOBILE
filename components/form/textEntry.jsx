@@ -16,7 +16,7 @@ const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
     if (text === "") {
       if (element === "params") {
         elementData = { ...object.params };
-        elementData[data.variableName];
+        delete elementData[data.variableName];
       } else {
         const variableId = variables.find(
           (variable) => variable.name === data.variableName
