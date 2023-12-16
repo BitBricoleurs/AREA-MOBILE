@@ -9,32 +9,30 @@ import {
   StatusBar,
   Keyboard,
   Animated,
-  Dimensions,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+
+import actions from "../../jsons/actions.json";
+import triggers from "../../jsons/triggers.json";
 
 import { dark, colorMap } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import ActionSection from "../../components/actions/actionSection";
+import { findUnusedIntID } from "../../utils/uniqueId";
 
 const WorkflowScreen = ({ navigation }) => {
-  const options = ["if", "loop", "delay", "end", "variable"];
-  const { trigger, workflow } = useWorkflowContext();
+  const options = ["if", "delay", "variable"];
+  const { trigger, workflow, setWorkflow, variables, setVariables } =
+    useWorkflowContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [scrollViewOffset, setScrollViewOffset] = useState(0);
+  const [focusedNode, setFocusedNode] = useState(null);
+  const [focusedParam, setFocusedParam] = useState(null);
   const opacity = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef(null);
-  const [prevOutputs, setPrevOutputs] = useState([
-    "output 1",
-    "output 2",
-    "body",
-    "sender",
-    "subject",
-  ]);
+  const [prevOutputs, setPrevOutputs] = useState([]);
 
   const nodeDispatch = (node, previousNodeId) => {
     switch (node.type) {
@@ -71,7 +69,44 @@ const WorkflowScreen = ({ navigation }) => {
     setScrollViewOffset(event.nativeEvent.contentOffset.y);
   };
 
-  const handleFocus = (nodeId, offset) => {
+  const getPreviousNodeOutputs = (previousNodeId) => {
+    if (previousNodeId === null || previousNodeId === undefined) return;
+    let elementToFind = [];
+    let actionName = "";
+    let serviceName = "";
+    let service = {};
+    if (previousNodeId === 0) {
+      actionName = trigger.trigger;
+      serviceName = trigger.serviceName;
+      service = triggers.find((s) => s.name === serviceName);
+      if (!service) return null;
+      elementToFind = service.triggers.find((a) => a.name === actionName);
+    } else {
+      const node = workflow.find((n) => n.id === previousNodeId);
+      if (!node) return null;
+      actionName = node.action;
+      serviceName = node.service;
+      service = actions.find((s) => s.name === serviceName);
+      if (!service) return null;
+      elementToFind = service.actions.find((a) => a.name === actionName);
+    }
+    if (!elementToFind) return null;
+    let outputs = [];
+    elementToFind.outputs.forEach((output) => {
+      outputs.push({
+        name: output.variableName,
+        output: output.variableName,
+        refer: previousNodeId,
+        user_defined: false,
+      });
+    });
+    setPrevOutputs(outputs);
+  };
+
+  const handleFocus = (previousNodeId, nodeId, offset, param) => {
+    setFocusedParam(param);
+    setFocusedNode(nodeId);
+    getPreviousNodeOutputs(previousNodeId);
     if (offset === null || offset === undefined) return;
     const adjustedPageY = offset + scrollViewOffset - 300;
     scrollViewRef.current.scrollTo({
@@ -81,8 +116,47 @@ const WorkflowScreen = ({ navigation }) => {
     });
   };
 
-  const handleVariablePress = () => {
-    // add variable to workflow variables
+  const handleVariablePress = (variable) => {
+    let id = null;
+    const variableAlreadyExists = variables.find(
+      (v) =>
+        v.output === variable.output &&
+        v.refer === variable.refer &&
+        v.user_defined === variable.user_defined
+    );
+    if (variableAlreadyExists) {
+      id = variableAlreadyExists.id;
+    } else {
+      id = findUnusedIntID(variables);
+      const newVariables = [...variables, { ...variable, id: id }];
+      setVariables(newVariables);
+    }
+    const newWorkflow = workflow.map((node) => {
+      if (node.id === focusedNode) {
+        const newParams = { ...node.params };
+        if (focusedParam[1] === -1) {
+          newParams[focusedParam[0]] = `${
+            newParams[focusedParam[0]] ? newParams[focusedParam[0]] : ""
+          }\${${id}}`;
+        } else {
+          if (!newParams[focusedParam[0]]) {
+            newParams[focusedParam[0]] = [];
+          }
+          newParams[focusedParam[0]][focusedParam[1]] = `${
+            newParams[focusedParam[0]][focusedParam[1]]
+              ? newParams[focusedParam[0]][focusedParam[1]]
+              : ""
+          }\${${id}}`;
+        }
+        return {
+          ...node,
+          params: newParams,
+        };
+      }
+      return node;
+    });
+    console.log("newWorkflow", newWorkflow);
+    setWorkflow(newWorkflow);
   };
 
   const fadeIn = () => {
@@ -235,7 +309,13 @@ const WorkflowScreen = ({ navigation }) => {
           <ScrollView
             style={styles.optionsScrollView}
             horizontal={true}
+            contentContainerStyle={{
+              justifyContent: "center",
+              flexGrow: 1,
+              paddingRight: prevOutputs.length > 3 ? 24 : 0,
+            }}
             showsHorizontalScrollIndicator={false}
+            keyboardShouldPersistTaps="always"
           >
             {prevOutputs &&
               prevOutputs.map((output, index) => (
@@ -243,10 +323,11 @@ const WorkflowScreen = ({ navigation }) => {
                   key={index}
                   style={[
                     styles.option,
-                    index === prevOutputs.length - 1 && { marginRight: 24 },
+                    index !== prevOutputs.length - 1 && { marginRight: 12 },
                   ]}
+                  onPress={() => handleVariablePress(output)}
                 >
-                  <MyText style={styles.optionText}>{output}</MyText>
+                  <MyText style={styles.optionText}>{output.name}</MyText>
                 </Pressable>
               ))}
           </ScrollView>
@@ -257,13 +338,18 @@ const WorkflowScreen = ({ navigation }) => {
           style={styles.optionsScrollView}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            justifyContent: "center",
+            flexGrow: 1,
+            paddingRight: options.length > 3 ? 24 : 0,
+          }}
         >
           {options.map((option, index) => (
             <Pressable
               key={index}
               style={[
                 styles.option,
-                index === options.length - 1 && { marginRight: 24 },
+                index !== options.length - 1 && { marginRight: 12 },
               ]}
             >
               <MyText style={styles.optionText}>{option}</MyText>
@@ -316,10 +402,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: dark.white,
   },
-
   workflowContainer: {
     flex: 1,
-    borderWidth: 1,
     paddingHorizontal: 20,
     alignItems: "center",
   },
@@ -403,7 +487,6 @@ const styles = StyleSheet.create({
   option: {
     backgroundColor: dark.secondary,
     borderRadius: 8,
-    marginRight: 12,
   },
   optionText: {
     fontSize: 18,

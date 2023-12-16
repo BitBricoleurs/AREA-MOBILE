@@ -23,6 +23,7 @@ const ActionForm = ({
   actionForm,
   currentAction,
   setCurrentAction,
+  nodeId,
   previousNodeId,
   onFocus,
 }) => {
@@ -87,7 +88,8 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
-            nodeId={previousNodeId}
+            previousNodeId={previousNodeId}
+            nodeId={nodeId}
             onFocus={onFocus}
           />
         );
@@ -98,7 +100,8 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
-            nodeId={previousNodeId}
+            previousNodeId={previousNodeId}
+            nodeId={nodeId}
             onFocus={onFocus}
           />
         );
@@ -109,7 +112,8 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
-            nodeId={previousNodeId}
+            previousNodeId={previousNodeId}
+            nodeId={nodeId}
             onFocus={onFocus}
           />
         );

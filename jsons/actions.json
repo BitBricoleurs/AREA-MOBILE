@@ -30,6 +30,16 @@
           }
         ]
       }
+    ],
+    "outputs": [
+      {
+        "type": "output",
+        "variableName": "time"
+      },
+      {
+        "type": "output",
+        "variableName": "date"
+      }
     ]
   },
   {
@@ -81,6 +91,20 @@
                 "required": "true"
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "sender"
+          },
+          {
+            "type": "output",
+            "variableName": "content"
+          },
+          {
+            "type": "output",
+            "variableName": "channel"
           }
         ]
       },
@@ -151,6 +175,36 @@
                   }
                 ]
               }
+            ],
+            "outputs": [
+              {
+                "type": "output",
+                "variableName": "id"
+              },
+              {
+                "type": "output",
+                "variableName": "title"
+              },
+              {
+                "type": "output",
+                "variableName": "content"
+              },
+              {
+                "type": "output",
+                "variableName": "start"
+              },
+              {
+                "type": "output",
+                "variableName": "end"
+              },
+              {
+                "type": "output",
+                "variableName": "location"
+              },
+              {
+                "type": "output",
+                "variableName": "attendees"
+              }
             ]
           },
           {
@@ -167,6 +221,36 @@
                     "required": "true"
                   }
                 ]
+              }
+            ],
+            "outputs": [
+              {
+                "type": "output",
+                "variableName": "id"
+              },
+              {
+                "type": "output",
+                "variableName": "title"
+              },
+              {
+                "type": "output",
+                "variableName": "content"
+              },
+              {
+                "type": "output",
+                "variableName": "start"
+              },
+              {
+                "type": "output",
+                "variableName": "end"
+              },
+              {
+                "type": "output",
+                "variableName": "location"
+              },
+              {
+                "type": "output",
+                "variableName": "attendees"
               }
             ]
           },
@@ -213,6 +297,36 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "id"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "content"
+          },
+          {
+            "type": "output",
+            "variableName": "start"
+          },
+          {
+            "type": "output",
+            "variableName": "end"
+          },
+          {
+            "type": "output",
+            "variableName": "location"
+          },
+          {
+            "type": "output",
+            "variableName": "attendees"
+          }
         ]
       }
     ]
@@ -236,6 +350,12 @@
                 "required": "true"
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "output"
           }
         ]
       }

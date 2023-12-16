@@ -12,7 +12,14 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
+const ChoiceTextEntry = ({
+  data,
+  object,
+  setObject,
+  nodeId,
+  previousNodeId,
+  onFocus,
+}) => {
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
   const inputRef = useRef(null);
@@ -98,7 +105,7 @@ const ChoiceTextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
 
   const handleFocus = () => {
     inputRef.current.measure((x, y, width, height, pageX, pageY) => {
-      onFocus(nodeId, pageY);
+      onFocus(previousNodeId, nodeId, pageY, [data.variableName, -1]);
     });
   };
 
@@ -139,6 +146,7 @@ export default ChoiceTextEntry;
 
 ChoiceTextEntry.defaultProps = {
   nodeId: null,
+  previousNodeId: null,
   onFocus: () => {},
 };
 

@@ -29,14 +29,14 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     }).start();
   }, [unfold]);
 
+  const findAction = (serviceName, actionName) => {
+    const service = actions.find((s) => s.name === serviceName);
+    if (!service) return null;
+
+    return service.actions.find((a) => a.name === actionName);
+  };
+
   useEffect(() => {
-    const findAction = (serviceName, actionName) => {
-      const service = actions.find((s) => s.name === serviceName);
-      if (!service) return null;
-
-      return service.actions.find((a) => a.name === actionName);
-    };
-
     const actionElement = workflow.find((node) => node.id === nodeId);
     setCurrentAction(actionElement);
 
@@ -62,6 +62,12 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
       updateWorkflow();
     }
   }, [currentAction]);
+
+  useEffect(() => {
+    const actionElement = workflow.find((node) => node.id === nodeId);
+    setCurrentAction(actionElement);
+    console.log("actionElement", actionElement);
+  }, [workflow]);
 
   return (
     <View
@@ -91,6 +97,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
             currentAction={currentAction}
             setCurrentAction={setCurrentAction}
             previousNodeId={previousNodeId}
+            nodeId={nodeId}
             onFocus={onFocus}
           />
         </View>

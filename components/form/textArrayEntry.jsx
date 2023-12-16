@@ -6,7 +6,14 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
+const TextArrayEntry = ({
+  data,
+  object,
+  setObject,
+  nodeId,
+  previousNodeId,
+  onFocus,
+}) => {
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
   const inputRefs = useRef([]);
@@ -81,7 +88,7 @@ const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
   const handleFocus = (index) => {
     const currentInput = inputRefs.current[index].current;
     currentInput.measure((x, y, width, height, pageX, pageY) => {
-      onFocus(nodeId, pageY);
+      onFocus(previousNodeId, nodeId, pageY, [data.variableName, index]);
     });
   };
 
@@ -99,6 +106,12 @@ const TextArrayEntry = ({ data, object, setObject, nodeId, onFocus }) => {
       (_, i) => inputRefs.current[i] || React.createRef()
     );
   }, [emailEntries]);
+
+  useEffect(() => {
+    if (object.params && object.params[data.variableName]) {
+      setEmailEntries(object.params[data.variableName]);
+    }
+  }, [object.params]);
 
   return (
     <View style={styles.inputContainer}>
@@ -148,6 +161,7 @@ export default TextArrayEntry;
 
 TextArrayEntry.defaultProps = {
   nodeId: null,
+  previousNodeId: null,
   onFocus: () => {},
 };
 

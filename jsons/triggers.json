@@ -112,17 +112,17 @@
             ]
           }
         ],
-        "exposes": [
+        "outputs": [
           {
-            "type": "sender",
+            "type": "output",
             "variableName": "sender"
           },
           {
-            "type": "subject",
+            "type": "output",
             "variableName": "subject"
           },
           {
-            "type": "content",
+            "type": "output",
             "variableName": "content"
           }
         ]
@@ -174,7 +174,7 @@
             ]
           }
         ],
-        "exposes": [
+        "outputs": [
           {
             "type": "output",
             "variableName": "creator"
@@ -249,6 +249,20 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "sender"
+          },
+          {
+            "type": "output",
+            "variableName": "content"
+          },
+          {
+            "type": "output",
+            "variableName": "channel"
+          }
         ]
       },
       {
@@ -285,6 +299,20 @@
                 "required": "false"
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "sender"
+          },
+          {
+            "type": "output",
+            "variableName": "content"
+          },
+          {
+            "type": "output",
+            "variableName": "channel"
           }
         ]
       }
@@ -350,6 +378,24 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "status"
+          },
+          {
+            "type": "output",
+            "variableName": "commented"
+          },
+          {
+            "type": "output",
+            "variableName": "assignee"
+          }
         ]
       }
     ]
@@ -403,6 +449,20 @@
                 "required": "false"
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "author"
+          },
+          {
+            "type": "output",
+            "variableName": "message"
+          },
+          {
+            "type": "output",
+            "variableName": "hash"
           }
         ]
       },
@@ -488,6 +548,24 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "author"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "description"
+          },
+          {
+            "type": "output",
+            "variableName": "assignee"
+          }
         ]
       },
       {
@@ -557,6 +635,24 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "author"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "description"
+          },
+          {
+            "type": "output",
+            "variableName": "assignee"
+          }
         ]
       },
       {
@@ -576,6 +672,12 @@
                 "required": "false"
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "user"
           }
         ]
       }
@@ -634,6 +736,20 @@
               }
             ]
           }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "build_number"
+          },
+          {
+            "type": "output",
+            "variableName": "build_result"
+          },
+          {
+            "type": "output",
+            "variableName": "build_url"
+          }
         ]
       },
       {
@@ -664,6 +780,12 @@
                 ]
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "status"
           }
         ]
       }
@@ -703,6 +825,12 @@
                 ]
               }
             ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "status"
           }
         ]
       }

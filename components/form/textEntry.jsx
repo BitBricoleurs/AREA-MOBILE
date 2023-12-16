@@ -6,7 +6,14 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
 
-const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
+const TextEntry = ({
+  data,
+  object,
+  setObject,
+  nodeId,
+  previousNodeId,
+  onFocus,
+}) => {
   const { variables } = useWorkflowContext();
   const inputRef = useRef(null);
 
@@ -60,7 +67,7 @@ const TextEntry = ({ data, object, setObject, nodeId, onFocus }) => {
 
   const handleFocus = () => {
     inputRef.current.measure((x, y, width, height, pageX, pageY) => {
-      onFocus(nodeId, pageY);
+      onFocus(previousNodeId, nodeId, pageY, [data.variableName, -1]);
     });
   };
 
@@ -85,6 +92,7 @@ export default TextEntry;
 
 TextEntry.defaultProps = {
   nodeId: null,
+  previousNodeId: null,
   onFocus: () => {},
 };
 
