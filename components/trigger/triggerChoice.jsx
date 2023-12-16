@@ -9,7 +9,7 @@ import { dark } from "../../utils/colors";
 
 const TriggerChoice = ({ service }) => {
   const navigation = useNavigation();
-  const { setTrigger, setVariables } = useWorkflowContext();
+  const { setTrigger, setVariables, setWorkflow } = useWorkflowContext();
 
   const handleTriggerPress = (index) => {
     setTrigger({
@@ -22,14 +22,15 @@ const TriggerChoice = ({ service }) => {
       (variable, index) => {
         return {
           name: variable.variableName,
-          type: variable.type,
-          parent_id: 0,
-          value: null,
+          output: variable.variableName,
+          refer: 0,
           id: index,
+          user_defined: false,
         };
       }
     );
     setVariables(triggerVars ? triggerVars : []);
+    setWorkflow([]);
     navigation.navigate("TriggerConfig", {
       serviceName: service.name,
       triggerName: service.triggers[index].name,
