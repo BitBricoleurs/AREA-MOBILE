@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 8,
+    marginTop: Platform.OS === "ios" ? 24 : 8,
   },
   title: {
     fontSize: 32,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Pressable, Animated } from "react-native";
+import { StyleSheet, View, Pressable, Animated, Alert } from "react-native";
 
 import actions from "../../jsons/actions";
 import { dark, colorMap } from "../../utils/colors";
@@ -10,7 +10,7 @@ import MyText from "../../utils/myText";
 import ActionForm from "../form/actionForm";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
-  const { workflow, setWorkflow } = useWorkflowContext();
+  const { workflow, setWorkflow, deleteNode } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
   const [currentAction, setCurrentAction] = useState({});
@@ -20,6 +20,24 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     inputRange: [0, 1],
     outputRange: ["0deg", "90deg"],
   });
+
+  const handleLongPress = () => {
+    Alert.alert(
+      "Delete action",
+      "Are you sure you want to delete this action ?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => deleteNode(nodeId, previousNodeId),
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   useEffect(() => {
     Animated.timing(rotateAnim, {
@@ -66,7 +84,6 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
   useEffect(() => {
     const actionElement = workflow.find((node) => node.id === nodeId);
     setCurrentAction(actionElement);
-    console.log("actionElement", actionElement);
   }, [workflow]);
 
   return (
@@ -76,7 +93,11 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
         { backgroundColor: colorMap[currentAction.service] },
       ]}
     >
-      <Pressable style={styles.action} onPress={() => setUnfold(!unfold)}>
+      <Pressable
+        style={styles.action}
+        onPress={() => setUnfold(!unfold)}
+        onLongPress={handleLongPress}
+      >
         <View style={styles.actionServiceIcon}>
           <IconComponent
             name={currentAction?.service}

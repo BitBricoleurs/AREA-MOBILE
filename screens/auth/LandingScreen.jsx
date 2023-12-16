@@ -1,16 +1,12 @@
-import { View, Image, Text, Button, StyleSheet, Pressable } from 'react-native';
-import MyText from '../../utils/myText';
-import { dark } from '../../utils/colors';
+import { View, Image, Text, Button, StyleSheet, Pressable } from "react-native";
+import MyText from "../../utils/myText";
+import { dark } from "../../utils/colors";
 
-const LandingScreen = ({navigation}) => {
-  const authServices = [
-    "Apple",
-    "Facebook",
-    "Google",
-    "Email & Password" ];
+const LandingScreen = ({ navigation }) => {
+  const authServices = ["Microsoft", "Email & Password"];
 
   const handleConnectionType = (service) => {
-    switch(service) {
+    switch (service) {
       case "Email & Password":
         navigation.navigate("Connect");
         break;
@@ -18,13 +14,16 @@ const LandingScreen = ({navigation}) => {
         console.log(service);
         break;
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems:"center"}}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={{ flex: 6, justifyContent: "flex-end", marginBottom: 24 }}>
-          <Image source={require('../../assets/logo-white.png')} style={styles.logo} />
+          <Image
+            source={require("../../assets/logo-color.png")}
+            style={styles.logo}
+          />
         </View>
         <View style={{ flex: 2 }}>
           <MyText style={styles.logoText}>BotButler</MyText>
@@ -35,19 +34,21 @@ const LandingScreen = ({navigation}) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        {
-          authServices.map((service, index) => {
-            return (
-              <Pressable key={index} style={styles.button} onPress={() => handleConnectionType(service)}>
-                <MyText style={styles.text}>{`Continue with ${service}`}</MyText>
-              </Pressable>
-            )
-          })
-        }
+        {authServices.map((service, index) => {
+          return (
+            <Pressable
+              key={index}
+              style={styles.button}
+              onPress={() => handleConnectionType(service)}
+            >
+              <MyText style={styles.text}>{`Continue with ${service}`}</MyText>
+            </Pressable>
+          );
+        })}
       </View>
     </View>
   );
-}
+};
 
 export default LandingScreen;
 
@@ -55,27 +56,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
     paddingTop: 50,
   },
   logoText: {
     fontSize: 44,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     color: dark.text,
   },
   tagline: {
     fontSize: 22,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 8,
     color: dark.text,
   },
   logo: {
     width: 150,
     height: 150,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   buttonContainer: {
     width: "100%",
@@ -96,5 +97,5 @@ const styles = StyleSheet.create({
     fontSize: 21,
     fontWeight: "bold",
     color: dark.primary,
-  }
+  },
 });

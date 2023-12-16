@@ -6,22 +6,31 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { dark } from "../../utils/colors";
+import { findUnusedIntID } from "../../utils/uniqueId";
 
 const ActionChoice = ({ service }) => {
   const navigation = useNavigation();
-  const { setWorkflow, workflow } = useWorkflowContext();
+  const { setWorkflow, workflow, trigger, setTrigger } = useWorkflowContext();
 
   const handleActionPress = (index) => {
     const updatedWorkflow = [...workflow];
+    const id = findUnusedIntID(workflow);
     const newAction = {
-      id: workflow.length + 1,
+      id: id,
       action: service.actions[index].name,
       type: "action",
       service: service.name,
+      next_id: -1,
     };
     if (workflow.length !== 0) {
       updatedWorkflow[workflow.length - 1].next_id = newAction.id;
+    } else {
+      setTrigger({
+        ...trigger,
+        next_id: newAction.id,
+      });
     }
+
     setWorkflow([...updatedWorkflow, newAction]);
     navigation.navigate("Workflow");
   };

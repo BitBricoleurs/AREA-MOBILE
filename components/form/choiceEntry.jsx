@@ -69,6 +69,10 @@ const ChoiceEntry = ({ data, object, setObject }) => {
   };
 
   useEffect(() => {
+    const index = data.options.findIndex(
+      (option) =>
+        option.label.toLowerCase() === object.params[data.variableName]
+    );
     handleChoicePress(0);
   }, []);
 

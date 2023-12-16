@@ -11,6 +11,54 @@ export const WorkflowContextProvider = ({ children }) => {
   console.log("workflow: ", workflow);
   console.log("variables: ", variables);
 
+  const getNode = (nodeId) => {
+    return workflow.find((node) => node.id === nodeId);
+  };
+
+  const handleDeleteNode = (nodeId, previousNodeId) => {
+    const currentAction = getNode(nodeId);
+    const id = currentAction.next_id > 0 ? currentAction.next_id : -1;
+    let newWorkflow = [...workflow];
+
+    if (previousNodeId === 0) {
+      setTrigger({
+        ...trigger,
+        next_id: id,
+      });
+    } else {
+      newWorkflow = newWorkflow.map((node) => {
+        if (node.id === previousNodeId) {
+          return {
+            ...node,
+            next_id: id,
+          };
+        }
+        return node;
+      });
+    }
+
+    const index = newWorkflow.findIndex((node) => node.id === nodeId);
+    newWorkflow.splice(index, 1);
+
+    const variableIds = variables
+      .filter((variable) => variable.refer === nodeId)
+      .map((variable) => variable.id);
+
+    const newVariables = variables.filter(
+      (variable) => variable.refer !== nodeId
+    );
+
+    let workflowString = JSON.stringify(newWorkflow);
+    variableIds.forEach((id) => {
+      const regex = new RegExp(`\\$\\{${id}\\}`, "g");
+      workflowString = workflowString.replace(regex, "");
+    });
+    newWorkflow = JSON.parse(workflowString);
+
+    setVariables(newVariables);
+    setWorkflow(newWorkflow);
+  };
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -20,6 +68,7 @@ export const WorkflowContextProvider = ({ children }) => {
         setWorkflow,
         variables,
         setVariables,
+        deleteNode: handleDeleteNode,
       }}
     >
       {children}

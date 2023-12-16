@@ -9,6 +9,7 @@ import {
   StatusBar,
   Keyboard,
   Animated,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -250,7 +251,30 @@ const WorkflowScreen = ({ navigation }) => {
             <View style={styles.title}>
               <MyText style={styles.titleText}>New workflow</MyText>
             </View>
-            <View style={{ width: 34 }} />
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => navigation.navigate("WorkflowConfig")}
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                disabled={!workflow[0]}
+              >
+                <MyText
+                  style={[
+                    { color: dark.white, fontSize: 18 },
+                    !workflow[0] && { opacity: 0.4 },
+                  ]}
+                >
+                  Next
+                </MyText>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <View style={styles.workflowContainer}>

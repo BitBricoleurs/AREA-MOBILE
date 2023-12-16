@@ -110,6 +110,12 @@ const ChoiceTextEntry = ({
   };
 
   useEffect(() => {
+    if (object.params && object.params[data.variableName]) {
+      setSelected(true);
+    }
+  }, [object]);
+
+  useEffect(() => {
     Animated.timing(inputHeight, {
       toValue: selected ? 48 : 0,
       duration: 250,
