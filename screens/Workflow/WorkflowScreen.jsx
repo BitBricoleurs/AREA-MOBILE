@@ -58,9 +58,19 @@ const WorkflowScreen = ({ navigation }) => {
     if (!node) return null;
 
     return (
-      <View key={node.id} style={{ flex: 1, width: "100%" }}>
+      <View
+        key={node.id}
+        style={{ flex: 1, width: "100%", alignItems: "center" }}
+      >
         {nodeDispatch(node, prevNodeId)}
-        {node.next_id > 0 && renderNode(node.next_id, node.id)}
+        {node.next_id > 0 && (
+          <>
+            <View
+              style={{ height: 12, width: 1, backgroundColor: dark.outline }}
+            />
+            {renderNode(node.next_id, node.id)}
+          </>
+        )}
       </View>
     );
   };
@@ -272,13 +282,13 @@ const WorkflowScreen = ({ navigation }) => {
           <View
             style={{
               height: 22,
-              width: 2,
+              width: 1,
               backgroundColor: dark.outline,
             }}
           />
           {workflow[0] ? renderNode(workflow[0].id, 0) : null}
           <View
-            style={{ height: 22, width: 2, backgroundColor: dark.outline }}
+            style={{ height: 22, width: 1, backgroundColor: dark.outline }}
           />
           <Pressable
             style={styles.addActionButton}

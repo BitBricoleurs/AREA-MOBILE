@@ -18,24 +18,4 @@ const ActionSection = ({ nodeId, previousNodeId, onFocus }) => {
 
 export default ActionSection;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  example: {
-    fontSize: 16,
-  },
-});
+const styles = StyleSheet.create({});

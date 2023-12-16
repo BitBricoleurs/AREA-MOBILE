@@ -80,7 +80,10 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
         <View style={styles.actionServiceIcon}>
           <IconComponent
             name={currentAction?.service}
-            style={styles.serviceIcon}
+            style={[
+              styles.serviceIcon,
+              currentAction.service === "Openai" && { tintColor: "#000000" },
+            ]}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 8,
     padding: 8,
-    marginBottom: 12,
+    // marginBottom: 12,
     overflow: "hidden",
     backgroundColor: "transparent",
   },

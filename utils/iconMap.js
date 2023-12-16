@@ -14,6 +14,7 @@ export const icons = {
   "pull-request": require("../assets/triggers/pull-request.png"),
   star: require("../assets/triggers/star.png"),
   "up-rectangle": require("../assets/triggers/up-rectangle.png"),
+  camera: require("../assets/triggers/camera.png"),
 
   "chevron-right": require("../assets/chevron-right.png"),
   "arrow-left": require("../assets/arrow-left.png"),

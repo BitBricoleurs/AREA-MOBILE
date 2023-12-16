@@ -332,6 +332,391 @@
     ]
   },
   {
+    "name": "Teams",
+    "actions": [
+      {
+        "name": "Message",
+        "eg": "Send a message to Jane",
+        "icon": "message",
+        "options": [
+          {
+            "name": "Chat",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Chat id",
+                    "variableName": "chat_id",
+                    "required": "true"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Content",
+                    "variableName": "content",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Channel",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Team id",
+                    "variableName": "team_id",
+                    "required": "true"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Channel id",
+                    "variableName": "channel_id",
+                    "required": "true"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Content",
+                    "variableName": "content",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "sender"
+          },
+          {
+            "type": "output",
+            "variableName": "content"
+          },
+          {
+            "type": "output",
+            "variableName": "channel"
+          }
+        ]
+      },
+      {
+        "name": "Meeting",
+        "eg": "Create a meeting",
+        "icon": "camera",
+        "options": [
+          {
+            "name": "Create",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Title",
+                    "variableName": "title",
+                    "required": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "dateRange",
+                    "type": "date",
+                    "placeholderFirst": "Start",
+                    "placeholderSecond": "End",
+                    "variableNameFirst": "start",
+                    "variableNameSecond": "end",
+                    "required": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "email",
+                    "label": "Attendees",
+                    "placeholder": "Email",
+                    "variableName": "attendees",
+                    "maxEntries": 0,
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "id"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "start"
+          },
+          {
+            "type": "output",
+            "variableName": "end"
+          },
+          {
+            "type": "output",
+            "variableName": "attendees"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jira",
+    "actions": [
+      {
+        "name": "Ticket",
+        "eg": "Update a ticket status",
+        "icon": "file",
+        "options": [
+          {
+            "name": "Create",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Project id",
+                    "variableName": "project_id",
+                    "required": "true"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Name",
+                    "variableName": "name",
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "text",
+                    "label": "Labels",
+                    "placeholder": "Label",
+                    "variableName": "labels",
+                    "maxEntries": 0,
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "email",
+                    "label": "Assignees",
+                    "placeholder": "Email",
+                    "variableName": "assignees",
+                    "maxEntries": 0,
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Summary",
+                    "variableName": "summary",
+                    "required": "false"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Issue type",
+                    "variableName": "issue_type",
+                    "required": "false"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Update",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Ticket id",
+                    "variableName": "ticket_id",
+                    "required": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Title",
+                    "variableName": "title",
+                    "required": "false"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Content",
+                    "variableName": "content",
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "text",
+                    "label": "Labels",
+                    "placeholder": "Label",
+                    "variableName": "labels",
+                    "maxEntries": 0,
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "textArrayEntry",
+                    "type": "email",
+                    "label": "Assignees",
+                    "placeholder": "Email",
+                    "variableName": "assignees",
+                    "maxEntries": 0,
+                    "required": "false"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Summary",
+                    "variableName": "summary",
+                    "required": "false"
+                  },
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Issue type",
+                    "variableName": "issue_type",
+                    "required": "false"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Delete",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Ticket id",
+                    "variableName": "ticket_id",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Get",
+            "sections": [
+              {
+                "sectionTitle": "",
+                "block": [
+                  {
+                    "name": "basicTextEntry",
+                    "type": "text",
+                    "placeholder": "Ticket id",
+                    "variableName": "ticket_id",
+                    "required": "true"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "id"
+          },
+          {
+            "type": "output",
+            "variableName": "project_id"
+          },
+          {
+            "type": "output",
+            "variableName": "title"
+          },
+          {
+            "type": "output",
+            "variableName": "labels"
+          },
+          {
+            "type": "output",
+            "variableName": "assignees"
+          },
+          {
+            "type": "output",
+            "variableName": "summary"
+          },
+          {
+            "type": "output",
+            "variableName": "issue_type"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Openai",
     "actions": [
       {
