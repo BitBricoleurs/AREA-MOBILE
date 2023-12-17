@@ -66,6 +66,7 @@ jobs:
           fi
 
           # Ensure temp-repo exists before copying
+          ls temp-repo/
           if [ -d "temp-repo/" ]; then
             cp -r temp-repo/ AREA-MOBILE/
             git add AREA-MOBILE
