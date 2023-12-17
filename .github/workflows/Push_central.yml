@@ -25,66 +25,29 @@ jobs:
           git config --global user.name "Bartoszkk"
           git config --global user.email "Bartosz.michalak@epitech.eu"
 
-      - name: Prepare Local Repository
-        run: |
-          git clean -fdx
-          git checkout -b temp-branchs
-
-      - name: Copy repository and remove workflows
-        run: |
-          # Create and prepare the temp-repo directory
-          mkdir temp-repo
-          shopt -s extglob
-          cp -r !(temp-repo) temp-repo/
-          rm -rf temp-repo/.github/workflows
-
-      - name: Stash Untracked Files
-        run: |
-          git stash --include-untracked
-          git stash list # Optional, to confirm that files have been stashed
-
       - name: Sync to Central Repository
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
         run: |
-          
-          mkdir temp-repo
-          shopt -s extglob
-          cp -r !(temp-repo) temp-repo/
-          rm -rf temp-repo/.github/workflows
+          # Adding central repository
           git remote add central "${CENTRAL_REPO}"
           git fetch central
-          git checkout -b central-main central/main
+          git checkout central/main
           
-          git pull central main
-
-          # Check if temp-branch exists, switch to it, else create it
-          if git branch --list temp-branchs; then
-             git checkout temp-branchs
-          else
-             git checkout -b temp-branchs
-          fi
-
-          # Check if AREA-BACKEND exists before removing it
+          # Check if AREA-MOBILE directory exists, remove if it does
           if [ -d "AREA-MOBILE/" ]; then
             git rm -rf AREA-MOBILE/
+            git commit -m "Remove existing AREA-MOBILE directory"
+          else
+            mkdir AREA-MOBILE
+            git add AREA-MOBILE
+            git commit -m "Create AREA-MOBILE directory"
           fi
 
-          # Ensure temp-repo exists before copying
-          if [ -d "temp-repo/" ]; then
-            # Check if AREA-MOBILE exists before updating
-            if [ -d "AREA-MOBILE/" ]; then
-              echo "AREA-MOBILE exists. Updating content."
-              # Remove the existing AREA-MOBILE directory to replace it with new content
-              git rm -rf AREA-MOBILE/
-              git commit -m "Remove existing AREA-MOBILE directory"
-            fi
-          
-            # Copy new contents into AREA-MOBILE
-            cp -r temp-repo/ AREA-MOBILE/
-            git add AREA-MOBILE
-            git commit -m "Update AREA-MOBILE content"
-            git push central HEAD:main
-          else
-            echo "temp-repo/ does not exist, skipping copy"
-          fi
+          # Copy the repository contents into AREA-MOBILE, excluding .git and .github
+          rsync -av --exclude='.git' --exclude='.github' ./ AREA-MOBILE/
+
+          # Commit and push the changes
+          git add AREA-MOBILE
+          git commit -m "Update AREA-MOBILE content"
+          git push central HEAD:main
