@@ -38,7 +38,7 @@ jobs:
           
           # Check if AREA-MOBILE directory exists, remove if it does
           if [ -d "AREA-MOBILE/" ]; then
-            git rm AREA-MOBILE/
+            git rm -r AREA-MOBILE/
             git add AREA-MOBILE
             git commit -m "Remove existing AREA-MOBILE directory"
           else
@@ -46,6 +46,7 @@ jobs:
           fi
 
           # Copy the repository contents into AREA-MOBILE, excluding .git and .github
+          pwd
           rsync -av --exclude='.git' --exclude='.github' --exclude='AREA-MOBILE' ./ AREA-MOBILE/
 
           # Commit and push the changes
