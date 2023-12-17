@@ -69,12 +69,19 @@ jobs:
           fi
 
           # Ensure temp-repo exists before copying
-          ls temp-repo/
           if [ -d "temp-repo/" ]; then
+            # Check if AREA-MOBILE exists before updating
+            if [ -d "AREA-MOBILE/" ]; then
+              echo "AREA-MOBILE exists. Updating content."
+              # Remove the existing AREA-MOBILE directory to replace it with new content
+              git rm -rf AREA-MOBILE/
+              git commit -m "Remove existing AREA-MOBILE directory"
+            fi
+          
+            # Copy new contents into AREA-MOBILE
             cp -r temp-repo/ AREA-MOBILE/
             git add AREA-MOBILE
             git commit -m "Update AREA-MOBILE content"
-            git subtree add --prefix=AREA-MOBILE temp-branch
             git push central HEAD:main
           else
             echo "temp-repo/ does not exist, skipping copy"
