@@ -45,33 +45,38 @@ jobs:
           git stash --include-untracked
           git stash list # Optional, to confirm that files have been stashed
 
+      
       - name: Sync to Central Repository
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
         run: |
+          ls
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
 
-          # Check if temp-branch exists, switch to it, else create it
-          if git branch --list temp-branch1; then
-             git checkout temp-branch1
+          # Check if temp-branch1 exists, switch to it, else create it
+          if git branch -a | grep -q temp-branch1; then
+            git checkout temp-branch1
           else
-             git checkout -b temp-branch1
+            git checkout -b temp-branch1
           fi
 
           # Check if AREA-MOBILE exists before removing it
           if [ -d "AREA-MOBILE/" ]; then
             git rm -rf AREA-MOBILE/
+            git commit -m "Remove existing AREA-MOBILE directory"
           fi
 
-          # Ensure temp-repo exists before copying
+          # Ensure temp-repo1 exists before copying
           if [ -d "temp-repo1/" ]; then
             cp -r temp-repo1/ AREA-MOBILE/
             git add AREA-MOBILE
             git commit -m "Update AREA-MOBILE content"
-            git subtree add --prefix=AREA-MOBILE temp-branch1
+            # Add the subtree only if AREA-MOBILE doesn't exist in the history
+            if ! git log --oneline | grep -q "git-subtree-dir: AREA-MOBILE "; then
+              git subtree add --prefix=AREA-MOBILE temp-branch1
+            fi
             git push central HEAD:main
           else
             echo "temp-repo1/ does not exist, skipping copy"
-          fi
