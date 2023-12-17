@@ -53,10 +53,10 @@ jobs:
           git fetch central
           git checkout -b central-main central/main
 
-          if git branch --list temp-branch; then
-             git checkout temp-branch
+          if git branch --list temp-branch1; then
+             git checkout temp-branch1
           else
-             git checkout -b temp-branch
+             git checkout -b temp-branch1
           fi
 
           # Check if AREA-MOBILE exists before removing it
@@ -65,12 +65,12 @@ jobs:
           fi
 
           # Ensure temp-repo exists before copying
-          if [ -d "temp-repo/" ]; then
-            cp -r temp-repo/ AREA-MOBILE/
+          if [ -d "temp-repo1/" ]; then
+            cp -r temp-repo1/ AREA-MOBILE/
             git add AREA-MOBILE
             git commit -m "Update AREA-MOBILE content"
-            git subtree add --prefix=AREA-MOBILE temp-branch
+            git subtree add --prefix=AREA-MOBILE temp-branch1
             git push central HEAD:main
           else
-            echo "temp-repo/ does not exist, skipping copy"
+            echo "temp-repo1/ does not exist, skipping copy"
           fi
