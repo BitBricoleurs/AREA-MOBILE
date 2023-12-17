@@ -29,17 +29,16 @@ jobs:
         run: |
           # Clean up the working directory
           git clean -fdx
-          # Generate a unique temporary branch name
-          UNIQUE_BRANCH="temp-branch-$(date +%s)"
-          git checkout -b $UNIQUE_BRANCH
+          # Create a new branch for the temporary work
+          git checkout -b temp-branch1
 
       - name: Copy repository and remove workflows
         run: |
           # Create and prepare the temp-repo directory
-          mkdir temp-repo
+          mkdir temp-repo1
           shopt -s extglob
-          cp -r !(temp-repo) temp-repo/
-          rm -rf temp-repo/.github/workflows
+          cp -r !(temp-repo1) temp-repo1/
+          rm -rf temp-repo1/.github/workflows
 
       - name: Stash Untracked Files
         run: |
@@ -49,32 +48,30 @@ jobs:
       - name: Sync to Central Repository
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
-          UNIQUE_BRANCH: ${{ steps.prepare-local-repository.outputs.UNIQUE_BRANCH }}
         run: |
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
-          git checkout $UNIQUE_BRANCH
 
-          # Define target directory based on repository or other unique identifier
-          TARGET_DIR="AREA-MOBILE"
+          # Check if temp-branch exists, switch to it, else create it
+          if git branch --list temp-branch1; then
+             git checkout temp-branch1
+          else
+             git checkout -b temp-branch1
+          fi
 
-          # Check if TARGET_DIR exists before removing it
-          if [ -d "$TARGET_DIR/" ]; then
-            git rm -rf $TARGET_DIR/
-            git commit -m "Remove existing $TARGET_DIR"
+          # Check if AREA-MOBILE exists before removing it
+          if [ -d "AREA-MOBILE/" ]; then
+            git rm -rf AREA-MOBILE/
           fi
 
           # Ensure temp-repo exists before copying
-          if [ -d "temp-repo/" ]; then
-            cp -r temp-repo/ $TARGET_DIR/
-            git add $TARGET_DIR
-            git commit -m "Update $TARGET_DIR content"
-            # Only use subtree add if TARGET_DIR is not already in the repository
-            if ! git log --oneline | grep -q "git-subtree-dir: $TARGET_DIR "; then
-              git subtree add --prefix=$TARGET_DIR $UNIQUE_BRANCH
-            fi
+          if [ -d "temp-repo1/" ]; then
+            cp -r temp-repo1/ AREA-MOBILE/
+            git add AREA-MOBILE
+            git commit -m "Update AREA-MOBILE content"
+            git subtree add --prefix=AREA-MOBILE temp-branch1
             git push central HEAD:main
           else
-            echo "temp-repo/ does not exist, skipping copy"
+            echo "temp-repo1/ does not exist, skipping copy"
           fi
