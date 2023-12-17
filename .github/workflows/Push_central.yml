@@ -62,6 +62,7 @@ jobs:
           # Check if TARGET_DIR exists before removing it
           if [ -d "$TARGET_DIR/" ]; then
             git rm -rf $TARGET_DIR/
+            git commit -m "Remove existing $TARGET_DIR"
           fi
 
           # Ensure temp-repo exists before copying
@@ -69,7 +70,10 @@ jobs:
             cp -r temp-repo/ $TARGET_DIR/
             git add $TARGET_DIR
             git commit -m "Update $TARGET_DIR content"
-            git subtree add --prefix=$TARGET_DIR $UNIQUE_BRANCH
+            # Only use subtree add if TARGET_DIR is not already in the repository
+            if ! git log --oneline | grep -q "git-subtree-dir: $TARGET_DIR "; then
+              git subtree add --prefix=$TARGET_DIR $UNIQUE_BRANCH
+            fi
             git push central HEAD:main
           else
             echo "temp-repo/ does not exist, skipping copy"
