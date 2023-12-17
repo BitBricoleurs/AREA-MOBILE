@@ -38,7 +38,8 @@ jobs:
           
           # Check if AREA-MOBILE directory exists, remove if it does
           if [ -d "AREA-MOBILE/" ]; then
-            git rm -r AREA-MOBILE/
+            git rm -rf AREA-MOBILE/
+            mkdir AREA-MOBILE
             git add AREA-MOBILE
             git commit -m "Remove existing AREA-MOBILE directory"
           else
