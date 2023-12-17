@@ -1,0 +1,77 @@
+name: Push to Central Repository
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  sync-to-central-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup SSH Keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Setup Git User
+        run: |
+          git config --global user.name "Bartoszkk"
+          git config --global user.email "Bartosz.michalak@epitech.eu"
+
+      - name: Prepare Local Repository
+        run: |
+          # Clean up the working directory
+          git clean -fdx
+          # Create a new branch for the temporary work
+          git checkout -b temp-branch
+
+      - name: Copy repository and remove workflows
+        run: |
+          # Create and prepare the temp-repo directory
+          mkdir temp-repo
+          shopt -s extglob
+          cp -r !(temp-repo) temp-repo/
+          rm -rf temp-repo/.github/workflows
+
+      - name: Stash Untracked Files
+        run: |
+          git stash --include-untracked
+          git stash list # Optional, to confirm that files have been stashed
+
+      - name: Sync to Central Repository
+        env:
+          CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
+        run: |
+          git remote add central "${CENTRAL_REPO}"
+          git fetch central
+          git checkout -b central-main central/main
+
+          # Check if temp-branch exists, switch to it, else create it
+          if git branch --list temp-branch; then
+             git checkout temp-branch
+          else
+             git checkout -b temp-branch
+          fi
+
+          # Check if AREA-MOBILE exists before removing it
+          if [ -d "AREA-MOBILE/" ]; then
+            git rm -rf AREA-MOBILE/
+          fi
+
+          # Ensure temp-repo exists before copying
+          if [ -d "temp-repo/" ]; then
+            cp -r temp-repo/ AREA-MOBILE/
+            git add AREA-MOBILE
+            git commit -m "Update AREA-MOBILE content"
+            git subtree add --prefix=AREA-MOBILE temp-branch
+            git push central HEAD:main
+          else
+            echo "temp-repo/ does not exist, skipping copy"
+          fi
