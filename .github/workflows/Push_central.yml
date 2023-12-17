@@ -50,7 +50,6 @@ jobs:
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
         run: |
-          ls
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
