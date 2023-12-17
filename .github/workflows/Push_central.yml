@@ -80,3 +80,4 @@ jobs:
             git push central HEAD:main
           else
             echo "temp-repo1/ does not exist, skipping copy"
+          fi
