@@ -46,7 +46,7 @@ jobs:
           fi
 
           # Copy the repository contents into AREA-MOBILE, excluding .git and .github
-          rsync -av --exclude='.git' --exclude='.github' ./ AREA-MOBILE/
+          rsync -av --exclude='.git' --exclude='.github' --exclude='AREA-MOBILE' ./ AREA-MOBILE/
 
           # Commit and push the changes
           git add AREA-MOBILE
