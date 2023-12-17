@@ -30,21 +30,15 @@ jobs:
           # Clean up the working directory
           git clean -fdx
           # Create a new branch for the temporary work
-          git checkout -b temp-branch1
+          git checkout -b temp-branch
 
-      - name: Create and prepare the temp-repo directory
+      - name: Copy repository and remove workflows
         run: |
           # Create and prepare the temp-repo directory
-          mkdir temp-repo1
+          mkdir temp-repo
           shopt -s extglob
-          cp -r !(temp-repo1) temp-repo1/
-          rm -rf temp-repo1/.github/workflows
-
-      - name: Upload temp-repo1 as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: temp-repo1
-          path: temp-repo1/
+          cp -r !(temp-repo) temp-repo/
+          rm -rf temp-repo/.github/workflows
 
       - name: Stash Untracked Files
         run: |
@@ -58,26 +52,26 @@ jobs:
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
-          git checkout temp-branch1
 
-      - name: Download temp-repo1
-        uses: actions/download-artifact@v2
-        with:
-          name: temp-repo1
+          # Check if temp-branch exists, switch to it, else create it
+          if git branch --list temp-branchs; then
+             git checkout temp-branchs
+          else
+             git checkout -b temp-branchs
+          fi
 
-      - name: Copy and Sync to Central Repository
-        run: |
-          echo "Checking existence of temp-repo1 directory:"
-          if [ -d "temp-repo1/" ]; then
-            echo "temp-repo1 exists. Proceeding with copy."
-            cp -r temp-repo1/ AREA-MOBILE/
+          # Check if AREA-BACKEND exists before removing it
+          if [ -d "AREA-MOBILE/" ]; then
+            git rm -rf AREA-MOBILE/
+          fi
+
+          # Ensure temp-repo exists before copying
+          if [ -d "temp-repo/" ]; then
+            cp -r temp-repo/ AREA-MOBILE/
             git add AREA-MOBILE
             git commit -m "Update AREA-MOBILE content"
-            # Add the subtree only if AREA-MOBILE doesn't exist in the history
-            if ! git log --oneline | grep -q "git-subtree-dir: AREA-MOBILE "; then
-              git subtree add --prefix=AREA-MOBILE temp-branch1
-            fi
+            git subtree add --prefix=AREA-MOBILE temp-branch
             git push central HEAD:main
           else
-            echo "temp-repo1/ does not exist, skipping copy"
+            echo "temp-repo/ does not exist, skipping copy"
           fi
