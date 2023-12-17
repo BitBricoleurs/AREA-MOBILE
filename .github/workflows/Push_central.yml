@@ -43,8 +43,6 @@ jobs:
             git commit -m "Remove existing AREA-MOBILE directory"
           else
             mkdir AREA-MOBILE
-            git add AREA-MOBILE
-            git commit -m "Create AREA-MOBILE directory"
           fi
 
           # Copy the repository contents into AREA-MOBILE, excluding .git and .github
