@@ -60,13 +60,13 @@ jobs:
           git checkout -b central-main central/main
           git checkout temp-branch1
 
-          # Download temp-repo1 artifact
-          - name: Download temp-repo1
-            uses: actions/download-artifact@v2
-            with:
-              name: temp-repo1
+      - name: Download temp-repo1
+        uses: actions/download-artifact@v2
+        with:
+          name: temp-repo1
 
-          # Check existence of temp-repo1 before copying
+      - name: Copy and Sync to Central Repository
+        run: |
           echo "Checking existence of temp-repo1 directory:"
           if [ -d "temp-repo1/" ]; then
             echo "temp-repo1 exists. Proceeding with copy."
