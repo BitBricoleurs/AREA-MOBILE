@@ -32,11 +32,14 @@ jobs:
           # Adding central repository
           git remote add central "${CENTRAL_REPO}"
           git fetch central
-          git checkout central/main
+          
+          # Create a new local branch that tracks central/main
+          git checkout -b local-main central/main
           
           # Check if AREA-MOBILE directory exists, remove if it does
           if [ -d "AREA-MOBILE/" ]; then
-            git rm -rf AREA-MOBILE/
+            git rm AREA-MOBILE/
+            git add AREA-MOBILE
             git commit -m "Remove existing AREA-MOBILE directory"
           else
             mkdir AREA-MOBILE
@@ -50,4 +53,4 @@ jobs:
           # Commit and push the changes
           git add AREA-MOBILE
           git commit -m "Update AREA-MOBILE content"
-          git push central HEAD:main
+          git push central local-main:main
