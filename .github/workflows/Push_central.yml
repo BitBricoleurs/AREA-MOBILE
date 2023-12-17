@@ -27,9 +27,7 @@ jobs:
 
       - name: Prepare Local Repository
         run: |
-          # Clean up the working directory
           git clean -fdx
-          # Create a new branch for the temporary work
           git checkout -b temp-branchs
 
       - name: Copy repository and remove workflows
@@ -49,6 +47,11 @@ jobs:
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
         run: |
+          
+          mkdir temp-repo
+          shopt -s extglob
+          cp -r !(temp-repo) temp-repo/
+          rm -rf temp-repo/.github/workflows
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
