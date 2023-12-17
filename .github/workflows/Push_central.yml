@@ -34,22 +34,17 @@ jobs:
 
       - name: Create and prepare the temp-repo directory
         run: |
-          # Show current working directory
-          echo "Current directory:"
-          pwd
-          # List files and directories
-          echo "Listing current directory contents:"
-          ls -la
-          
           # Create and prepare the temp-repo directory
           mkdir temp-repo1
           shopt -s extglob
           cp -r !(temp-repo1) temp-repo1/
           rm -rf temp-repo1/.github/workflows
 
-          # Verify creation of temp-repo1
-          echo "Verifying creation of temp-repo1:"
-          ls -la temp-repo1/
+      - name: Upload temp-repo1 as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: temp-repo1
+          path: temp-repo1/
 
       - name: Stash Untracked Files
         run: |
@@ -63,23 +58,14 @@ jobs:
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
-          
-          # Check if temp-branch1 exists, switch to it, else create it
-          if git branch -a | grep -q temp-branch1; then
-            git checkout temp-branch1
-          else
-            git checkout -b temp-branch1
-          fi
+          git checkout temp-branch1
 
-          echo "Current directory:"
-          pwd
-          
-          # Check if AREA-MOBILE exists before removing it
-          if [ -d "AREA-MOBILE/" ]; then
-            git rm -rf AREA-MOBILE/
-            git commit -m "Remove existing AREA-MOBILE directory"
-          fi
-          
+          # Download temp-repo1 artifact
+          - name: Download temp-repo1
+            uses: actions/download-artifact@v2
+            with:
+              name: temp-repo1
+
           # Check existence of temp-repo1 before copying
           echo "Checking existence of temp-repo1 directory:"
           if [ -d "temp-repo1/" ]; then
@@ -94,4 +80,3 @@ jobs:
             git push central HEAD:main
           else
             echo "temp-repo1/ does not exist, skipping copy"
-          fi
