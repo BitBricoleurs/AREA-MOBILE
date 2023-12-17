@@ -55,6 +55,8 @@ jobs:
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
+          
+          git pull central main
 
           # Check if temp-branch exists, switch to it, else create it
           if git branch --list temp-branchs; then
