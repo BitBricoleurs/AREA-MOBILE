@@ -30,7 +30,7 @@ jobs:
           # Clean up the working directory
           git clean -fdx
           # Create a new branch for the temporary work
-          git checkout -b temp-branch
+          git checkout -b temp-branchs
 
       - name: Copy repository and remove workflows
         run: |
