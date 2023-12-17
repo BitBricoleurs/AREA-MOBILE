@@ -53,20 +53,20 @@ jobs:
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           git checkout -b central-main central/main
-
+          
           # Check if temp-branch1 exists, switch to it, else create it
           if git branch -a | grep -q temp-branch1; then
             git checkout temp-branch1
           else
             git checkout -b temp-branch1
           fi
-
+          
           # Check if AREA-MOBILE exists before removing it
           if [ -d "AREA-MOBILE/" ]; then
             git rm -rf AREA-MOBILE/
             git commit -m "Remove existing AREA-MOBILE directory"
           fi
-
+          
           # Ensure temp-repo1 exists before copying
           if [ -d "temp-repo1/" ]; then
             cp -r temp-repo1/ AREA-MOBILE/
@@ -79,3 +79,4 @@ jobs:
             git push central HEAD:main
           else
             echo "temp-repo1/ does not exist, skipping copy"
+          fi
