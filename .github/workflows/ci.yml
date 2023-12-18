@@ -21,6 +21,8 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Lint
+      run: npm run lint
 
     - name: Simulate Expo Build (Prebuild)
       run: |
