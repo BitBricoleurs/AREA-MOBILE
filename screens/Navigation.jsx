@@ -17,6 +17,7 @@ import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
 import TriggerConfigScreen from "./Workflow/TriggerConfigScreen";
 import WorkflowScreen from "./Workflow/WorkflowScreen";
 import ActionsScreen from "./Workflow/ActionsScreen";
+import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
 
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -77,6 +78,13 @@ const Workflow = () => {
         <WorkflowStack.Screen
           name="TriggerConfigFromWorkflow"
           component={TriggerConfigScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <WorkflowStack.Screen
+          name="WorkflowConfig"
+          component={WorkflowConfigScreen}
           options={{
             headerShown: false,
           }}

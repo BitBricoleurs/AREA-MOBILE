@@ -3,6 +3,7 @@ import { useContext, useState, createContext } from "react";
 const WorkflowContext = createContext();
 
 export const WorkflowContextProvider = ({ children }) => {
+  const [workflowInfo, setWorkflowInfo] = useState({});
   const [trigger, setTrigger] = useState({});
   const [workflow, setWorkflow] = useState([]);
   const [variables, setVariables] = useState([]);
@@ -62,6 +63,8 @@ export const WorkflowContextProvider = ({ children }) => {
   return (
     <WorkflowContext.Provider
       value={{
+        workflowInfo,
+        setWorkflowInfo,
         trigger,
         setTrigger,
         workflow,
