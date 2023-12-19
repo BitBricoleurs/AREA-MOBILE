@@ -1,0 +1,30 @@
+name: Expo CI
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  install-lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Simulate Expo Build (Prebuild)
+      run: |
+        npm install -g expo-cli
+        npx expo prebuild --clean --no-install

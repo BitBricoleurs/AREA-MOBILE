@@ -29,15 +29,12 @@ jobs:
         env:
           CENTRAL_REPO: 'git@github.com:EpitechPromo2026/B-DEV-500-TLS-5-2-area-alexandre.lagasse.git'
         run: |
-          # Adding central repository
           rsync -av --exclude='.git' --exclude='.github' --exclude='AREA-MOBILE' ./ ../AREA-MOBILECP/
           git remote add central "${CENTRAL_REPO}"
           git fetch central
           
-          # Create a new local branch that tracks central/main
           git checkout -b local-main central/main
           
-          # Check if AREA-MOBILE directory exists, remove if it does
           if [ -d "AREA-MOBILE/" ]; then
             git rm -rf AREA-MOBILE/
             mkdir AREA-MOBILE
@@ -47,7 +44,6 @@ jobs:
             mkdir AREA-MOBILE
           fi
 
-          # Copy the repository contents into AREA-MOBILE, excluding .git and .github
 
           rsync -av --exclude='.git' --exclude='.github' --exclude='AREA-MOBILE' ../AREA-MOBILECP/. AREA-MOBILE/
 
