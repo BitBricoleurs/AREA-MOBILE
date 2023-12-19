@@ -58,7 +58,7 @@
                 "type": "email",
                 "label": "Recipients",
                 "placeholder": "Email",
-                "variableName": "recipients",
+                "variableName": "receiver",
                 "maxEntries": 0,
                 "required": "true"
               },
@@ -87,7 +87,7 @@
                 "name": "basicTextEntry",
                 "type": "text",
                 "placeholder": "Content",
-                "variableName": "content",
+                "variableName": "body",
                 "required": "true"
               }
             ]
@@ -100,7 +100,7 @@
           },
           {
             "type": "output",
-            "variableName": "content"
+            "variableName": "body"
           },
           {
             "type": "output",
@@ -387,7 +387,7 @@
                     "name": "basicTextEntry",
                     "type": "text",
                     "placeholder": "Content",
-                    "variableName": "content",
+                    "variableName": "message",
                     "required": "true"
                   }
                 ]
