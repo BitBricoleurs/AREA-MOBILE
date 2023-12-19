@@ -9,8 +9,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 
 import LandingScreen from "./auth/LandingScreen";
-import EmailScreen from "./auth/EmailScreen";
-import PasswordScreen from "./auth/PasswordScreen";
+import AuthScreen from "./auth/AuthScreen";
 import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
 import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
@@ -32,13 +31,8 @@ const Authentification = () => {
         options={{ headerShown: false }}
       />
       <AuthStack.Screen
-        name="Connect"
-        component={EmailScreen}
-        options={{ headerShown: false }}
-      />
-      <AuthStack.Screen
-        name="Password"
-        component={PasswordScreen}
+        name="Auth"
+        component={AuthScreen}
         options={{ headerShown: false }}
       />
     </AuthStack.Navigator>

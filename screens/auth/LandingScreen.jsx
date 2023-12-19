@@ -3,17 +3,12 @@ import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
 
 const LandingScreen = ({ navigation }) => {
-  const authServices = ["Microsoft", "Email & Password"];
+  const authServices = ["Create an account", "Sign in"];
 
   const handleConnectionType = (service) => {
-    switch (service) {
-      case "Email & Password":
-        navigation.navigate("Connect");
-        break;
-      default:
-        console.log(service);
-        break;
-    }
+    navigation.navigate("Auth", {
+      method: service === "Sign in" ? "login" : "register",
+    });
   };
 
   return (
@@ -41,7 +36,7 @@ const LandingScreen = ({ navigation }) => {
               style={styles.button}
               onPress={() => handleConnectionType(service)}
             >
-              <MyText style={styles.text}>{`Continue with ${service}`}</MyText>
+              <MyText style={styles.text}>{service}</MyText>
             </Pressable>
           );
         })}

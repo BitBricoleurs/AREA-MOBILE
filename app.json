@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AREA-MOBILE",
-    "slug": "AREA-MOBILE",
+    "slug": "botbutler",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6ee89139-6c97-4fec-a6ed-9a75b5914bc4"
+      }
+    },
+    "owner": "bitbricoleurs"
   }
 }

@@ -60,6 +60,16 @@ export const WorkflowContextProvider = ({ children }) => {
     setWorkflow(newWorkflow);
   };
 
+  const jsonifyWorkflow = () => {
+    const json = {
+      name_workflow: workflowInfo.name || "Nom du Workflow",
+      description: workflowInfo.description || "Description du Workflow",
+      workflow: [trigger, ...workflow],
+      variables: [...variables],
+    };
+    return json;
+  };
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -72,6 +82,7 @@ export const WorkflowContextProvider = ({ children }) => {
         variables,
         setVariables,
         deleteNode: handleDeleteNode,
+        jsonifyWorkflow,
       }}
     >
       {children}
