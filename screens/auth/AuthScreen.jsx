@@ -25,7 +25,7 @@ const AuthScreen = ({ navigation, route }) => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleOnPress = () => {
+  const handleOnPress = async () => {
     Keyboard.dismiss();
     if (method === "register") {
       if (
@@ -41,17 +41,25 @@ const AuthScreen = ({ navigation, route }) => {
         console.warn("Please enter a valid email");
         return;
       }
-      const response = dispatchAPI("REGISTER", "/register", {
-        email: email,
-        password: password,
-        fullName: fullName,
-      });
+      try {
+        const response = await dispatchAPI("REGISTER", "/register", {
+          email: email,
+          password: password,
+          fullName: fullName,
+        });
+        const res = await dispatchAPI("LOGIN", "/login", {
+          email: email,
+          password: password,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       if (email === "" || password === "") {
         console.warn("Please fill in all fields");
         return;
       }
-      const response = dispatchAPI("LOGIN", "/login", {
+      const response = await dispatchAPI("LOGIN", "/login", {
         email: email,
         password: password,
       });

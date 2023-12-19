@@ -61,10 +61,23 @@ export const WorkflowContextProvider = ({ children }) => {
   };
 
   const jsonifyWorkflow = () => {
+    const triggerToSend = {
+      ...trigger,
+      type_action: trigger.trigger,
+    };
+    delete triggerToSend.trigger;
+    const actionsToSend = workflow.map((action) => {
+      const actionToSend = {
+        ...action,
+        type_action: action.action,
+      };
+      delete actionToSend.action;
+      return actionToSend;
+    });
     const json = {
       name_workflow: workflowInfo.name || "Nom du Workflow",
       description: workflowInfo.description || "Description du Workflow",
-      workflow: [trigger, ...workflow],
+      workflow: [triggerToSend, ...actionsToSend],
       variables: [...variables],
     };
     return json;

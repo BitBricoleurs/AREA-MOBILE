@@ -119,7 +119,8 @@ const TriggerConfigScreen = ({ route, navigation }) => {
       (service) => service.name === serviceName
     );
     setService(services[serviceIndex]);
-    const triggerIndex = services[serviceIndex].triggers.findIndex(
+    console.log(serviceIndex);
+    const triggerIndex = services[serviceIndex]?.triggers.findIndex(
       (trigger) => trigger.name === triggerName
     );
     setTriggerIndex(triggerIndex);

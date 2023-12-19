@@ -88,7 +88,7 @@ const WorkflowScreen = ({ navigation }) => {
     let service = {};
     if (previousNodeId === 0) {
       actionName = trigger.trigger;
-      serviceName = trigger.serviceName;
+      serviceName = trigger.service;
       service = triggers.find((s) => s.name === serviceName);
       if (!service) return null;
       elementToFind = service.triggers.find((a) => a.name === actionName);
@@ -281,7 +281,7 @@ const WorkflowScreen = ({ navigation }) => {
           <Pressable
             style={[
               styles.trigger,
-              { backgroundColor: colorMap[trigger?.serviceName] },
+              { backgroundColor: colorMap[trigger?.service] },
             ]}
             onPress={() =>
               navigation.navigate("TriggerConfigFromWorkflow", {
@@ -294,7 +294,7 @@ const WorkflowScreen = ({ navigation }) => {
           >
             <View style={styles.triggerServiceIcon}>
               <IconComponent
-                name={trigger?.serviceName}
+                name={trigger?.service}
                 style={styles.serviceIcon}
               />
             </View>

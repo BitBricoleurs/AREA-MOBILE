@@ -12,11 +12,14 @@ import {
 import MyText from "../../utils/myText";
 import { dark, colorMap } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import IconComponent from "../../utils/iconComponent";
 
 const WorkflowConfigScreen = ({ navigation }) => {
-  const { trigger, workflowInfo, setWorkflowInfo } = useWorkflowContext();
+  const { trigger, workflowInfo, setWorkflowInfo, jsonifyWorkflow } =
+    useWorkflowContext();
+  const { dispatchAPI } = useAuthContext();
 
   const handleChangeText = (text, param) => {
     setWorkflowInfo({
@@ -33,6 +36,18 @@ const WorkflowConfigScreen = ({ navigation }) => {
       });
     }
   }, []);
+
+  const handleCreateWorkflowPress = async () => {
+    const workflow = jsonifyWorkflow();
+    console.log(workflow);
+    const { data } = await dispatchAPI("POST", "/create-workflow", {
+      name_workflow: workflow.name_workflow,
+      description: workflow.description,
+      variables: workflow.variables,
+      workflow: workflow.workflow,
+    });
+    navigation.navigate("Home");
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -75,7 +90,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
           </View>
           <Pressable
             style={styles.addActionButton}
-            onPress={() => navigation.navigate("Actions")}
+            onPress={handleCreateWorkflowPress}
           >
             <LinearGradient
               colors={["#BE76FC", "#5F14D8"]}

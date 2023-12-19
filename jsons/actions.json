@@ -123,7 +123,7 @@
                     "name": "basicTextEntry",
                     "type": "text",
                     "placeholder": "Title",
-                    "variableName": "title",
+                    "variableName": "subject",
                     "required": "true"
                   },
                   {
@@ -143,8 +143,8 @@
                     "type": "date",
                     "placeholderFirst": "Start",
                     "placeholderSecond": "End",
-                    "variableNameFirst": "start",
-                    "variableNameSecond": "end",
+                    "variableNameFirst": "start_time",
+                    "variableNameSecond": "end_time",
                     "required": "true"
                   }
                 ]

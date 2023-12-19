@@ -21,6 +21,8 @@ const ActionChoice = ({ service }) => {
       type: "action",
       service: service.name,
       next_id: -1,
+      params: {},
+      details_action: "",
     };
     if (workflow.length !== 0) {
       updatedWorkflow[workflow.length - 1].next_id = newAction.id;
