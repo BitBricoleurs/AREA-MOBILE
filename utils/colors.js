@@ -6,6 +6,7 @@ export const dark = {
   white: "#fff",
   purple: "#974FEE",
   border: "#fff",
+  red: "#FF0000",
 };
 
 export const colorMap = {

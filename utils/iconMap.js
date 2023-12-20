@@ -21,6 +21,7 @@ export const icons = {
   check: require("../assets/check.png"),
   minus: require("../assets/minus.png"),
   plus: require("../assets/plus.png"),
+  close: require("../assets/close.png"),
 
   Azure: require("../assets/services/azure.png"),
   Github: require("../assets/services/github.png"),
