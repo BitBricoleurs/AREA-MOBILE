@@ -514,6 +514,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     alignItems: "center",
     backgroundColor: dark.primary,
+    paddingBottom: 24,
   },
   optionsScrollView: {
     paddingHorizontal: 12,

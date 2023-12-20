@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 import { dark } from "../utils/colors";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -21,6 +22,11 @@ import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const WorkflowStack = createNativeStackNavigator();
+const AppStack = createNativeStackNavigator();
+
+const Blank = () => {
+  return <View />;
+};
 
 const Authentification = () => {
   return (
@@ -89,6 +95,7 @@ const Workflow = () => {
 };
 
 const MainStack = () => {
+  const navigation = useNavigation();
   return (
     <MainTab.Navigator
       screenOptions={({ route }) => ({
@@ -129,11 +136,34 @@ const MainStack = () => {
       />
       <MainTab.Screen
         name="Create"
-        component={Workflow}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("Workflow");
+          },
+        }}
+        component={Blank}
         options={{ headerShown: false }}
       />
       <MainTab.Screen name="Settings" component={SettingsScreen} />
     </MainTab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="Main"
+        component={MainStack}
+        options={{ headerShown: false }}
+      />
+      <AppStack.Screen
+        name="Workflow"
+        component={Workflow}
+        options={{ headerShown: false, presentation: "fullScreenModal" }}
+      />
+    </AppStack.Navigator>
   );
 };
 
@@ -143,7 +173,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-        {isLoggedIn ? <MainStack /> : <Authentification />}
+        {isLoggedIn ? <App /> : <Authentification />}
       </SafeAreaProvider>
     </NavigationContainer>
   );
