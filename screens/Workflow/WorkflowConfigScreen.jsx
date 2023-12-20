@@ -55,7 +55,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
         <View
           style={[
             styles.header,
-            { backgroundColor: colorMap[trigger.serviceName] },
+            { backgroundColor: colorMap[trigger.service] },
           ]}
         >
           <SafeAreaView />
@@ -64,7 +64,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
               <IconComponent name="arrow-left" style={styles.backIcon} />
             </View>
             <View style={styles.logo}>
-              <IconComponent name={trigger.serviceName} style={styles.icon} />
+              <IconComponent name={trigger.service} style={styles.icon} />
             </View>
             <View style={{ width: 24 }} />
           </View>
