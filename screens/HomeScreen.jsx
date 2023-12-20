@@ -12,7 +12,6 @@ import {
   Animated,
   Platform,
   StatusBar,
-  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
@@ -225,7 +224,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
-    // padding: 20,
   },
   logoContainer: {
     justifyContent: "center",

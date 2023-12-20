@@ -285,7 +285,7 @@ const WorkflowScreen = ({ navigation }) => {
             ]}
             onPress={() =>
               navigation.navigate("TriggerConfigFromWorkflow", {
-                serviceName: trigger?.serviceName,
+                serviceName: trigger?.service,
                 triggerName: trigger?.trigger,
                 fromWorkflow: true,
                 previousPage: "Workflow",
