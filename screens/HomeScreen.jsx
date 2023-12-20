@@ -12,6 +12,7 @@ import {
   Animated,
   Platform,
   StatusBar,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
@@ -35,7 +36,7 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
 
     const getWorkflow = async (workflowId) => {
       const { data } = await dispatchAPI("GET", `/get-workflow/${workflowId}`);
-      console.log("data", data);
+      return data;
     };
 
     (async () => {
@@ -51,7 +52,36 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
   return (
     // Your Workflows content here
     <View style={{ flex: 1 }}>
-      <Text style={{ color: "#FFF" }}>Workflows Content</Text>
+      {workflows.length > 0 &&
+        workflows.map((workflow) => (
+          <View
+            style={{
+              backgroundColor: dark.secondary,
+              padding: 20,
+              marginVertical: 10,
+              borderRadius: 10,
+            }}
+            key={workflow.id_workflow}
+          >
+            <Text
+              style={{
+                color: dark.white,
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {workflow.name_workflow}
+            </Text>
+            <Text
+              style={{
+                color: dark.white,
+                fontSize: 16,
+              }}
+            >
+              {workflow.description}
+            </Text>
+          </View>
+        ))}
     </View>
   );
 };
