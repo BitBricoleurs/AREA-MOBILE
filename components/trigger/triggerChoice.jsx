@@ -9,9 +9,11 @@ import { dark } from "../../utils/colors";
 
 const TriggerChoice = ({ service }) => {
   const navigation = useNavigation();
-  const { setTrigger, setVariables, setWorkflow } = useWorkflowContext();
+  const { setTrigger, setVariables, setWorkflow, setLastUnfolded } =
+    useWorkflowContext();
 
   const handleTriggerPress = (index) => {
+    setLastUnfolded(0);
     setTrigger({
       service: service.name,
       trigger: service.triggers[index].name,

@@ -52,7 +52,7 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
     // Your Workflows content here
     <View style={{ flex: 1 }}>
       {workflows?.length > 0 &&
-        workflows.map((workflow) => (
+        workflows.map((workflow, index) => (
           <View
             style={{
               backgroundColor: dark.secondary,
@@ -60,7 +60,7 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
               marginVertical: 10,
               borderRadius: 10,
             }}
-            key={workflow.id_workflow}
+            key={index}
           >
             <Text
               style={{

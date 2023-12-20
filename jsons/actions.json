@@ -104,7 +104,7 @@
           },
           {
             "type": "output",
-            "variableName": "channel"
+            "variableName": "subject"
           }
         ]
       },

@@ -21,12 +21,20 @@ import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import ActionSection from "../../components/actions/actionSection";
+import TriggerHeader from "../../components/trigger/triggerHeader";
 import { findUnusedIntID } from "../../utils/uniqueId";
 
 const WorkflowScreen = ({ navigation }) => {
   const options = ["if", "delay", "variable"];
-  const { trigger, workflow, setWorkflow, variables, setVariables } =
-    useWorkflowContext();
+  const {
+    trigger,
+    workflow,
+    setWorkflow,
+    variables,
+    setVariables,
+    lastUnfolded,
+    lastNodeId,
+  } = useWorkflowContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [scrollViewOffset, setScrollViewOffset] = useState(0);
   const [focusedNode, setFocusedNode] = useState(null);
@@ -80,7 +88,7 @@ const WorkflowScreen = ({ navigation }) => {
     setScrollViewOffset(event.nativeEvent.contentOffset.y);
   };
 
-  const getPreviousNodeOutputs = (previousNodeId) => {
+  const getNodeOutputs = (previousNodeId) => {
     if (previousNodeId === null || previousNodeId === undefined) return;
     let elementToFind = [];
     let actionName = "";
@@ -101,7 +109,7 @@ const WorkflowScreen = ({ navigation }) => {
       if (!service) return null;
       elementToFind = service.actions.find((a) => a.name === actionName);
     }
-    if (!elementToFind) return null;
+    if (!elementToFind || !elementToFind?.outputs) return null;
     let outputs = [];
     elementToFind.outputs.forEach((output) => {
       outputs.push({
@@ -117,7 +125,7 @@ const WorkflowScreen = ({ navigation }) => {
   const handleFocus = (previousNodeId, nodeId, offset, param) => {
     setFocusedParam(param);
     setFocusedNode(nodeId);
-    getPreviousNodeOutputs(previousNodeId);
+    getNodeOutputs(previousNodeId);
     if (offset === null || offset === undefined) return;
     const adjustedPageY = offset + scrollViewOffset - 300;
     scrollViewRef.current.scrollTo({
@@ -141,6 +149,24 @@ const WorkflowScreen = ({ navigation }) => {
       id = findUnusedIntID(variables);
       const newVariables = [...variables, { ...variable, id: id }];
       setVariables(newVariables);
+    }
+    if (focusedParam[0] === "variable") {
+      console.log("variable");
+      let variableToUpdate = variables.find((v) => v.id === focusedParam[1]);
+      if (!variableToUpdate) return;
+      variableToUpdate = {
+        ...variableToUpdate,
+        output: variable.output,
+        name: variableToUpdate?.name ? variableToUpdate.name : variable.name,
+      };
+      const newVariables = variables.map((v) => {
+        if (v.id === focusedParam[1]) {
+          return variableToUpdate;
+        }
+        return v;
+      });
+      setVariables(newVariables);
+      return;
     }
     const newWorkflow = workflow.map((node) => {
       if (node.id === focusedNode) {
@@ -168,6 +194,29 @@ const WorkflowScreen = ({ navigation }) => {
     });
     console.log("newWorkflow", newWorkflow);
     setWorkflow(newWorkflow);
+  };
+
+  const handleOptionPress = (option) => {
+    switch (option) {
+      case "if":
+        console.log("if");
+        break;
+      case "delay":
+        console.log("delay");
+        break;
+      case "variable":
+        const newVariable = {
+          id: findUnusedIntID(variables),
+          output: "",
+          name: "",
+          refer: lastUnfolded || lastNodeId,
+          user_defined: true,
+        };
+        setVariables([...variables, newVariable]);
+        break;
+      default:
+        break;
+    }
   };
 
   const fadeIn = () => {
@@ -278,38 +327,7 @@ const WorkflowScreen = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.workflowContainer}>
-          <Pressable
-            style={[
-              styles.trigger,
-              { backgroundColor: colorMap[trigger?.service] },
-            ]}
-            onPress={() =>
-              navigation.navigate("TriggerConfigFromWorkflow", {
-                serviceName: trigger?.service,
-                triggerName: trigger?.trigger,
-                fromWorkflow: true,
-                previousPage: "Workflow",
-              })
-            }
-          >
-            <View style={styles.triggerServiceIcon}>
-              <IconComponent
-                name={trigger?.service}
-                style={styles.serviceIcon}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <MyText style={styles.triggerText}>{trigger?.trigger}</MyText>
-            </View>
-            <IconComponent name="chevron-right" style={styles.chevronIcon} />
-          </Pressable>
-          <View
-            style={{
-              height: 22,
-              width: 1,
-              backgroundColor: dark.outline,
-            }}
-          />
+          <TriggerHeader onFocus={handleFocus} />
           {workflow[0] ? renderNode(workflow[0].id, 0) : null}
           <View
             style={{ height: 22, width: 1, backgroundColor: dark.outline }}
@@ -335,7 +353,7 @@ const WorkflowScreen = ({ navigation }) => {
           style={[
             styles.outputChoiceView,
             {
-              bottom: keyboardHeight - 90,
+              bottom: keyboardHeight,
               opacity: opacity,
             },
           ]}
@@ -385,6 +403,7 @@ const WorkflowScreen = ({ navigation }) => {
                 styles.option,
                 index !== options.length - 1 && { marginRight: 12 },
               ]}
+              onPress={() => handleOptionPress(option)}
             >
               <MyText style={styles.optionText}>{option}</MyText>
             </Pressable>
@@ -441,32 +460,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: "center",
   },
-  trigger: {
-    height: 72,
-    backgroundColor: "#32A9E7",
-    flexDirection: "row",
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-  },
-  triggerServiceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 100,
-    backgroundColor: dark.white,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   serviceIcon: {
     width: 42,
     height: 42,
     resizeMode: "contain",
-  },
-  triggerText: {
-    fontSize: 18,
-    color: dark.white,
-    marginHorizontal: 16,
   },
   chevronIcon: {
     width: 18,

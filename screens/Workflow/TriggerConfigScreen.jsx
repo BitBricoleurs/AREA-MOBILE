@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 20,
     right: 20,
-    bottom: 20,
+    bottom: 32,
     backgroundColor: dark.purple,
     padding: 12,
     justifyContent: "center",
