@@ -26,7 +26,7 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
     const getWorkflowIds = async () => {
       try {
         const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
-        return data.workflow_ids;
+        return data?.workflow_ids;
       } catch (error) {
         console.error("Failed to get workflow IDs:", error);
         // Handle error appropriately
@@ -52,7 +52,7 @@ const WorkflowsContent = ({ refresh, setRefreshing }) => {
   return (
     // Your Workflows content here
     <View style={{ flex: 1 }}>
-      {workflows.length > 0 &&
+      {workflows?.length > 0 &&
         workflows.map((workflow) => (
           <View
             style={{
