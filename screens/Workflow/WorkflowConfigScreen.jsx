@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   SafeAreaView,
   TextInput,
   Pressable,
-  KeyboardAvoidingView,
+  ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
@@ -17,6 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import IconComponent from "../../utils/iconComponent";
 
 const WorkflowConfigScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const { trigger, workflowInfo, setWorkflowInfo, jsonifyWorkflow } =
     useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
@@ -38,6 +39,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
   }, []);
 
   const handleCreateWorkflowPress = async () => {
+    setLoading(true);
     const workflow = jsonifyWorkflow();
     console.log(workflow);
     const { data } = await dispatchAPI("POST", "/create-workflow", {
@@ -46,6 +48,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
       variables: workflow.variables,
       workflow: workflow.workflow,
     });
+    setLoading(false);
     navigation.navigate("Home");
   };
 
@@ -91,6 +94,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
           <Pressable
             style={styles.addActionButton}
             onPress={handleCreateWorkflowPress}
+            disabled={loading}
           >
             <LinearGradient
               colors={["#BE76FC", "#5F14D8"]}
@@ -98,7 +102,11 @@ const WorkflowConfigScreen = ({ navigation }) => {
               end={[1, 1]}
               style={styles.addActionButtonGradient}
             >
-              <MyText style={styles.addActionText}>Create workflow</MyText>
+              {loading ? (
+                <ActivityIndicator size="small" color={dark.white} />
+              ) : (
+                <MyText style={styles.addActionText}>Create workflow</MyText>
+              )}
             </LinearGradient>
           </Pressable>
         </View>
