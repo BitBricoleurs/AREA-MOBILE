@@ -7,6 +7,7 @@ import {
   TextInput,
   Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,6 +18,7 @@ import { useAuthContext } from "../../contexts/AuthContext";
 
 const AuthScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -26,6 +28,7 @@ const AuthScreen = ({ navigation, route }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleOnPress = async () => {
+    setLoading(true);
     Keyboard.dismiss();
     if (method === "register") {
       if (
@@ -64,6 +67,7 @@ const AuthScreen = ({ navigation, route }) => {
         password: password,
       });
     }
+    setLoading(false);
   };
 
   return (
@@ -125,8 +129,16 @@ const AuthScreen = ({ navigation, route }) => {
             />
           )}
         </View>
-        <Pressable style={styles.button} onPress={() => handleOnPress()}>
-          <MyText style={[styles.text, { color: dark.primary }]}>Next</MyText>
+        <Pressable
+          style={styles.button}
+          onPress={() => handleOnPress()}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color={dark.primary} />
+          ) : (
+            <MyText style={[styles.text, { color: dark.primary }]}>Next</MyText>
+          )}
         </Pressable>
       </KeyboardAvoidingView>
     </SafeAreaView>
