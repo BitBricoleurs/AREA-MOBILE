@@ -49,7 +49,9 @@ const WorkflowConfigScreen = ({ navigation }) => {
       workflow: workflow.workflow,
     });
     setLoading(false);
-    navigation.navigate("Home");
+    if (data?.workflow_id) {
+      navigation.navigate("Home");
+    }
   };
 
   return (
