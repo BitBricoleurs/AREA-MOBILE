@@ -1,6 +1,7 @@
 import { useContext, useState, createContext } from "react";
 import { SERVER_URL } from "@env";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext({ isLoggedIn: false });
 
@@ -18,6 +19,7 @@ export const AuthContextProvider = ({ children }) => {
         email,
         password,
       });
+      await AsyncStorage.setItem("token", response.data.token);
       setToken(response.data.token);
       setIsLoggedIn(true);
       setError(null);
@@ -55,6 +57,38 @@ export const AuthContextProvider = ({ children }) => {
         name: fullName,
       });
       return JSON.stringify(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Error Message:", error.response.data.message);
+        console.log("Status Code:", error.response.status);
+        setError(error.response.data.message);
+        return {
+          message: error.response.data.message,
+          status: error.response.status,
+        };
+      } else {
+        console.log("Error:", error);
+        setError("An unexpected error occurred");
+      }
+    }
+  };
+
+  const attemptLogin = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+      const response = await axios.get(`${SERVER_URL}/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data);
+      setToken(token);
+      setIsLoggedIn(true);
+      setError(null);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.log("Error Message:", error.response.data.message);
@@ -157,6 +191,7 @@ export const AuthContextProvider = ({ children }) => {
       value={{
         user,
         setUser,
+        attemptLogin,
         isLoggedIn,
         isLoading,
         dispatchAPI,

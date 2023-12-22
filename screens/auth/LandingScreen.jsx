@@ -1,8 +1,11 @@
 import { View, Image, Text, Button, StyleSheet, Pressable } from "react-native";
 import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
+import { useEffect } from "react";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const LandingScreen = ({ navigation }) => {
+  const { attemptLogin } = useAuthContext();
   const authServices = ["Create an account", "Sign in"];
 
   const handleConnectionType = (service) => {
@@ -10,6 +13,10 @@ const LandingScreen = ({ navigation }) => {
       method: service === "Sign in" ? "login" : "register",
     });
   };
+
+  useEffect(() => {
+    attemptLogin();
+  }, []);
 
   return (
     <View style={styles.container}>
