@@ -139,7 +139,7 @@ const MainStack = () => {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate("Workflow");
+            navigation.navigate("WorkflowStack");
           },
         }}
         component={Blank}
@@ -159,7 +159,7 @@ const App = () => {
         options={{ headerShown: false }}
       />
       <AppStack.Screen
-        name="Workflow"
+        name="WorkflowStack"
         component={Workflow}
         options={{ headerShown: false, presentation: "fullScreenModal" }}
       />
