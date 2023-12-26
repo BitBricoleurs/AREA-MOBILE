@@ -15,12 +15,72 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
+import { useAuthContext } from "../contexts/AuthContext";
 
-const WorkflowsContent = () => {
+const WorkflowsContent = ({ refresh, setRefreshing }) => {
+  const { dispatchAPI } = useAuthContext();
+  const [workflows, setWorkflows] = useState(0);
+
+  useEffect(() => {
+    const getWorkflowIds = async () => {
+      try {
+        const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
+        return data?.workflow_ids;
+      } catch (error) {
+        console.error("Failed to get workflow IDs:", error);
+        // Handle error appropriately
+        return [];
+      }
+    };
+
+    const getWorkflow = async (workflowId) => {
+      const { data } = await dispatchAPI("GET", `/get-workflow/${workflowId}`);
+      return data;
+    };
+
+    (async () => {
+      const ids = await getWorkflowIds();
+
+      const workflowPromises = ids.map((id) => getWorkflow(id));
+      const workflows = await Promise.all(workflowPromises);
+      console.log(workflows);
+      setWorkflows(workflows);
+    })();
+  }, []);
+
   return (
     // Your Workflows content here
     <View style={{ flex: 1 }}>
-      <Text style={{ color: "#FFF" }}>Workflows Content</Text>
+      {workflows?.length > 0 &&
+        workflows.map((workflow, index) => (
+          <View
+            style={{
+              backgroundColor: dark.secondary,
+              padding: 20,
+              marginVertical: 10,
+              borderRadius: 10,
+            }}
+            key={index}
+          >
+            <Text
+              style={{
+                color: dark.white,
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {workflow.name_workflow}
+            </Text>
+            <Text
+              style={{
+                color: dark.white,
+                fontSize: 16,
+              }}
+            >
+              {workflow.description}
+            </Text>
+          </View>
+        ))}
     </View>
   );
 };
@@ -37,6 +97,7 @@ const AnalyticsContent = () => {
 const HomeScreen = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [width, setWidth] = useState(3);
+  const [refreshing, setRefreshing] = useState(false);
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
 
@@ -58,6 +119,10 @@ const HomeScreen = () => {
     indicatorPosition.setValue(initialPosition);
   }, [width]);
 
+  // onRefresh = () => {
+  //   setRefreshing(true);
+  // };
+
   return (
     <SafeAreaView
       style={{
@@ -70,6 +135,9 @@ const HomeScreen = () => {
         style={styles.container}
         contentInsetAdjustmentBehavior="automatic"
         stickyHeaderIndices={[1]}
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
       >
         <MaskedView
           style={styles.logoContainer}
@@ -138,7 +206,14 @@ const HomeScreen = () => {
           />
         </View>
         <View style={styles.body}>
-          {activeTab === 0 ? <WorkflowsContent /> : <AnalyticsContent />}
+          {activeTab === 0 ? (
+            <WorkflowsContent
+              refresh={refreshing}
+              setRefreshing={setRefreshing}
+            />
+          ) : (
+            <AnalyticsContent />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -149,7 +224,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: dark.primary,
-    // padding: 20,
   },
   logoContainer: {
     justifyContent: "center",

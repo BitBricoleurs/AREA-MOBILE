@@ -4,7 +4,6 @@ import ActionChoice from '../components/actions/actionChoice.jsx';
 import { useNavigation } from '@react-navigation/native';
 import { useWorkflowContext } from '../contexts/WorkflowContext';
 
-// Mock hooks
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),

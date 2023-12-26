@@ -10,7 +10,8 @@ import MyText from "../../utils/myText";
 import ActionForm from "../form/actionForm";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
-  const { workflow, setWorkflow, deleteNode } = useWorkflowContext();
+  const { workflow, setWorkflow, deleteNode, setLastUnfolded } =
+    useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
   const [currentAction, setCurrentAction] = useState({});
@@ -54,6 +55,13 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     return service.actions.find((a) => a.name === actionName);
   };
 
+  const handleUnfold = () => {
+    setUnfold(!unfold);
+    if (!unfold) {
+      setLastUnfolded(nodeId);
+    }
+  };
+
   useEffect(() => {
     const actionElement = workflow.find((node) => node.id === nodeId);
     setCurrentAction(actionElement);
@@ -95,7 +103,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
     >
       <Pressable
         style={styles.action}
-        onPress={() => setUnfold(!unfold)}
+        onPress={() => handleUnfold()}
         onLongPress={handleLongPress}
       >
         <View style={styles.actionServiceIcon}>

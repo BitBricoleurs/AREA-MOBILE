@@ -100,9 +100,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: dark.secondary,
     borderRadius: 8,
-    height: 48,
+    height: "auto",
     paddingHorizontal: 16,
     justifyContent: "center",
+    marginVertical: 10,
   },
   input: {
     color: dark.white,

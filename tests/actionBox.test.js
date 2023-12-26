@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import ActionBox from '../components/actions/actionBox.jsx';
 
-import { fireEvent } from '@testing-library/react-native';
 
 
 const mockWorkflow = [

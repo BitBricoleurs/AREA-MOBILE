@@ -1,22 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   SafeAreaView,
   TextInput,
   Pressable,
-  KeyboardAvoidingView,
+  ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import MyText from "../../utils/myText";
 import { dark, colorMap } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import IconComponent from "../../utils/iconComponent";
 
 const WorkflowConfigScreen = ({ navigation }) => {
-  const { trigger, workflowInfo, setWorkflowInfo } = useWorkflowContext();
+  const [loading, setLoading] = useState(false);
+  const { trigger, workflowInfo, setWorkflowInfo, jsonifyWorkflow } =
+    useWorkflowContext();
+  const { dispatchAPI } = useAuthContext();
 
   const handleChangeText = (text, param) => {
     setWorkflowInfo({
@@ -34,13 +38,29 @@ const WorkflowConfigScreen = ({ navigation }) => {
     }
   }, []);
 
+  const handleCreateWorkflowPress = async () => {
+    setLoading(true);
+    const workflow = jsonifyWorkflow();
+    console.log(workflow);
+    const { data } = await dispatchAPI("POST", "/create-workflow", {
+      name_workflow: workflow.name_workflow,
+      description: workflow.description,
+      variables: workflow.variables,
+      workflow: workflow.workflow,
+    });
+    setLoading(false);
+    if (data?.workflow_id) {
+      navigation.navigate("Home");
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <View
           style={[
             styles.header,
-            { backgroundColor: colorMap[trigger.serviceName] },
+            { backgroundColor: colorMap[trigger.service] },
           ]}
         >
           <SafeAreaView />
@@ -49,7 +69,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
               <IconComponent name="arrow-left" style={styles.backIcon} />
             </View>
             <View style={styles.logo}>
-              <IconComponent name={trigger.serviceName} style={styles.icon} />
+              <IconComponent name={trigger.service} style={styles.icon} />
             </View>
             <View style={{ width: 24 }} />
           </View>
@@ -75,7 +95,8 @@ const WorkflowConfigScreen = ({ navigation }) => {
           </View>
           <Pressable
             style={styles.addActionButton}
-            onPress={() => navigation.navigate("Actions")}
+            onPress={handleCreateWorkflowPress}
+            disabled={loading}
           >
             <LinearGradient
               colors={["#BE76FC", "#5F14D8"]}
@@ -83,7 +104,11 @@ const WorkflowConfigScreen = ({ navigation }) => {
               end={[1, 1]}
               style={styles.addActionButtonGradient}
             >
-              <MyText style={styles.addActionText}>Create workflow</MyText>
+              {loading ? (
+                <ActivityIndicator size="small" color={dark.white} />
+              ) : (
+                <MyText style={styles.addActionText}>Create workflow</MyText>
+              )}
             </LinearGradient>
           </Pressable>
         </View>

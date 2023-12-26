@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  Animated,
   SafeAreaView,
-  TouchableOpacity,
   View,
-  Text,
   ScrollView,
   StyleSheet,
   TextInput,
   Image,
   Platform,
   StatusBar,
+  Pressable,
 } from "react-native";
 
 import { dark } from "../../utils/colors";
@@ -28,8 +26,21 @@ const ChooseTriggerScreen = ({ navigation }) => {
         stickyHeaderIndices={[1]}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        <View style={styles.titleContainer}>
-          <MyText style={styles.title}>Select a trigger</MyText>
+        <View style={styles.headerContainer}>
+          <Pressable
+            style={{
+              width: 50,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <MyText style={{ color: dark.red, fontSize: 16 }}>Cancel</MyText>
+          </Pressable>
+          <View style={styles.titleContainer}>
+            <MyText style={styles.title}>Select a trigger</MyText>
+          </View>
+          <View style={{ width: 50 }} />
         </View>
         <View style={styles.searchBarContainer}>
           <View style={styles.searchBar}>
@@ -70,6 +81,13 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  headerContainer: {
+    backgroundColor: dark.primary,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    // marginVertical: 8,
   },
   titleContainer: {
     justifyContent: "center",

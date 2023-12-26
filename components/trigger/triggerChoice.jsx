@@ -9,14 +9,18 @@ import { dark } from "../../utils/colors";
 
 const TriggerChoice = ({ service }) => {
   const navigation = useNavigation();
-  const { setTrigger, setVariables, setWorkflow } = useWorkflowContext();
+  const { setTrigger, setVariables, setWorkflow, setLastUnfolded } =
+    useWorkflowContext();
 
   const handleTriggerPress = (index) => {
+    setLastUnfolded(0);
     setTrigger({
-      serviceName: service.name,
+      service: service.name,
       trigger: service.triggers[index].name,
       conditions: [],
       params: {},
+      type: "trigger",
+      id: 0,
     });
     const triggerVars = service.triggers[index]?.exposes?.map(
       (variable, index) => {

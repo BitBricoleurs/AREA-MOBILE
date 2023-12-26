@@ -7,6 +7,8 @@ export const WorkflowContextProvider = ({ children }) => {
   const [trigger, setTrigger] = useState({});
   const [workflow, setWorkflow] = useState([]);
   const [variables, setVariables] = useState([]);
+  const [lastUnfolded, setLastUnfolded] = useState(0);
+  const [lastNodeId, setLastNodeId] = useState(0);
 
   console.log("trigger: ", trigger);
   console.log("workflow: ", workflow);
@@ -14,6 +16,20 @@ export const WorkflowContextProvider = ({ children }) => {
 
   const getNode = (nodeId) => {
     return workflow.find((node) => node.id === nodeId);
+  };
+
+  const handleDeleteVariable = (variableId) => {
+    const newVariables = variables.filter(
+      (variable) => variable.id !== variableId
+    );
+    let workflowString = JSON.stringify(workflow);
+
+    const regex = new RegExp(`\\$\\{${variableId}\\}`, "g");
+    workflowString = workflowString.replace(regex, "");
+
+    const newWorkflow = JSON.parse(workflowString);
+    setWorkflow(newWorkflow);
+    setVariables(newVariables);
   };
 
   const handleDeleteNode = (nodeId, previousNodeId) => {
@@ -60,6 +76,31 @@ export const WorkflowContextProvider = ({ children }) => {
     setWorkflow(newWorkflow);
   };
 
+  console.log("lastUnfolded: ", lastUnfolded);
+
+  const jsonifyWorkflow = () => {
+    const triggerToSend = {
+      ...trigger,
+      type_action: trigger.trigger,
+    };
+    delete triggerToSend.trigger;
+    const actionsToSend = workflow.map((action) => {
+      const actionToSend = {
+        ...action,
+        type_action: action.action,
+      };
+      delete actionToSend.action;
+      return actionToSend;
+    });
+    const json = {
+      name_workflow: workflowInfo.name || "Nom du Workflow",
+      description: workflowInfo.description || "Description du Workflow",
+      workflow: [triggerToSend, ...actionsToSend],
+      variables: [...variables],
+    };
+    return json;
+  };
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -72,6 +113,12 @@ export const WorkflowContextProvider = ({ children }) => {
         variables,
         setVariables,
         deleteNode: handleDeleteNode,
+        jsonifyWorkflow,
+        lastUnfolded,
+        setLastUnfolded,
+        setLastNodeId,
+        lastNodeId,
+        deleteVariable: handleDeleteVariable,
       }}
     >
       {children}

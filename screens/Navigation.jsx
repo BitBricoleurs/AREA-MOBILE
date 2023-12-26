@@ -3,14 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 import { dark } from "../utils/colors";
 import { useAuthContext } from "../contexts/AuthContext";
 import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 
 import LandingScreen from "./auth/LandingScreen";
-import EmailScreen from "./auth/EmailScreen";
-import PasswordScreen from "./auth/PasswordScreen";
+import AuthScreen from "./auth/AuthScreen";
 import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
 import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
@@ -22,6 +22,11 @@ import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const WorkflowStack = createNativeStackNavigator();
+const AppStack = createNativeStackNavigator();
+
+const Blank = () => {
+  return <View />;
+};
 
 const Authentification = () => {
   return (
@@ -32,13 +37,8 @@ const Authentification = () => {
         options={{ headerShown: false }}
       />
       <AuthStack.Screen
-        name="Connect"
-        component={EmailScreen}
-        options={{ headerShown: false }}
-      />
-      <AuthStack.Screen
-        name="Password"
-        component={PasswordScreen}
+        name="Auth"
+        component={AuthScreen}
         options={{ headerShown: false }}
       />
     </AuthStack.Navigator>
@@ -95,6 +95,7 @@ const Workflow = () => {
 };
 
 const MainStack = () => {
+  const navigation = useNavigation();
   return (
     <MainTab.Navigator
       screenOptions={({ route }) => ({
@@ -135,11 +136,34 @@ const MainStack = () => {
       />
       <MainTab.Screen
         name="Create"
-        component={Workflow}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("WorkflowStack");
+          },
+        }}
+        component={Blank}
         options={{ headerShown: false }}
       />
       <MainTab.Screen name="Settings" component={SettingsScreen} />
     </MainTab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen
+        name="Main"
+        component={MainStack}
+        options={{ headerShown: false }}
+      />
+      <AppStack.Screen
+        name="WorkflowStack"
+        component={Workflow}
+        options={{ headerShown: false, presentation: "fullScreenModal" }}
+      />
+    </AppStack.Navigator>
   );
 };
 
@@ -149,7 +173,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-        {isLoggedIn ? <MainStack /> : <Authentification />}
+        {isLoggedIn ? <App /> : <Authentification />}
       </SafeAreaProvider>
     </NavigationContainer>
   );

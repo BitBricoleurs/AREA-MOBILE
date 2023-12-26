@@ -1,20 +1,22 @@
 import { View, Image, Text, Button, StyleSheet, Pressable } from "react-native";
 import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
+import { useEffect } from "react";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const LandingScreen = ({ navigation }) => {
-  const authServices = ["Microsoft", "Email & Password"];
+  const { attemptLogin } = useAuthContext();
+  const authServices = ["Create an account", "Sign in"];
 
   const handleConnectionType = (service) => {
-    switch (service) {
-      case "Email & Password":
-        navigation.navigate("Connect");
-        break;
-      default:
-        console.log(service);
-        break;
-    }
+    navigation.navigate("Auth", {
+      method: service === "Sign in" ? "login" : "register",
+    });
   };
+
+  useEffect(() => {
+    attemptLogin();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -41,7 +43,7 @@ const LandingScreen = ({ navigation }) => {
               style={styles.button}
               onPress={() => handleConnectionType(service)}
             >
-              <MyText style={styles.text}>{`Continue with ${service}`}</MyText>
+              <MyText style={styles.text}>{service}</MyText>
             </Pressable>
           );
         })}

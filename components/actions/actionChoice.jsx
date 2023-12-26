@@ -10,17 +10,21 @@ import { findUnusedIntID } from "../../utils/uniqueId";
 
 const ActionChoice = ({ service }) => {
   const navigation = useNavigation();
-  const { setWorkflow, workflow, trigger, setTrigger } = useWorkflowContext();
+  const { setWorkflow, workflow, trigger, setTrigger, setLastNodeId } =
+    useWorkflowContext();
 
   const handleActionPress = (index) => {
     const updatedWorkflow = [...workflow];
     const id = findUnusedIntID(workflow);
+    setLastNodeId(id);
     const newAction = {
       id: id,
       action: service.actions[index].name,
       type: "action",
       service: service.name,
       next_id: -1,
+      params: {},
+      details_action: "",
     };
     if (workflow.length !== 0) {
       updatedWorkflow[workflow.length - 1].next_id = newAction.id;
