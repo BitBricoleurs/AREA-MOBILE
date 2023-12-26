@@ -19,8 +19,10 @@ import ActionChoice from "../../components/actions/actionChoice";
 
 import actions from "../../jsons/actions.json";
 
-const ActionsScreen = ({ navigation }) => {
+const ActionsScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
+  const { prevNodeId } = route.params;
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -51,7 +53,11 @@ const ActionsScreen = ({ navigation }) => {
         </View>
         <View style={styles.triggerContainer}>
           {actions.map((action, index) => (
-            <ActionChoice key={index} service={action} />
+            <ActionChoice
+              key={index}
+              service={action}
+              prevNodeId={prevNodeId}
+            />
           ))}
         </View>
       </ScrollView>

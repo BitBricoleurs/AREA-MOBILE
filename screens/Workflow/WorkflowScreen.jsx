@@ -23,6 +23,8 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import ActionSection from "../../components/actions/actionSection";
 import TriggerHeader from "../../components/trigger/triggerHeader";
 import { findUnusedIntID } from "../../utils/uniqueId";
+import RenderNode from "../../components/renderNode";
+import AddActionButton from "../../components/addActionButton";
 
 const WorkflowScreen = ({ navigation }) => {
   const options = ["if", "delay", "variable"];
@@ -78,6 +80,29 @@ const WorkflowScreen = ({ navigation }) => {
               style={{ height: 12, width: 1, backgroundColor: dark.outline }}
             />
             {renderNode(node.next_id, node.id)}
+          </>
+        )}
+        {node.next_id < 0 && (
+          <>
+            <View
+              style={{ height: 22, width: 1, backgroundColor: dark.outline }}
+            />
+            <Pressable
+              style={styles.addActionButton}
+              onPress={() =>
+                navigation.navigate("Actions", { previousNodeId: node.id })
+              }
+            >
+              <LinearGradient
+                colors={["#BE76FC", "#5F14D8"]}
+                start={[0, 0]}
+                end={[1, 1]}
+                style={styles.addActionButtonGradient}
+              >
+                <IconComponent name="plus" style={styles.plusIcon} />
+                <MyText style={styles.addActionText}>Add action</MyText>
+              </LinearGradient>
+            </Pressable>
           </>
         )}
       </View>
@@ -199,7 +224,14 @@ const WorkflowScreen = ({ navigation }) => {
   const handleOptionPress = (option) => {
     switch (option) {
       case "if":
-        console.log("if");
+        const ifBlock = {
+          id: findUnusedIntID(workflow),
+          type: "condition",
+          type_condition: "",
+          conditions: [],
+          next_id_success: -1,
+          next_id_failure: -1,
+        };
         break;
       case "delay":
         console.log("delay");
@@ -328,24 +360,15 @@ const WorkflowScreen = ({ navigation }) => {
         </View>
         <View style={styles.workflowContainer}>
           <TriggerHeader onFocus={handleFocus} />
-          {workflow[0] ? renderNode(workflow[0].id, 0) : null}
-          <View
-            style={{ height: 22, width: 1, backgroundColor: dark.outline }}
-          />
-          <Pressable
-            style={styles.addActionButton}
-            onPress={() => navigation.navigate("Actions")}
-          >
-            <LinearGradient
-              colors={["#BE76FC", "#5F14D8"]}
-              start={[0, 0]}
-              end={[1, 1]}
-              style={styles.addActionButtonGradient}
-            >
-              <IconComponent name="plus" style={styles.plusIcon} />
-              <MyText style={styles.addActionText}>Add action</MyText>
-            </LinearGradient>
-          </Pressable>
+          {workflow[0] ? (
+            <RenderNode
+              nodeId={workflow[0].id}
+              previousNodeId={0}
+              handleFocus={handleFocus}
+            />
+          ) : (
+            <AddActionButton nodeId={0} />
+          )}
         </View>
       </ScrollView>
       {keyboardHeight > 0 && (
@@ -471,30 +494,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     marginHorizontal: 8,
     margin: 12,
-  },
-  addActionButton: {
-    height: 48,
-    width: "100%",
-    borderRadius: 100,
-  },
-  addActionButtonGradient: {
-    height: 48,
-    flex: 1,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  addActionText: {
-    fontSize: 18,
-    color: dark.white,
-    fontFamily: "Outfit_600SemiBold",
-    marginLeft: 8,
-  },
-  plusIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
   },
 
   outputChoiceView: {

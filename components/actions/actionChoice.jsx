@@ -8,7 +8,7 @@ import IconComponent from "../../utils/iconComponent";
 import { dark } from "../../utils/colors";
 import { findUnusedIntID } from "../../utils/uniqueId";
 
-const ActionChoice = ({ service }) => {
+const ActionChoice = ({ service, prevNodeId }) => {
   const navigation = useNavigation();
   const { setWorkflow, workflow, trigger, setTrigger, setLastNodeId } =
     useWorkflowContext();
@@ -27,7 +27,9 @@ const ActionChoice = ({ service }) => {
       details_action: "",
     };
     if (workflow.length !== 0) {
-      updatedWorkflow[workflow.length - 1].next_id = newAction.id;
+      const prevNode = workflow.find((node) => node.id === prevNodeId);
+      const prevNodeIndex = workflow.indexOf(prevNode);
+      updatedWorkflow[prevNodeIndex].next_id = newAction.id;
     } else {
       setTrigger({
         ...trigger,
