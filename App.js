@@ -7,43 +7,51 @@ import {
 } from "@expo-google-fonts/outfit";
 import * as SplashScreen from "expo-splash-screen";
 
-import { AuthContextProvider } from "./contexts/AuthContext";
+import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
 import Navigation from "./screens/Navigation";
 import CustomSplashScreen from "./screens/splashscreen/CustomSplashScreen";
 
-export default function App() {
+function Initializer() {
+  const { attemptLogin } = useAuthContext();
   const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await attemptLogin();
+        setAppIsReady(true);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    prepare();
+  }, []);
+
+  if (!appIsReady) {
+    return <CustomSplashScreen />;
+  }
+
+  return <Navigation />;
+}
+
+export default function App() {
   const [fontsLoaded] = useFonts({
     Outfit_500Medium,
     Outfit_600SemiBold,
     Outfit_700Bold,
   });
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        if (fontsLoaded) {
-          setAppIsReady(true);
-        }
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        if (fontsLoaded) {
-          await SplashScreen.hideAsync();
-        }
-      }
-    }
-
-    prepare();
-  }, [fontsLoaded]);
-
-  if (!appIsReady || !fontsLoaded) {
+  if (!fontsLoaded) {
     return <CustomSplashScreen />;
   }
 
   return (
     <AuthContextProvider>
-      <Navigation />
+      <Initializer />
     </AuthContextProvider>
   );
 }
