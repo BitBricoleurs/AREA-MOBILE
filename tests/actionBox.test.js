@@ -2,8 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import ActionBox from '../components/actions/actionBox.jsx';
 
-
-
 const mockWorkflow = [
   {
     id: 1,
