@@ -16,7 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import actions from "../../jsons/actions.json";
 import triggers from "../../jsons/triggers.json";
 
-import { dark, colorMap } from "../../utils/colors";
+import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
@@ -30,6 +30,7 @@ const WorkflowScreen = ({ navigation }) => {
   const options = ["if", "delay", "variable"];
   const {
     trigger,
+    setTrigger,
     workflow,
     setWorkflow,
     variables,
@@ -44,70 +45,6 @@ const WorkflowScreen = ({ navigation }) => {
   const opacity = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef(null);
   const [prevOutputs, setPrevOutputs] = useState([]);
-
-  const nodeDispatch = (node, previousNodeId) => {
-    switch (node.type) {
-      case "action":
-        return (
-          <ActionSection
-            nodeId={node.id}
-            previousNodeId={previousNodeId}
-            onFocus={handleFocus}
-          />
-        );
-      case "condition":
-        return <View style={{ flex: 1 }} />;
-      case "delay":
-        return <View style={{ flex: 1 }} />;
-      default:
-        return null;
-    }
-  };
-
-  const renderNode = (nodeId, prevNodeId) => {
-    const node = workflow.find((n) => n.id === nodeId);
-    if (!node) return null;
-
-    return (
-      <View
-        key={node.id}
-        style={{ flex: 1, width: "100%", alignItems: "center" }}
-      >
-        {nodeDispatch(node, prevNodeId)}
-        {node.next_id > 0 && (
-          <>
-            <View
-              style={{ height: 12, width: 1, backgroundColor: dark.outline }}
-            />
-            {renderNode(node.next_id, node.id)}
-          </>
-        )}
-        {node.next_id < 0 && (
-          <>
-            <View
-              style={{ height: 22, width: 1, backgroundColor: dark.outline }}
-            />
-            <Pressable
-              style={styles.addActionButton}
-              onPress={() =>
-                navigation.navigate("Actions", { previousNodeId: node.id })
-              }
-            >
-              <LinearGradient
-                colors={["#BE76FC", "#5F14D8"]}
-                start={[0, 0]}
-                end={[1, 1]}
-                style={styles.addActionButtonGradient}
-              >
-                <IconComponent name="plus" style={styles.plusIcon} />
-                <MyText style={styles.addActionText}>Add action</MyText>
-              </LinearGradient>
-            </Pressable>
-          </>
-        )}
-      </View>
-    );
-  };
 
   const handleScroll = (event) => {
     setScrollViewOffset(event.nativeEvent.contentOffset.y);
@@ -143,6 +80,11 @@ const WorkflowScreen = ({ navigation }) => {
         refer: previousNodeId,
         user_defined: false,
       });
+    });
+    variables.forEach((variable) => {
+      if (variable.user_defined) {
+        outputs.push(variable);
+      }
     });
     setPrevOutputs(outputs);
   };
@@ -232,6 +174,22 @@ const WorkflowScreen = ({ navigation }) => {
           next_id_success: -1,
           next_id_failure: -1,
         };
+        const newWorkflow = [...workflow];
+        if (workflow.length !== 0) {
+          const updateIdIndex = newWorkflow.findIndex(
+            (node) => node.id === lastNodeId
+          );
+          newWorkflow[updateIdIndex] = {
+            ...newWorkflow[updateIdIndex],
+            next_id: ifBlock.id,
+          };
+        } else {
+          setTrigger({
+            ...trigger,
+            next_id: ifBlock.id,
+          });
+        }
+        setWorkflow([...newWorkflow, ifBlock]);
         break;
       case "delay":
         console.log("delay");
