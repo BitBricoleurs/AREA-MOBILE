@@ -32,10 +32,11 @@ export const WorkflowContextProvider = ({ children }) => {
     setVariables(newVariables);
   };
 
-  const handleDeleteNode = (nodeId, previousNodeId) => {
+  const handleDeleteNode = (nodeId, previousNodeId, thisworkflow) => {
+    console.log("nodeId: ", nodeId);
     const currentAction = getNode(nodeId);
     const id = currentAction.next_id > 0 ? currentAction.next_id : -1;
-    let newWorkflow = [...workflow];
+    let newWorkflow = thisworkflow ? [...thisworkflow] : [...workflow];
 
     if (previousNodeId === 0) {
       setTrigger({
@@ -45,13 +46,20 @@ export const WorkflowContextProvider = ({ children }) => {
     } else {
       newWorkflow = newWorkflow.map((node) => {
         if (node.id === previousNodeId) {
-          return {
-            ...node,
-            next_id: id,
-          };
+          if (node.type === "condition") {
+            return node.next_id_success === nodeId
+              ? { ...node, next_id_success: id }
+              : { ...node, next_id_fail: id };
+          } else {
+            return {
+              ...node,
+              next_id: id,
+            };
+          }
         }
         return node;
       });
+      console.log("newWorkflow: ", newWorkflow);
     }
 
     const index = newWorkflow.findIndex((node) => node.id === nodeId);
@@ -74,9 +82,27 @@ export const WorkflowContextProvider = ({ children }) => {
 
     setVariables(newVariables);
     setWorkflow(newWorkflow);
+    return newWorkflow;
   };
 
-  console.log("lastUnfolded: ", lastUnfolded);
+  const recursiveDelete = (nodeId, thisworkflow) => {
+    const node = getNode(nodeId);
+    if (node.next_id > 0) {
+      thisworkflow = recursiveDelete(node.next_id, thisworkflow);
+    }
+    if (node.next_id_success > 0) {
+      thisworkflow = recursiveDelete(node.next_id_success, thisworkflow);
+    }
+    if (node.next_id_fail > 0) {
+      thisworkflow = recursiveDelete(node.next_id_fail, thisworkflow);
+    }
+    return handleDeleteNode(nodeId, node.previous_id, thisworkflow);
+  };
+
+  const handleRecursiveDelete = (nodeId) => {
+    let newWorkflow = recursiveDelete(nodeId, workflow);
+    setWorkflow(newWorkflow);
+  };
 
   const jsonifyWorkflow = () => {
     const triggerToSend = {
@@ -119,6 +145,7 @@ export const WorkflowContextProvider = ({ children }) => {
         setLastNodeId,
         lastNodeId,
         deleteVariable: handleDeleteVariable,
+        handleRecursiveDelete,
       }}
     >
       {children}

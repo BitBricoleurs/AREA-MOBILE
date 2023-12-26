@@ -21,7 +21,7 @@ import actions from "../../jsons/actions.json";
 
 const ActionsScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
-  const { prevNodeId } = route.params;
+  const { prevNodeId, type } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,6 +57,7 @@ const ActionsScreen = ({ navigation, route }) => {
               key={index}
               service={action}
               prevNodeId={prevNodeId}
+              type={type}
             />
           ))}
         </View>

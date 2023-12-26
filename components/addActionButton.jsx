@@ -1,39 +1,49 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import IconComponent from "../utils/iconComponent";
 import MyText from "../utils/myText";
 import { dark } from "../utils/colors";
 
-const AddActionButton = ({ nodeId }) => {
+const AddActionButton = ({ nodeId, type }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable
-      style={styles.addActionButton}
-      onPress={() => navigation.navigate("Actions", { prevNodeId: nodeId })}
-    >
-      <LinearGradient
-        colors={["#BE76FC", "#5F14D8"]}
-        start={[0, 0]}
-        end={[1, 1]}
-        style={styles.addActionButtonGradient}
+    <>
+      <View style={{ height: 18, width: 1, backgroundColor: dark.outline }} />
+      <Pressable
+        style={styles.addActionButton}
+        onPress={() =>
+          navigation.navigate("Actions", { prevNodeId: nodeId, type: type })
+        }
       >
-        <IconComponent name="plus" style={styles.plusIcon} />
-        <MyText style={styles.addActionText}>Add action</MyText>
-      </LinearGradient>
-    </Pressable>
+        <LinearGradient
+          colors={["#BE76FC", "#5F14D8"]}
+          start={[0, 0]}
+          end={[1, 1]}
+          style={styles.addActionButtonGradient}
+        >
+          <IconComponent name="plus" style={styles.plusIcon} />
+          <MyText style={styles.addActionText}>Add action</MyText>
+        </LinearGradient>
+      </Pressable>
+    </>
   );
 };
 
 export default AddActionButton;
+
+AddActionButton.defaultProps = {
+  type: "none",
+};
 
 const styles = StyleSheet.create({
   addActionButton: {
     height: 48,
     width: "100%",
     borderRadius: 100,
+    marginBottom: 12,
   },
   addActionButtonGradient: {
     height: 48,

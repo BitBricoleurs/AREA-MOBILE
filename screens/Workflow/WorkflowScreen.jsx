@@ -11,7 +11,6 @@ import {
   Animated,
   TouchableOpacity,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import actions from "../../jsons/actions.json";
 import triggers from "../../jsons/triggers.json";
@@ -20,7 +19,6 @@ import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
-import ActionSection from "../../components/actions/actionSection";
 import TriggerHeader from "../../components/trigger/triggerHeader";
 import { findUnusedIntID } from "../../utils/uniqueId";
 import RenderNode from "../../components/renderNode";
@@ -104,7 +102,8 @@ const WorkflowScreen = ({ navigation }) => {
 
   const handleVariablePress = (variable) => {
     let id = null;
-    const variableAlreadyExists = variables.find(
+    let newVariables = [...variables];
+    const variableAlreadyExists = newVariables.find(
       (v) =>
         v.output === variable.output &&
         v.refer === variable.refer &&
@@ -113,12 +112,11 @@ const WorkflowScreen = ({ navigation }) => {
     if (variableAlreadyExists) {
       id = variableAlreadyExists.id;
     } else {
-      id = findUnusedIntID(variables);
-      const newVariables = [...variables, { ...variable, id: id }];
+      id = findUnusedIntID(newVariables);
+      newVariables = [...newVariables, { ...variable, id: id }];
       setVariables(newVariables);
     }
     if (focusedParam[0] === "variable") {
-      console.log("variable");
       let variableToUpdate = variables.find((v) => v.id === focusedParam[1]);
       if (!variableToUpdate) return;
       variableToUpdate = {
@@ -126,13 +124,25 @@ const WorkflowScreen = ({ navigation }) => {
         output: variable.output,
         name: variableToUpdate?.name ? variableToUpdate.name : variable.name,
       };
-      const newVariables = variables.map((v) => {
+      newVariables = newVariables.map((v) => {
         if (v.id === focusedParam[1]) {
           return variableToUpdate;
         }
         return v;
       });
       setVariables(newVariables);
+      return;
+    } else if (focusedParam[0] === "key" || focusedParam[0] === "value") {
+      const newWorkflow = workflow.map((node) => {
+        if (node.id === focusedNode) {
+          node[focusedParam[0]] = `${
+            node[focusedParam[0]] ? node[focusedParam[0]] : ""
+          }\${${id}}`;
+          return node;
+        }
+        return node;
+      });
+      setWorkflow(newWorkflow);
       return;
     }
     const newWorkflow = workflow.map((node) => {
@@ -169,8 +179,7 @@ const WorkflowScreen = ({ navigation }) => {
         const ifBlock = {
           id: findUnusedIntID(workflow),
           type: "condition",
-          type_condition: "",
-          conditions: [],
+          type_condition: "contains",
           next_id_success: -1,
           next_id_failure: -1,
         };
@@ -321,6 +330,7 @@ const WorkflowScreen = ({ navigation }) => {
           {workflow[0] ? (
             <RenderNode
               nodeId={workflow[0].id}
+              nodeOutputId={0}
               previousNodeId={0}
               handleFocus={handleFocus}
             />

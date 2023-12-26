@@ -7,7 +7,7 @@ import { dark } from "../../utils/colors";
 import VariableBox from "../variableBox";
 import ActionBox from "./actionBox";
 
-const ActionSection = ({ nodeId, previousNodeId, onFocus }) => {
+const ActionSection = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
   const [actionVariables, setActionVariables] = useState([]);
   const { variables } = useWorkflowContext();
 
@@ -22,6 +22,7 @@ const ActionSection = ({ nodeId, previousNodeId, onFocus }) => {
     <>
       <ActionBox
         nodeId={nodeId}
+        nodeOutputId={nodeOutputId}
         previousNodeId={previousNodeId}
         onFocus={onFocus}
       />

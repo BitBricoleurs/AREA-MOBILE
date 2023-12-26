@@ -8,7 +8,7 @@ import IconComponent from "../../utils/iconComponent";
 import { dark } from "../../utils/colors";
 import { findUnusedIntID } from "../../utils/uniqueId";
 
-const ActionChoice = ({ service, prevNodeId }) => {
+const ActionChoice = ({ service, prevNodeId, type }) => {
   const navigation = useNavigation();
   const { setWorkflow, workflow, trigger, setTrigger, setLastNodeId } =
     useWorkflowContext();
@@ -29,7 +29,17 @@ const ActionChoice = ({ service, prevNodeId }) => {
     if (workflow.length !== 0) {
       const prevNode = workflow.find((node) => node.id === prevNodeId);
       const prevNodeIndex = workflow.indexOf(prevNode);
-      updatedWorkflow[prevNodeIndex].next_id = newAction.id;
+      switch (type) {
+        case "failure":
+          updatedWorkflow[prevNodeIndex].next_id_fail = newAction.id;
+          break;
+        case "success":
+          updatedWorkflow[prevNodeIndex].next_id_success = newAction.id;
+          break;
+        default:
+          updatedWorkflow[prevNodeIndex].next_id = newAction.id;
+          break;
+      }
     } else {
       setTrigger({
         ...trigger,
@@ -82,6 +92,10 @@ const ActionChoice = ({ service, prevNodeId }) => {
 };
 
 export default ActionChoice;
+
+ActionChoice.defaultProps = {
+  type: "none",
+};
 
 const styles = StyleSheet.create({
   container: {

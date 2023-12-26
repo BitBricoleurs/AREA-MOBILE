@@ -9,7 +9,7 @@ import MyText from "../../utils/myText";
 
 import ActionForm from "../form/actionForm";
 
-const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
+const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
   const { workflow, setWorkflow, deleteNode, setLastUnfolded } =
     useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
@@ -128,7 +128,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus }) => {
             actionForm={actionForm}
             currentAction={currentAction}
             setCurrentAction={setCurrentAction}
-            previousNodeId={previousNodeId}
+            previousNodeId={nodeOutputId}
             nodeId={nodeId}
             onFocus={onFocus}
           />
