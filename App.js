@@ -6,10 +6,13 @@ import {
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 import * as SplashScreen from "expo-splash-screen";
+import { LogBox } from "react-native";
 
 import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
 import Navigation from "./screens/Navigation";
 import CustomSplashScreen from "./screens/splashscreen/CustomSplashScreen";
+
+LogBox.ignoreLogs(["Require cycle:"]);
 
 function Initializer() {
   const { attemptLogin } = useAuthContext();
