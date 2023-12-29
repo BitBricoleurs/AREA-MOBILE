@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@expo-google-fonts/outfit": "^0.2.3",
+    "@expo/webpack-config": "^19.0.0",
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-masked-view/masked-view": "^0.3.1",
     "@react-native-picker/picker": "2.4.10",
@@ -20,21 +22,20 @@
     "@react-navigation/native-stack": "^6.9.17",
     "axios": "^1.6.2",
     "expo": "^49.0.21",
+    "expo-file-system": "^15.6.0",
     "expo-font": "~11.4.0",
     "expo-linear-gradient": "~12.3.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.72.6",
     "react-native-dotenv": "^3.4.9",
     "react-native-gesture-handler": "^2.14.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "react-native-ui-datepicker": "^1.0.10",
-    "react-native-web": "~0.19.6",
-    "react-dom": "18.2.0",
-    "@expo/webpack-config": "^19.0.0",
-    "@react-native-async-storage/async-storage": "1.18.2"
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

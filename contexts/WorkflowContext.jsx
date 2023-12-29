@@ -127,6 +127,22 @@ export const WorkflowContextProvider = ({ children }) => {
     return json;
   };
 
+  const parseWorkflow = (workflow) => {
+    const trigger = workflow.workflow[0];
+    const actions = workflow.workflow.slice(1);
+    const variables = workflow.variables;
+    const workflowInfo = {
+      name: workflow.name_workflow,
+      description: workflow.description,
+      id: workflow.id,
+      is_active: workflow.is_active,
+    };
+    setWorkflowInfo(workflowInfo);
+    setTrigger(trigger);
+    setWorkflow(actions);
+    setVariables(variables);
+  };
+
   return (
     <WorkflowContext.Provider
       value={{
@@ -146,6 +162,7 @@ export const WorkflowContextProvider = ({ children }) => {
         lastNodeId,
         deleteVariable: handleDeleteVariable,
         handleRecursiveDelete,
+        parseWorkflow,
       }}
     >
       {children}
