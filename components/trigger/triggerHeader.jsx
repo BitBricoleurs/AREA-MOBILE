@@ -27,7 +27,7 @@ const debounce = (onSingle, onDouble) => {
 
 const TriggerHeader = ({ onFocus }) => {
   const [actionVariables, setActionVariables] = useState([]);
-  const { trigger, variables, setVariables } = useWorkflowContext();
+  const { trigger, variables, setVariables, editable } = useWorkflowContext();
   const navigation = useNavigation();
 
   const onSingleTap = () => {
@@ -40,6 +40,7 @@ const TriggerHeader = ({ onFocus }) => {
   };
 
   const onDoubleTap = () => {
+    if (!editable) return;
     const newVariable = {
       id: findUnusedIntID(variables),
       output: "",

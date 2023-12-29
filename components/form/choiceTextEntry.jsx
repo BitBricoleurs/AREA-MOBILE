@@ -19,6 +19,7 @@ const ChoiceTextEntry = ({
   nodeId,
   previousNodeId,
   onFocus,
+  editable,
 }) => {
   const [selected, setSelected] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
@@ -125,7 +126,11 @@ const ChoiceTextEntry = ({
 
   return (
     <View style={styles.inputContainer}>
-      <TouchableOpacity style={styles.selectButton} onPress={handleSelectPress}>
+      <TouchableOpacity
+        style={styles.selectButton}
+        onPress={handleSelectPress}
+        disabled={!editable}
+      >
         <MyText style={styles.text}>{data.label}</MyText>
         {selected && <IconComponent name="check" style={styles.checkIcon} />}
       </TouchableOpacity>
@@ -141,6 +146,7 @@ const ChoiceTextEntry = ({
             placeholderTextColor={"#969696"}
             onFocus={handleFocus}
             ref={inputRef}
+            editable={editable}
           />
         )}
       </Animated.View>

@@ -9,7 +9,8 @@ import IconComponent from "../utils/iconComponent";
 const VariableBox = ({ id, nodeId, onFocus }) => {
   const inputRef = useRef(null);
   const [variable, setVariable] = useState({});
-  const { variables, setVariables, deleteVariable } = useWorkflowContext();
+  const { variables, setVariables, deleteVariable, editable } =
+    useWorkflowContext();
 
   const handleFocus = () => {
     inputRef.current.measure((x, y, width, height, pageX, pageY) => {
@@ -39,7 +40,7 @@ const VariableBox = ({ id, nodeId, onFocus }) => {
   }, [variables]);
 
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} pointerEvents={editable ? "" : "none"}>
       <LinearGradient
         colors={["#FFA43E", "#FF3A3A"]}
         start={[0, 0]}
@@ -69,12 +70,14 @@ const VariableBox = ({ id, nodeId, onFocus }) => {
             autoCapitalize="none"
           />
         </View>
-        <Pressable
-          style={styles.iconContainer}
-          onPress={() => deleteVariable(id)}
-        >
-          <IconComponent name="close" style={styles.icon} />
-        </Pressable>
+        {editable && (
+          <Pressable
+            style={styles.iconContainer}
+            onPress={() => deleteVariable(id)}
+          >
+            <IconComponent name="close" style={styles.icon} />
+          </Pressable>
+        )}
       </LinearGradient>
     </Pressable>
   );

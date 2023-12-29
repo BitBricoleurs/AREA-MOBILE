@@ -13,6 +13,7 @@ const TextArrayEntry = ({
   nodeId,
   previousNodeId,
   onFocus,
+  editable,
 }) => {
   const [selected, setSelected] = useState(false);
   const [emailEntries, setEmailEntries] = useState([""]);
@@ -115,7 +116,11 @@ const TextArrayEntry = ({
 
   return (
     <View style={styles.inputContainer}>
-      <TouchableOpacity style={styles.selectButton} onPress={handleSelectPress}>
+      <TouchableOpacity
+        style={styles.selectButton}
+        onPress={handleSelectPress}
+        disabled={!editable}
+      >
         <MyText style={styles.text}>{data.label}</MyText>
         {selected && <IconComponent name="check" style={styles.checkIcon} />}
       </TouchableOpacity>
@@ -133,11 +138,13 @@ const TextArrayEntry = ({
                   placeholderTextColor={dark.outline}
                   onFocus={() => handleFocus(index)}
                   ref={inputRefs.current[index]}
+                  editable={editable}
                 />
                 {index < emailEntries.length - 1 && (
                   <TouchableOpacity
                     onPress={() => handleRemoveEntry(index)}
                     style={{ alignSelf: "center" }}
+                    disabled={!editable}
                   >
                     <IconComponent
                       name="minus"

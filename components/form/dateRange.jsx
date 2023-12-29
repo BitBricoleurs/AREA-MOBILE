@@ -11,7 +11,7 @@ import DateTimePicker from "react-native-ui-datepicker";
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 
-const DateRange = ({ data, object, setObject, nodeId, onFocus }) => {
+const DateRange = ({ data, object, setObject, nodeId, onFocus, editable }) => {
   const [showModal, setShowModal] = useState(false);
   const [editedValue, setEditedValue] = useState(0);
   const [firstDate, setFirstDate] = useState();
@@ -66,6 +66,7 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus }) => {
             ? { backgroundColor: dark.primary }
             : {},
         ]}
+        disabled={!editable}
       >
         <MyText
           style={[
@@ -91,6 +92,7 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus }) => {
             ? { backgroundColor: dark.primary }
             : {},
         ]}
+        disabled={!editable}
       >
         <MyText
           style={[

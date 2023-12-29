@@ -25,7 +25,7 @@ import services from "../../jsons/triggers.json";
 
 const TriggerConfigScreen = ({ route, navigation }) => {
   const { serviceName, triggerName, previousPage } = route.params;
-  const { trigger, setTrigger } = useWorkflowContext();
+  const { trigger, setTrigger, editable } = useWorkflowContext();
   const [triggerJson, setTriggerJson] = useState({});
   const [requirementsMet, setRequirementsMet] = useState(true);
   const [service, setService] = useState(null);
@@ -41,6 +41,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             key={index}
             object={trigger}
             setObject={setTrigger}
+            editable={editable}
           />
         );
       case "choice":
@@ -50,6 +51,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             key={index}
             object={trigger}
             setObject={setTrigger}
+            editable={editable}
           />
         );
       case "choiceTextEntry":
@@ -59,6 +61,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             key={index}
             object={trigger}
             setObject={setTrigger}
+            editable={editable}
           />
         );
       case "textArrayEntry":
@@ -68,6 +71,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             key={index}
             object={trigger}
             setObject={setTrigger}
+            editable={editable}
           />
         );
       case "textEntry":
@@ -77,6 +81,7 @@ const TriggerConfigScreen = ({ route, navigation }) => {
             key={index}
             object={trigger}
             setObject={setTrigger}
+            editable={editable}
           />
         );
       default:

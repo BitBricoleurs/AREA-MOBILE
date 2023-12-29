@@ -8,7 +8,7 @@ import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const TimeEntry = ({ data, object, setObject }) => {
+const TimeEntry = ({ data, object, setObject, editable }) => {
   const [time, setTime] = useState(new Date());
 
   const timeTo24h = (dateTime) => {
@@ -59,6 +59,7 @@ const TimeEntry = ({ data, object, setObject }) => {
             });
           }}
           style={styles.adroidTimePicker}
+          disabled={!editable}
         >
           <MyText style={styles.timeText}>{timeTo24h(time)}</MyText>
         </TouchableOpacity>
@@ -72,6 +73,7 @@ const TimeEntry = ({ data, object, setObject }) => {
               textColor={dark.white}
               themeVariant="dark"
               onChange={handleTimeChange}
+              disabled={!editable}
             />
           )}
         </>

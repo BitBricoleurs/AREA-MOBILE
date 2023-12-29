@@ -8,7 +8,7 @@ import Weekdays from "./weekdays";
 import Calendar from "./calendar";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const ChoiceEntry = ({ data, object, setObject }) => {
+const ChoiceEntry = ({ data, object, setObject, editable }) => {
   const [selectedChoice, setSelectedChoice] = useState(1);
 
   const displayRevealComponent = () => {
@@ -19,10 +19,13 @@ const ChoiceEntry = ({ data, object, setObject }) => {
             update={selectedChoice}
             object={object}
             setObject={setObject}
+            editable={editable}
           />
         );
       case "Weekdays":
-        return <Weekdays object={object} setObject={setObject} />;
+        return (
+          <Weekdays object={object} setObject={setObject} editable={editable} />
+        );
       default:
         return null;
     }
@@ -93,6 +96,7 @@ const ChoiceEntry = ({ data, object, setObject }) => {
                 )}
                 <TouchableOpacity
                   style={styles.choice}
+                  disabled={!editable}
                   onPress={() => handleChoicePress(index)}
                 >
                   <View style={styles.objectInfo}>

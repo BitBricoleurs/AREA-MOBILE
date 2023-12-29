@@ -10,7 +10,7 @@ import MyText from "../../utils/myText";
 import ActionForm from "../form/actionForm";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
-  const { workflow, setWorkflow, deleteNode, setLastUnfolded } =
+  const { workflow, setWorkflow, deleteNode, setLastUnfolded, editable } =
     useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
@@ -104,7 +104,9 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
       <Pressable
         style={styles.action}
         onPress={() => handleUnfold()}
-        onLongPress={handleLongPress}
+        onLongPress={() => {
+          editable && handleLongPress();
+        }}
       >
         <View style={styles.actionServiceIcon}>
           <IconComponent
@@ -131,6 +133,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
             previousNodeId={nodeOutputId}
             nodeId={nodeId}
             onFocus={onFocus}
+            editable={editable}
           />
         </View>
       )}

@@ -13,7 +13,7 @@ import IconComponent from "../../utils/iconComponent";
 
 const ActivityScreen = ({ navigation, route }) => {
   const { id } = route.params || {};
-  const runs = Array.from({ length: 23 }, (_, index) => index);
+  const runs = Array.from({ length: 23 }, (_, index) => index).reverse();
 
   return (
     <View style={styles.container}>
@@ -31,6 +31,7 @@ const ActivityScreen = ({ navigation, route }) => {
         data={runs}
         keyExtractor={(item) => item}
         showsVerticalScrollIndicator={false}
+        inverted={true}
         renderItem={({ item }) => (
           <Pressable style={styles.run}>
             <MyText style={styles.runText}>Run #{item}</MyText>

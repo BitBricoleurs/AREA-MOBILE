@@ -19,12 +19,14 @@ import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 import TriggerHeader from "../../components/trigger/triggerHeader";
 import { findUnusedIntID } from "../../utils/uniqueId";
 import RenderNode from "../../components/renderNode";
 import AddActionButton from "../../components/addActionButton";
 
-const WorkflowScreen = ({ navigation }) => {
+const WorkflowScreen = ({ navigation, route }) => {
+  const { id } = route.params || {};
   const options = ["if", "delay", "variable"];
   const {
     trigger,
@@ -39,7 +41,9 @@ const WorkflowScreen = ({ navigation }) => {
     setEditable,
     mode,
     setMode,
+    parseWorkflow,
   } = useWorkflowContext();
+  const { dispatchAPI } = useAuthContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [scrollViewOffset, setScrollViewOffset] = useState(0);
   const [focusedNode, setFocusedNode] = useState(null);
@@ -290,7 +294,7 @@ const WorkflowScreen = ({ navigation }) => {
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <Pressable
-              onPress={() => {
+              onPress={async () => {
                 if (mode === "create") {
                   navigation.navigate("TriggerConfig", {
                     previousPage: "ChooseTrigger",
@@ -301,7 +305,11 @@ const WorkflowScreen = ({ navigation }) => {
                 } else if (mode === "edit") {
                   setMode("view");
                   setEditable(false);
-                  navigation.goBack();
+                  const { data } = await dispatchAPI(
+                    "GET",
+                    `/get-workflow/${id}`
+                  );
+                  parseWorkflow(data);
                 }
               }}
               style={styles.backButton}
@@ -405,31 +413,33 @@ const WorkflowScreen = ({ navigation }) => {
           </ScrollView>
         </Animated.View>
       )}
-      <View style={styles.options}>
-        <ScrollView
-          style={styles.optionsScrollView}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            justifyContent: "center",
-            flexGrow: 1,
-            paddingRight: options.length > 3 ? 24 : 0,
-          }}
-        >
-          {options.map((option, index) => (
-            <Pressable
-              key={index}
-              style={[
-                styles.option,
-                index !== options.length - 1 && { marginRight: 12 },
-              ]}
-              onPress={() => handleOptionPress(option)}
-            >
-              <MyText style={styles.optionText}>{option}</MyText>
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
+      {editable && (
+        <View style={styles.options}>
+          <ScrollView
+            style={styles.optionsScrollView}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              justifyContent: "center",
+              flexGrow: 1,
+              paddingRight: options.length > 3 ? 24 : 0,
+            }}
+          >
+            {options.map((option, index) => (
+              <Pressable
+                key={index}
+                style={[
+                  styles.option,
+                  index !== options.length - 1 && { marginRight: 12 },
+                ]}
+                onPress={() => handleOptionPress(option)}
+              >
+                <MyText style={styles.optionText}>{option}</MyText>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

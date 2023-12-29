@@ -5,7 +5,7 @@ import DateTimePicker from "react-native-ui-datepicker";
 import { dark } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const Calendar = ({ update, object, setObject }) => {
+const Calendar = ({ update, object, setObject, editable }) => {
   const todaysDate = new Date();
   const [date, setDate] = useState(todaysDate.toISOString().split("T")[0]);
 

@@ -159,6 +159,33 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const put = async (url, options) => {
+    try {
+      const response = await axios.put(`${SERVER_URL}${url}`, options, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return JSON.stringify(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
+        setError(error.response.data.message);
+        if (error.response.status === 401) {
+          setIsLoggedIn(false);
+        }
+        return {
+          message: error.response.data.message,
+          status: error.response.status,
+        };
+      } else {
+        console.warn("Error:", error);
+        setError("An unexpected error occurred");
+      }
+    }
+  };
+
   const logout = async () => {
     try {
       setUser(null);
@@ -187,6 +214,8 @@ export const AuthContextProvider = ({ children }) => {
         return post(url, options);
       case "GET":
         return get(url);
+      case "PUT":
+        return put(url, options);
       default:
         throw new Error("Invalid dispatchAPI type");
     }

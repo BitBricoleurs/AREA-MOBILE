@@ -5,7 +5,7 @@ import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-const Weekdays = ({ object, setObject }) => {
+const Weekdays = ({ object, setObject, editable }) => {
   const [selectedDays, setSelectedDays] = useState([1]);
   const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
 
@@ -42,6 +42,7 @@ const Weekdays = ({ object, setObject }) => {
               selectedDays.includes(index) && { backgroundColor: dark.purple },
             ]}
             onPress={() => handlePress(index)}
+            disabled={!editable}
           >
             <MyText style={styles.weekdayText}>{weekday}</MyText>
           </Pressable>

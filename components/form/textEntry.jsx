@@ -13,6 +13,7 @@ const TextEntry = ({
   nodeId,
   previousNodeId,
   onFocus,
+  editable,
 }) => {
   const { variables } = useWorkflowContext();
   const inputRef = useRef(null);
@@ -83,6 +84,7 @@ const TextEntry = ({
         numberOfLines={4}
         onFocus={handleFocus}
         ref={inputRef}
+        editable={editable}
       />
     </View>
   );

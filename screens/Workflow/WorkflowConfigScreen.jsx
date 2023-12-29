@@ -16,9 +16,11 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import IconComponent from "../../utils/iconComponent";
 
+import * as FileSystem from "expo-file-system";
+
 const WorkflowConfigScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const { trigger, workflowInfo, setWorkflowInfo, jsonifyWorkflow } =
+  const { trigger, workflowInfo, setWorkflowInfo, jsonifyWorkflow, mode } =
     useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
 
@@ -42,16 +44,60 @@ const WorkflowConfigScreen = ({ navigation }) => {
     setLoading(true);
     const workflow = jsonifyWorkflow();
     console.log(workflow);
-    const { data } = await dispatchAPI("POST", "/create-workflow", {
+    const payload = {
       name_workflow: workflow.name_workflow,
       description: workflow.description,
       variables: workflow.variables,
       workflow: workflow.workflow,
-    });
-    setLoading(false);
-    if (data?.workflow_id) {
-      navigation.navigate("Home");
+    };
+
+    const fileInfo = await FileSystem.getInfoAsync(
+      FileSystem.documentDirectory + "yourfilename.json"
+    );
+    if (!fileInfo.exists) {
+      await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory, {
+        intermediates: true,
+      });
     }
+
+    const fileUri = FileSystem.documentDirectory + "yourfilename.json";
+    FileSystem.writeAsStringAsync(fileUri, JSON.stringify(payload))
+      .then(() => {
+        console.log("File written successfully!");
+      })
+      .catch((error) => {
+        console.error("Error writing file:", error);
+      });
+
+    if (mode === "edit") {
+      const { data } = await dispatchAPI(
+        "PUT",
+        `/edit-workflow/${workflowInfo.id}`,
+        {
+          name_workflow: workflow.name_workflow,
+          description: workflow.description,
+          variables: workflow.variables,
+          workflow: workflow.workflow,
+        }
+      );
+      if (data?.workflow_id) {
+        navigation.navigate("HomeStack", {
+          screen: "WorkflowInfoScreen",
+          params: { id: workflowInfo.id },
+        });
+      }
+    } else {
+      const { data } = await dispatchAPI("POST", "/create-workflow", {
+        name_workflow: workflow.name_workflow,
+        description: workflow.description,
+        variables: workflow.variables,
+        workflow: workflow.workflow,
+      });
+      if (data?.workflow_id) {
+        navigation.navigate("Home");
+      }
+    }
+    setLoading(false);
   };
 
   return (
@@ -107,7 +153,9 @@ const WorkflowConfigScreen = ({ navigation }) => {
               {loading ? (
                 <ActivityIndicator size="small" color={dark.white} />
               ) : (
-                <MyText style={styles.addActionText}>Create workflow</MyText>
+                <MyText style={styles.addActionText}>
+                  {mode === "edit" ? "Update" : "Create"} workflow
+                </MyText>
               )}
             </LinearGradient>
           </Pressable>

@@ -26,6 +26,7 @@ const ActionForm = ({
   nodeId,
   previousNodeId,
   onFocus,
+  editable,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentOption, setCurrentOption] = useState(0);
@@ -70,6 +71,7 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            editable={editable}
           />
         );
       case "choice":
@@ -79,6 +81,7 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            editable={editable}
           />
         );
       case "choiceTextEntry":
@@ -91,6 +94,7 @@ const ActionForm = ({
             previousNodeId={previousNodeId}
             nodeId={nodeId}
             onFocus={onFocus}
+            editable={editable}
           />
         );
       case "textArrayEntry":
@@ -103,6 +107,7 @@ const ActionForm = ({
             previousNodeId={previousNodeId}
             nodeId={nodeId}
             onFocus={onFocus}
+            editable={editable}
           />
         );
       case "basicTextEntry":
@@ -115,6 +120,7 @@ const ActionForm = ({
             previousNodeId={previousNodeId}
             nodeId={nodeId}
             onFocus={onFocus}
+            editable={editable}
           />
         );
       case "dateRange":
@@ -124,6 +130,7 @@ const ActionForm = ({
             key={index}
             object={currentAction}
             setObject={setCurrentAction}
+            editable={editable}
           />
         );
       default:

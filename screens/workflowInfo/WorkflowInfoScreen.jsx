@@ -145,6 +145,7 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
               setEditable(false);
               navigation.navigate("WorkflowStack", {
                 screen: "Workflow",
+                params: { id: id },
               });
             }}
           >
