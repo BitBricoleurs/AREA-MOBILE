@@ -20,8 +20,15 @@ import MyText from "../../utils/myText";
 const WorkflowInfoScreen = ({ navigation, route }) => {
   const [loadingData, setLoadingData] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const { parseWorkflow, trigger, workflow, variables, workflowInfo } =
-    useWorkflowContext();
+  const {
+    parseWorkflow,
+    trigger,
+    workflow,
+    variables,
+    workflowInfo,
+    setMode,
+    setEditable,
+  } = useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
   const { id } = route.params || {};
 
@@ -133,6 +140,13 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
               styles.button,
               { bottom: 140, backgroundColor: colorMap[trigger.service] },
             ]}
+            onPress={() => {
+              setMode("view");
+              setEditable(false);
+              navigation.navigate("WorkflowStack", {
+                screen: "Workflow",
+              });
+            }}
           >
             <MyText style={styles.buttonText}>View workflow</MyText>
           </Pressable>
@@ -141,6 +155,7 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
               styles.button,
               { bottom: 80, backgroundColor: colorMap[trigger.service] },
             ]}
+            onPress={() => navigation.navigate("Activity", { id: id })}
           >
             <MyText style={styles.buttonText}>View activity</MyText>
           </Pressable>

@@ -19,6 +19,7 @@ import WorkflowScreen from "./workflow/WorkflowScreen";
 import ActionsScreen from "./workflow/ActionsScreen";
 import WorkflowConfigScreen from "./workflow/WorkflowConfigScreen";
 import WorkflowInfoScreen from "./workflowInfo/WorkflowInfoScreen";
+import ActivityScreen from "./workflowInfo/ActivityScreen";
 
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -161,6 +162,11 @@ const Home = () => {
       <HomeStack.Screen
         name="WorkflowInfoScreen"
         component={WorkflowInfoScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Activity"
+        component={ActivityScreen}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>
