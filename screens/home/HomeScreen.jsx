@@ -1,5 +1,5 @@
 import MyText from "../../utils/myText";
-import { colorMap, dark } from "../../utils/colors";
+import { dark } from "../../utils/colors";
 
 import React, { useRef, useState, useEffect } from "react";
 import {
@@ -13,6 +13,7 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
@@ -35,6 +36,7 @@ const HomeScreen = () => {
   const [workflows, setWorkflows] = useState([]);
   const [width, setWidth] = useState(3);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { dispatchAPI } = useAuthContext();
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
@@ -84,12 +86,11 @@ const HomeScreen = () => {
     }).start();
   };
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    await fetchData().catch(console.error);
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     const initialPosition = (0 * width) / 2 + (width / 4 - 75 / 2);
@@ -97,9 +98,13 @@ const HomeScreen = () => {
   }, [width]);
 
   useEffect(() => {
-    if (workflows.length === 0) {
-      fetchData().catch(console.error);
-    }
+    (async () => {
+      setLoading(true);
+      if (workflows.length === 0) {
+        await fetchData().catch(console.error);
+      }
+      setLoading(false);
+    })();
   }, [workflows.length]);
 
   return (
@@ -190,11 +195,26 @@ const HomeScreen = () => {
         </View>
         <View style={styles.body}>
           {activeTab === 0 ? (
-            <WorkflowsContent
-              refresh={refreshing}
-              setRefreshing={setRefreshing}
-              workflows={workflows}
-            />
+            <>
+              {loading ? (
+                <View
+                  style={{
+                    flex: 1,
+                    height: 400,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ActivityIndicator size="large" color="#39F0BA" />
+                </View>
+              ) : (
+                <WorkflowsContent
+                  refresh={refreshing}
+                  setRefreshing={setRefreshing}
+                  workflows={workflows}
+                />
+              )}
+            </>
           ) : (
             <AnalyticsContent />
           )}
