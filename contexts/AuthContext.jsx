@@ -118,6 +118,9 @@ export const AuthContextProvider = ({ children }) => {
         console.warn("Error Message:", error.response.data.message);
         console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
+        if (error.response.status === 401) {
+          setIsLoggedIn(false);
+        }
         return {
           message: error.response.data.message,
           status: error.response.status,
@@ -142,6 +145,9 @@ export const AuthContextProvider = ({ children }) => {
         console.warn("Error Message:", error.response.data.message);
         console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
+        if (error.response.status === 401) {
+          setIsLoggedIn(false);
+        }
         return {
           message: error.response.data.message,
           status: error.response.status,
