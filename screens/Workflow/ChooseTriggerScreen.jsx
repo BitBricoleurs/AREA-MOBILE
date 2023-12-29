@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -14,11 +14,19 @@ import {
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import TriggerChoice from "../../components/trigger/triggerChoice";
+import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 import services from "../../jsons/triggers.json";
 
 const ChooseTriggerScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
+  const { setMode, setEditable } = useWorkflowContext();
+
+  useEffect(() => {
+    setMode("create");
+    setEditable(true);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

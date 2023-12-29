@@ -35,6 +35,10 @@ const WorkflowScreen = ({ navigation }) => {
     setVariables,
     lastUnfolded,
     lastNodeId,
+    editable,
+    setEditable,
+    mode,
+    setMode,
   } = useWorkflowContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [scrollViewOffset, setScrollViewOffset] = useState(0);
@@ -286,15 +290,32 @@ const WorkflowScreen = ({ navigation }) => {
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <Pressable
-              onPress={() =>
-                navigation.navigate("TriggerConfig", {
-                  previousPage: "ChooseTrigger",
-                  fromWorkflow: false,
-                })
-              }
+              onPress={() => {
+                if (mode === "create") {
+                  navigation.navigate("TriggerConfig", {
+                    previousPage: "ChooseTrigger",
+                    fromWorkflow: false,
+                  });
+                } else if (mode === "view") {
+                  navigation.goBack();
+                } else if (mode === "edit") {
+                  setMode("view");
+                  setEditable(false);
+                  navigation.goBack();
+                }
+              }}
               style={styles.backButton}
             >
-              <IconComponent name="arrow-left" style={styles.arrow} />
+              {mode === "create" || mode === "view" ? (
+                <IconComponent
+                  name={mode === "create" ? "arrow-left" : "close"}
+                  style={styles.arrow}
+                />
+              ) : (
+                <MyText style={{ color: dark.red, fontSize: 16 }}>
+                  Cancel
+                </MyText>
+              )}
             </Pressable>
             <View style={styles.title}>
               <MyText style={styles.titleText}>New workflow</MyText>
@@ -303,10 +324,18 @@ const WorkflowScreen = ({ navigation }) => {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
+                width: 44,
               }}
             >
               <TouchableOpacity
-                onPress={() => navigation.navigate("WorkflowConfig")}
+                onPress={() => {
+                  if (mode === "create" || mode === "edit") {
+                    navigation.navigate("WorkflowConfig");
+                  } else {
+                    setMode("edit");
+                    setEditable(true);
+                  }
+                }}
                 style={{
                   justifyContent: "center",
                   alignItems: "center",
@@ -319,7 +348,7 @@ const WorkflowScreen = ({ navigation }) => {
                     !workflow[0] && { opacity: 0.4 },
                   ]}
                 >
-                  Next
+                  {mode === "create" || mode === "edit" ? "Next" : "Edit"}
                 </MyText>
               </TouchableOpacity>
             </View>
@@ -428,7 +457,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   backButton: {
-    width: 34,
+    width: 44,
     height: 34,
     justifyContent: "center",
     alignItems: "center",
@@ -463,7 +492,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     margin: 12,
   },
-
   outputChoiceView: {
     width: "100%",
     position: "absolute",

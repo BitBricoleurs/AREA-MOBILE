@@ -9,6 +9,8 @@ export const WorkflowContextProvider = ({ children }) => {
   const [variables, setVariables] = useState([]);
   const [lastUnfolded, setLastUnfolded] = useState(0);
   const [lastNodeId, setLastNodeId] = useState(0);
+  const [editable, setEditable] = useState(true);
+  const [mode, setMode] = useState("create");
 
   console.log("trigger: ", trigger);
   console.log("workflow: ", workflow);
@@ -128,8 +130,20 @@ export const WorkflowContextProvider = ({ children }) => {
   };
 
   const parseWorkflow = (workflow) => {
-    const trigger = workflow.workflow[0];
-    const actions = workflow.workflow.slice(1);
+    const trigger = {
+      ...workflow.workflow[0],
+      trigger: workflow.workflow[0].type_trigger,
+    };
+    delete trigger.type_trigger;
+    const actionsToParse = workflow.workflow.slice(1);
+    const actions = actionsToParse.map((action) => {
+      const actionToParse = {
+        ...action,
+        action: action.type_action,
+      };
+      delete actionToParse.type_action;
+      return actionToParse;
+    });
     const variables = workflow.variables;
     const workflowInfo = {
       name: workflow.name_workflow,
@@ -154,15 +168,19 @@ export const WorkflowContextProvider = ({ children }) => {
         setWorkflow,
         variables,
         setVariables,
-        deleteNode: handleDeleteNode,
-        jsonifyWorkflow,
         lastUnfolded,
         setLastUnfolded,
-        setLastNodeId,
+        editable,
+        setEditable,
+        mode,
+        setMode,
         lastNodeId,
+        setLastNodeId,
+        deleteNode: handleDeleteNode,
         deleteVariable: handleDeleteVariable,
         handleRecursiveDelete,
         parseWorkflow,
+        jsonifyWorkflow,
       }}
     >
       {children}
