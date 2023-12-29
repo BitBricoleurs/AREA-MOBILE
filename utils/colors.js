@@ -19,3 +19,9 @@ export const colorMap = {
   System: "#974FEE",
   Openai: "#74AA9C",
 };
+
+export const statusColorMap = {
+  success: "#4CAF50",
+  failure: "#F44336",
+  running: "#FFC107",
+};

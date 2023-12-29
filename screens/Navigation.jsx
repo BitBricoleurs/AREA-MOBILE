@@ -11,18 +11,20 @@ import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 
 import LandingScreen from "./auth/LandingScreen";
 import AuthScreen from "./auth/AuthScreen";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./home/HomeScreen";
 import SettingsScreen from "./SettingsScreen";
-import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
-import TriggerConfigScreen from "./Workflow/TriggerConfigScreen";
-import WorkflowScreen from "./Workflow/WorkflowScreen";
-import ActionsScreen from "./Workflow/ActionsScreen";
-import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
+import ChooseTriggerScreen from "./workflow/ChooseTriggerScreen";
+import TriggerConfigScreen from "./workflow/TriggerConfigScreen";
+import WorkflowScreen from "./workflow/WorkflowScreen";
+import ActionsScreen from "./workflow/ActionsScreen";
+import WorkflowConfigScreen from "./workflow/WorkflowConfigScreen";
+import WorkflowInfoScreen from "./workflowInfo/WorkflowInfoScreen";
 
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const WorkflowStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 
 const Blank = () => {
   return <View />;
@@ -47,50 +49,48 @@ const Authentification = () => {
 
 const Workflow = () => {
   return (
-    <WorkflowContextProvider>
-      <WorkflowStack.Navigator>
-        <WorkflowStack.Screen
-          name="ChooseTrigger"
-          component={ChooseTriggerScreen}
-          options={{ headerShown: false }}
-        />
-        <WorkflowStack.Screen
-          name="TriggerConfig"
-          component={TriggerConfigScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <WorkflowStack.Screen
-          name="Workflow"
-          component={WorkflowScreen}
-          options={{ headerShown: false }}
-        />
-        <WorkflowStack.Screen
-          name="Actions"
-          component={ActionsScreen}
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-          }}
-        />
-        <WorkflowStack.Screen
-          name="TriggerConfigFromWorkflow"
-          component={TriggerConfigScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <WorkflowStack.Screen
-          name="WorkflowConfig"
-          component={WorkflowConfigScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </WorkflowStack.Navigator>
-    </WorkflowContextProvider>
+    <WorkflowStack.Navigator>
+      <WorkflowStack.Screen
+        name="ChooseTrigger"
+        component={ChooseTriggerScreen}
+        options={{ headerShown: false }}
+      />
+      <WorkflowStack.Screen
+        name="TriggerConfig"
+        component={TriggerConfigScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <WorkflowStack.Screen
+        name="Workflow"
+        component={WorkflowScreen}
+        options={{ headerShown: false }}
+      />
+      <WorkflowStack.Screen
+        name="Actions"
+        component={ActionsScreen}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+        }}
+      />
+      <WorkflowStack.Screen
+        name="TriggerConfigFromWorkflow"
+        component={TriggerConfigScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <WorkflowStack.Screen
+        name="WorkflowConfig"
+        component={WorkflowConfigScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </WorkflowStack.Navigator>
   );
 };
 
@@ -102,7 +102,7 @@ const MainStack = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Home") {
+          if (route.name === "HomeStack") {
             iconName = focused
               ? require("../assets/tabbarIcons/dashboard-filled.png")
               : require("../assets/tabbarIcons/dashboard.png");
@@ -130,8 +130,8 @@ const MainStack = () => {
       })}
     >
       <MainTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={Home}
         options={{ headerShown: false }}
       />
       <MainTab.Screen
@@ -150,20 +150,39 @@ const MainStack = () => {
   );
 };
 
-const App = () => {
+const Home = () => {
   return (
-    <AppStack.Navigator>
-      <AppStack.Screen
-        name="Main"
-        component={MainStack}
+    <HomeStack.Navigator>
+      <MainTab.Screen
+        name="Home"
+        component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <AppStack.Screen
-        name="WorkflowStack"
-        component={Workflow}
-        options={{ headerShown: false, presentation: "fullScreenModal" }}
+      <HomeStack.Screen
+        name="WorkflowInfoScreen"
+        component={WorkflowInfoScreen}
+        options={{ headerShown: false }}
       />
-    </AppStack.Navigator>
+    </HomeStack.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <WorkflowContextProvider>
+      <AppStack.Navigator>
+        <AppStack.Screen
+          name="Main"
+          component={MainStack}
+          options={{ headerShown: false }}
+        />
+        <AppStack.Screen
+          name="WorkflowStack"
+          component={Workflow}
+          options={{ headerShown: false, presentation: "fullScreenModal" }}
+        />
+      </AppStack.Navigator>
+    </WorkflowContextProvider>
   );
 };
 

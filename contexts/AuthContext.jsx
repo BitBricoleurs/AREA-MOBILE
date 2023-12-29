@@ -32,15 +32,15 @@ export const AuthContextProvider = ({ children }) => {
       return JSON.stringify(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error Message:", error.response.data.message);
-        console.log("Status Code:", error.response.status);
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
         return {
           message: error.response.data.message,
           status: error.response.status,
         };
       } else {
-        console.log("Error:", error);
+        console.warn("Error:", error);
         setError("An unexpected error occurred");
       }
     }
@@ -59,15 +59,15 @@ export const AuthContextProvider = ({ children }) => {
       return JSON.stringify(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error Message:", error.response.data.message);
-        console.log("Status Code:", error.response.status);
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
         return {
           message: error.response.data.message,
           status: error.response.status,
         };
       } else {
-        console.log("Error:", error);
+        console.warn("Error:", error);
         setError("An unexpected error occurred");
       }
     }
@@ -91,15 +91,15 @@ export const AuthContextProvider = ({ children }) => {
       setError(null);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error Message:", error.response.data.message);
-        console.log("Status Code:", error.response.status);
+        console.warn("Error Message:", error.response);
+        console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
         return {
           message: error.response.data.message,
           status: error.response.status,
         };
       } else {
-        console.log("Error:", error);
+        console.warn("Error:", error);
         setError("An unexpected error occurred");
       }
     }
@@ -115,15 +115,15 @@ export const AuthContextProvider = ({ children }) => {
       return JSON.stringify(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error Message:", error.response.data.message);
-        console.log("Status Code:", error.response.status);
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
         return {
           message: error.response.data.message,
           status: error.response.status,
         };
       } else {
-        console.log("Error:", error);
+        console.warn("Error:", error);
         setError("An unexpected error occurred");
       }
     }
@@ -139,15 +139,15 @@ export const AuthContextProvider = ({ children }) => {
       return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error Message:", error.response.data.message);
-        console.log("Status Code:", error.response.status);
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
         setError(error.response.data.message);
         return {
           message: error.response.data.message,
           status: error.response.status,
         };
       } else {
-        console.log("Error:", error);
+        console.warn("Error:", error);
         setError("An unexpected error occurred");
       }
     }

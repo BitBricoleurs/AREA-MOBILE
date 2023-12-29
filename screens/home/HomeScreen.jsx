@@ -1,5 +1,5 @@
-import MyText from "../utils/myText";
-import { dark } from "../utils/colors";
+import MyText from "../../utils/myText";
+import { colorMap, dark } from "../../utils/colors";
 
 import React, { useRef, useState, useEffect } from "react";
 import {
@@ -12,78 +12,14 @@ import {
   Animated,
   Platform,
   StatusBar,
+  RefreshControl,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
-import { useAuthContext } from "../contexts/AuthContext";
+import { chunkData } from "../../utils/helpers";
+import { useAuthContext } from "../../contexts/AuthContext";
 
-const WorkflowsContent = ({ refresh, setRefreshing }) => {
-  const { dispatchAPI } = useAuthContext();
-  const [workflows, setWorkflows] = useState(0);
-
-  useEffect(() => {
-    const getWorkflowIds = async () => {
-      try {
-        const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
-        return data?.workflow_ids;
-      } catch (error) {
-        console.error("Failed to get workflow IDs:", error);
-        // Handle error appropriately
-        return [];
-      }
-    };
-
-    const getWorkflow = async (workflowId) => {
-      const { data } = await dispatchAPI("GET", `/get-workflow/${workflowId}`);
-      return data;
-    };
-
-    (async () => {
-      const ids = await getWorkflowIds();
-
-      const workflowPromises = ids.map((id) => getWorkflow(id));
-      const workflows = await Promise.all(workflowPromises);
-      console.log(workflows);
-      setWorkflows(workflows);
-    })();
-  }, []);
-
-  return (
-    // Your Workflows content here
-    <View style={{ flex: 1 }}>
-      {workflows?.length > 0 &&
-        workflows.map((workflow, index) => (
-          <View
-            style={{
-              backgroundColor: dark.secondary,
-              padding: 20,
-              marginVertical: 10,
-              borderRadius: 10,
-            }}
-            key={index}
-          >
-            <Text
-              style={{
-                color: dark.white,
-                fontSize: 20,
-                fontWeight: "bold",
-              }}
-            >
-              {workflow.name_workflow}
-            </Text>
-            <Text
-              style={{
-                color: dark.white,
-                fontSize: 16,
-              }}
-            >
-              {workflow.description}
-            </Text>
-          </View>
-        ))}
-    </View>
-  );
-};
+import WorkflowsContent from "./WorkflowsScreen";
 
 const AnalyticsContent = () => {
   return (
@@ -96,10 +32,44 @@ const AnalyticsContent = () => {
 
 const HomeScreen = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [workflows, setWorkflows] = useState([]);
   const [width, setWidth] = useState(3);
   const [refreshing, setRefreshing] = useState(false);
+  const { dispatchAPI } = useAuthContext();
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
+
+  const getWorkflowIds = async () => {
+    try {
+      const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
+      return data?.workflow_ids;
+    } catch (error) {
+      console.error("Failed to get workflow IDs:", error);
+      // Handle error appropriately
+      return [];
+    }
+  };
+
+  const getWorkflow = async (workflowId) => {
+    const { data } = await dispatchAPI("GET", `/get-workflow/${workflowId}`);
+    return data;
+  };
+
+  const fetchData = async () => {
+    const ids = await getWorkflowIds();
+    if (ids && ids.length === 0) {
+      return;
+    }
+
+    // const workflowPromises = ids.map((id) => getWorkflow(id));
+    const workflowPromises = ids.map(async (id) => {
+      const workflowData = await getWorkflow(id);
+      // Combine the workflow data with its id
+      return { ...workflowData, id };
+    });
+    const workflowsData = await Promise.all(workflowPromises);
+    setWorkflows(chunkData(workflowsData, 2));
+  };
 
   const handleWidth = (e) => {
     const layout = e.nativeEvent.layout;
@@ -114,14 +84,23 @@ const HomeScreen = () => {
     }).start();
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   useEffect(() => {
     const initialPosition = (0 * width) / 2 + (width / 4 - 75 / 2);
     indicatorPosition.setValue(initialPosition);
   }, [width]);
 
-  // onRefresh = () => {
-  //   setRefreshing(true);
-  // };
+  useEffect(() => {
+    if (workflows.length === 0) {
+      fetchData().catch(console.error);
+    }
+  }, [workflows.length]);
 
   return (
     <SafeAreaView
@@ -135,9 +114,13 @@ const HomeScreen = () => {
         style={styles.container}
         contentInsetAdjustmentBehavior="automatic"
         stickyHeaderIndices={[1]}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={"#39F0BA"}
+          />
+        }
       >
         <MaskedView
           style={styles.logoContainer}
@@ -157,7 +140,7 @@ const HomeScreen = () => {
             colors={["#BE76FC", "#5F14D8"]}
             start={[0, 0]}
             end={[1, 1]}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "95%", height: "95%", margin: 8 }}
           />
         </MaskedView>
         <View style={styles.tabBar}>
@@ -210,6 +193,7 @@ const HomeScreen = () => {
             <WorkflowsContent
               refresh={refreshing}
               setRefreshing={setRefreshing}
+              workflows={workflows}
             />
           ) : (
             <AnalyticsContent />
@@ -229,7 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    height: 44,
+    height: 48,
     borderWidth: 1,
     borderColor: "red",
   },
