@@ -146,7 +146,11 @@ const MainStack = () => {
         component={Blank}
         options={{ headerShown: false }}
       />
-      <MainTab.Screen name="Settings" component={SettingsScreen} />
+      <MainTab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
     </MainTab.Navigator>
   );
 };
