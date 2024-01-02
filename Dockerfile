@@ -1,16 +1,16 @@
-FROM node:20.7.0
+FROM node:18.0.0
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package*.json yarn.lock ./
 
-COPY . ./
+RUN yarn install --network-concurrency 1
+
+COPY . .
 
 EXPOSE 19000
 EXPOSE 19001
 EXPOSE 19002
 EXPOSE 19006
 
-ENTRYPOINT ["npm", "start"]
-CMD [ "i" ]
+CMD ["sh", "-c", "sleep 5 && sync && expo run:ios --tunnel"]

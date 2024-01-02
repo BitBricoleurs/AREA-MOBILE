@@ -1,0 +1,9 @@
+version: "2"
+options:
+  verbose: true
+syncs:
+  app-sync: # tip: add -sync to the name of the sync strategy
+    src: './'
+    sync_strategy: 'native_osx' # use 'native_osx' as the sync strategy
+    sync_excludes: ['.gitignore', '.git/', 'node_modules/']
+    sync_host_port: 10872
