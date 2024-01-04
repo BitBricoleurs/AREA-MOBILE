@@ -9,10 +9,19 @@ import {
 import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 import { dark, colorMap } from "../../utils/colors";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const ServiceForm = ({ service, fields, endpoint, navigation }) => {
-  const [serviceForm, setServiceForm] = useState([]);
+  const [serviceForm, setServiceForm] = useState({});
+  const { dispatchAPI } = useAuthContext();
   console.log(fields);
+
+  const handleSubmitForm = async () => {
+    if (endpoint === "") return;
+    await dispatchAPI("POST", endpoint, serviceForm);
+  };
+
+  console.log(serviceForm);
 
   return (
     <View style={[styles.container, { backgroundColor: colorMap[service] }]}>
@@ -37,6 +46,12 @@ const ServiceForm = ({ service, fields, endpoint, navigation }) => {
                 placeholderTextColor={"#969696"}
                 style={[styles.formInput, index !== 0 && { marginTop: 6 }]}
                 key={index}
+                onChangeText={(text) => {
+                  setServiceForm({
+                    ...serviceForm,
+                    [field.variableName]: text,
+                  });
+                }}
               />
             ))}
         </View>
@@ -45,6 +60,7 @@ const ServiceForm = ({ service, fields, endpoint, navigation }) => {
             styles.postButton,
             { height: fields.length * 37 + (fields.length - 1) * 6 },
           ]}
+          onPress={handleSubmitForm}
         >
           <IconComponent name="arrow-left" style={styles.postIcon} />
         </TouchableOpacity>

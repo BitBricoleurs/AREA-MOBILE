@@ -18,6 +18,7 @@ import ChoiceTextEntry from "./choiceTextEntry";
 import TextArrayEntry from "./textArrayEntry";
 import TextEntry from "./textEntry";
 import DateRange from "./dateRange";
+import ChoicePicker from "./picker";
 
 const ActionForm = ({
   actionForm,
@@ -133,6 +134,17 @@ const ActionForm = ({
             editable={editable}
           />
         );
+      case "picker":
+        return (
+          <ChoicePicker
+            data={section}
+            key={index}
+            object={currentAction}
+            setObject={setCurrentAction}
+            editable={editable}
+          />
+        );
+
       default:
         return null;
     }
