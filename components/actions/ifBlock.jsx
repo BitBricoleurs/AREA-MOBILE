@@ -19,7 +19,7 @@ import RenderNode from "../renderNode";
 import AddActionButton from "../addActionButton";
 
 const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
-  const { workflow, handleRecursiveDelete } = useWorkflowContext();
+  const { workflow, handleRecursiveDelete, setWorkflow } = useWorkflowContext();
   const conditionOptions = [
     "is",
     "is not",
@@ -58,6 +58,18 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
       ...conditionNode,
       [key]: value,
     });
+
+    const newWorkflow = workflow.map((node) => {
+      if (node.id === nodeId) {
+        return {
+          ...node,
+          [key]: value,
+        };
+      }
+      return node;
+    });
+
+    setWorkflow(newWorkflow);
   };
 
   const handlePickerChange = (itemValue) => {
