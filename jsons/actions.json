@@ -58,7 +58,7 @@
                 "type": "email",
                 "label": "Recipients",
                 "placeholder": "Email",
-                "variableName": "receiver",
+                "variableName": "receivers",
                 "maxEntries": 0,
                 "required": "true"
               },
@@ -67,7 +67,7 @@
                 "type": "email",
                 "label": "Cc Recipients",
                 "placeholder": "Email",
-                "variableName": "ccRecipients",
+                "variableName": "cc",
                 "maxEntries": 0,
                 "required": "false"
               }
@@ -501,12 +501,35 @@
                 "sectionTitle": "",
                 "block": [
                   {
-                    "name": "basicTextEntry",
+                    "name": "picker",
                     "type": "text",
                     "placeholder": "Project id",
                     "variableName": "project_id",
-                    "required": "true"
-                  },
+                    "required": "true",
+                    "options": [
+                      {
+                        "name": "Project 1",
+                        "value": "1"
+                      },
+                      {
+                        "name": "Project 2",
+                        "value": "2"
+                      },
+                      {
+                        "name": "Project 3",
+                        "value": "3"
+                      },
+                      {
+                        "name": "Project 4",
+                        "value": "4"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "",
+                "block": [
                   {
                     "name": "basicTextEntry",
                     "type": "text",
