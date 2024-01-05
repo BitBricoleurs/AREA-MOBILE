@@ -21,7 +21,7 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
   return (
     // Your Workflows content here
     <View style={{ flex: 1 }}>
-      {currentlyRunning.length > 0 && (
+      {currentlyRunning && currentlyRunning.length > 0 && (
         <>
           <MyText style={styles.sectionTitle}>Currently Running</MyText>
           <View style={{ flex: 1, flexDirection: "row" }}>
@@ -30,7 +30,7 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
           </View>
         </>
       )}
-      {workflows.length > 0 && (
+      {workflows && workflows?.length > 0 && (
         <>
           <MyText style={styles.sectionTitle}>Your Workflows</MyText>
           {workflows.map((pair, index) => (

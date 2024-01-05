@@ -37,14 +37,15 @@ const HomeScreen = () => {
   const [width, setWidth] = useState(3);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { dispatchAPI } = useAuthContext();
+  const { dispatchAPI, socket } = useAuthContext();
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
 
   const getWorkflowIds = async () => {
     try {
       const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
-      return data?.workflow_ids;
+      console.log("data", data);
+      return data?.workflow;
     } catch (error) {
       console.error("Failed to get workflow IDs:", error);
       // Handle error appropriately
@@ -52,25 +53,10 @@ const HomeScreen = () => {
     }
   };
 
-  const getWorkflow = async (workflowId) => {
-    const { data } = await dispatchAPI("GET", `/get-workflow/${workflowId}`);
-    return data;
-  };
-
   const fetchData = async () => {
-    const ids = await getWorkflowIds();
-    if (ids && ids.length === 0) {
-      return;
-    }
-
-    // const workflowPromises = ids.map((id) => getWorkflow(id));
-    const workflowPromises = ids.map(async (id) => {
-      const workflowData = await getWorkflow(id);
-      // Combine the workflow data with its id
-      return { ...workflowData, id };
-    });
-    const workflowsData = await Promise.all(workflowPromises);
-    setWorkflows(chunkData(workflowsData, 2));
+    const workflowsMini = await getWorkflowIds();
+    console.log("workflowsMini", workflowsMini);
+    setWorkflows(chunkData(workflowsMini, 2));
   };
 
   const handleWidth = (e) => {
@@ -106,6 +92,22 @@ const HomeScreen = () => {
       setLoading(false);
     })();
   }, [workflows.length]);
+
+  useEffect(() => {
+    const onJoined = (data) => {
+      console.warn("joined", data);
+    };
+    const onError = (error) => {
+      console.warn("error", error);
+    };
+    console.log("here");
+    socket.on("joined", onJoined);
+    socket.on("error", onError);
+    return () => {
+      socket.off("joined");
+      socket.off("error");
+    };
+  }, [socket]);
 
   return (
     <SafeAreaView

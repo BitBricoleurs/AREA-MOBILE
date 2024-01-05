@@ -7,6 +7,10 @@ import {
   Button,
   Pressable,
   SafeAreaView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
 } from "react-native";
 import MyText from "../utils/myText";
 import IconComponent from "../utils/iconComponent";
@@ -18,18 +22,18 @@ import ServiceForm from "../components/settings/serviceForm";
 const OpenaiFields = [
   {
     name: "Api key",
-    variableName: "api_key",
+    variableName: "openai_token",
   },
 ];
 
 const JiraFields = [
   {
     name: "Username",
-    variableName: "username",
+    variableName: "jira_username",
   },
   {
-    name: "Api key",
-    variableName: "api_key",
+    name: "Jira token",
+    variableName: "jira_token",
   },
 ];
 
@@ -51,11 +55,11 @@ const SettingsScreen = () => {
     if (data.authorization_url) {
       setMicrosoftLink(data.authorization_url);
     }
-    const { data: data2 } = await dispatchAPI("GET", "/github-login");
-    console.log("data2", data2);
-    if (data2.authorization_url) {
-      setGithubLink(data2.authorization_url);
-    }
+    // const { data: data2 } = await dispatchAPI("GET", "/github-login");
+    // console.log("data2", data2);
+    // if (data2.authorization_url) {
+    //   setGithubLink(data2.authorization_url);
+    // }
   };
 
   const _handlePressButtonAsync = async (url) => {
@@ -68,12 +72,12 @@ const SettingsScreen = () => {
   }, [refresh]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <SafeAreaView />
       <View style={styles.customHeader}>
         <MyText style={styles.headerText}>Settings</MyText>
       </View>
-      <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer} behavior="padding">
         <Pressable
           onPress={() => _handlePressButtonAsync(githubLink)}
           style={[styles.button, { backgroundColor: "#000000" }]}
@@ -89,9 +93,17 @@ const SettingsScreen = () => {
             Connect to Microsoft
           </MyText>
         </Pressable>
-        <ServiceForm service="Openai" fields={OpenaiFields} />
-        <ServiceForm service="Jenkins" fields={JenkinsFields} />
-        <ServiceForm service="Jira" fields={JiraFields} />
+        <ServiceForm
+          service="Openai"
+          fields={OpenaiFields}
+          endpoint={"/openai-login"}
+        />
+        <ServiceForm service="Jenkins" fields={JenkinsFields} endpoint={""} />
+        <ServiceForm
+          service="Jira"
+          fields={JiraFields}
+          endpoint={"/jira-login"}
+        />
         <Pressable
           style={styles.logoutButton}
           onPress={() => dispatchAPI("LOGOUT")}
@@ -99,7 +111,7 @@ const SettingsScreen = () => {
           <MyText style={[styles.text, { color: "#FFFFFF" }]}>Log out</MyText>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: "100%",
     paddingBottom: 146,
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   button: {
     flexDirection: "row",

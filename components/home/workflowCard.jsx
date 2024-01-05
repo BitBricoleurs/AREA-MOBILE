@@ -6,6 +6,7 @@ import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 
 const WorkflowCard = ({ workflow, status }) => {
+  console.log("workflow", workflow);
   const navigation = useNavigation();
   // console.error(workflow);
   return (
@@ -20,10 +21,7 @@ const WorkflowCard = ({ workflow, status }) => {
     >
       <View style={styles.headerContainer}>
         <View style={styles.iconContainer}>
-          <IconComponent
-            name={workflow.workflow[0].service}
-            style={styles.icon}
-          />
+          <IconComponent name={workflow?.service || ""} style={styles.icon} />
         </View>
         {status !== "none" && (
           <View
@@ -36,7 +34,7 @@ const WorkflowCard = ({ workflow, status }) => {
       </View>
       <View style={styles.titleContainer}>
         <MyText style={styles.titleText} numberOfLines={2} ellipsizeMode="tail">
-          {workflow.name_workflow}
+          {workflow.name || "Untitled Workflow"}
         </MyText>
       </View>
     </Pressable>
