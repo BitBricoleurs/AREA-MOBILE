@@ -12,6 +12,7 @@ import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 import LandingScreen from "./auth/LandingScreen";
 import AuthScreen from "./auth/AuthScreen";
 import HomeScreen from "./home/HomeScreen";
+import ListViewModalPage from "./home/ModalPage";
 import SettingsScreen from "./SettingsScreen";
 import ChooseTriggerScreen from "./workflow/ChooseTriggerScreen";
 import TriggerConfigScreen from "./workflow/TriggerConfigScreen";
@@ -162,6 +163,15 @@ const Home = () => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="ModalPage"
+        component={ListViewModalPage}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+        }}
       />
       <HomeStack.Screen
         name="WorkflowInfoScreen"

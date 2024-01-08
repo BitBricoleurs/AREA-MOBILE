@@ -21,23 +21,17 @@ import { chunkData } from "../../utils/helpers";
 import { useAuthContext } from "../../contexts/AuthContext";
 
 import WorkflowsContent from "./WorkflowsScreen";
+import AnalyticsContent from "./AnalyticsScreen";
 
-const AnalyticsContent = () => {
-  return (
-    // Your Analytics content here
-    <View style={{ flex: 1 }}>
-      <Text style={{ color: "#FFF" }}>Analytics Content</Text>
-    </View>
-  );
-};
-
-const HomeScreen = () => {
+const HomeScreen = ({ navigation, route }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [workflows, setWorkflows] = useState([]);
   const [width, setWidth] = useState(3);
   const [refreshing, setRefreshing] = useState(false);
+  const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
   const { dispatchAPI, socket } = useAuthContext();
+  let { refresh } = route.params || {};
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
 
@@ -91,7 +85,7 @@ const HomeScreen = () => {
       }
       setLoading(false);
     })();
-  }, [workflows.length]);
+  }, [workflows.length, reload]);
 
   useEffect(() => {
     const onJoined = (data) => {
@@ -108,6 +102,12 @@ const HomeScreen = () => {
       socket.off("error");
     };
   }, [socket]);
+
+  useEffect(() => {
+    if (refresh) {
+      setReload(!reload);
+    }
+  }, [refresh]);
 
   return (
     <SafeAreaView
@@ -218,7 +218,7 @@ const HomeScreen = () => {
               )}
             </>
           ) : (
-            <AnalyticsContent />
+            <AnalyticsContent refresh={refreshing} />
           )}
         </View>
       </ScrollView>
