@@ -487,6 +487,271 @@
     ]
   },
   {
+    "name": "Github",
+    "actions": [
+      {
+        "name": "Label",
+        "eg": "Add a label to an issue",
+        "icon": "issue",
+        "sections": [
+          {
+            "sectionTitle": "Repository",
+            "block": [
+              {
+                "name": "picker",
+                "type": "text",
+                "placeholder": "",
+                "variableName": "repository",
+                "required": "true",
+                "options": [
+                  {
+                    "name": "Project 1",
+                    "value": "1"
+                  },
+                  {
+                    "name": "Project 2",
+                    "value": "2"
+                  },
+                  {
+                    "name": "Project 3",
+                    "value": "3"
+                  },
+                  {
+                    "name": "Project 4",
+                    "value": "4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Issue number",
+                "variableName": "issue",
+                "required": "true"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "text",
+                "label": "Labels",
+                "placeholder": "Label",
+                "variableName": "labels",
+                "maxEntries": 0,
+                "required": "true"
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "id"
+          },
+          {
+            "type": "output",
+            "variableName": "repository"
+          },
+          {
+            "type": "output",
+            "variableName": "issue_type"
+          }
+        ]
+      },
+      {
+        "name": "Issue",
+        "eg": "Create an issue",
+        "icon": "issue",
+        "sections": [
+          {
+            "sectionTitle": "Repository",
+            "block": [
+              {
+                "name": "picker",
+                "type": "text",
+                "placeholder": "",
+                "variableName": "repository",
+                "required": "true",
+                "options": [
+                  {
+                    "name": "Project 1",
+                    "value": "AREA"
+                  },
+                  {
+                    "name": "Project 2",
+                    "value": "2"
+                  },
+                  {
+                    "name": "Project 3",
+                    "value": "3"
+                  },
+                  {
+                    "name": "Project 4",
+                    "value": "4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Title",
+                "variableName": "title",
+                "required": "true"
+              },
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Body",
+                "variableName": "body",
+                "required": "true"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "textArrayEntry",
+                "type": "text",
+                "label": "Assignees",
+                "placeholder": "Assignees",
+                "variableName": "assignees",
+                "maxEntries": 0,
+                "required": "true"
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "output",
+            "variableName": "id"
+          },
+          {
+            "type": "output",
+            "variableName": "repository"
+          },
+          {
+            "type": "output",
+            "variableName": "issue_type"
+          }
+        ]
+      },
+      {
+        "name": "Merge Pull Request",
+        "eg": "Merge a pull request",
+        "icon": "pull-request",
+        "sections": [
+          {
+            "sectionTitle": "Repository",
+            "block": [
+              {
+                "name": "picker",
+                "type": "text",
+                "placeholder": "",
+                "variableName": "repository",
+                "required": "true",
+                "options": [
+                  {
+                    "name": "Project 1",
+                    "value": "AREA"
+                  },
+                  {
+                    "name": "Project 2",
+                    "value": "2"
+                  },
+                  {
+                    "name": "Project 3",
+                    "value": "3"
+                  },
+                  {
+                    "name": "Project 4",
+                    "value": "4"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Commit title",
+                "variableName": "title",
+                "required": "false"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Commit message",
+                "variableName": "message",
+                "required": "false"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "basicTextEntry",
+                "type": "text",
+                "placeholder": "Commit message",
+                "variableName": "message",
+                "required": "false"
+              }
+            ]
+          },
+          {
+            "sectionTitle": "",
+            "block": [
+              {
+                "name": "choice",
+                "type": "",
+                "placeholder": "",
+                "variableName": "merge_method",
+                "required": "true",
+                "options": [
+                  {
+                    "name": "Merge",
+                    "value": "merge"
+                  },
+                  {
+                    "name": "Squash",
+                    "value": "squash"
+                  },
+                  {
+                    "name": "Rebase",
+                    "value": "rebase"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Jira",
     "actions": [
       {

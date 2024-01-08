@@ -105,7 +105,7 @@
                 "type": "condition",
                 "conditionType": "contains",
                 "label": "Content contains",
-                "variableName": "body",
+                "variableName": "content",
                 "placeholder": "Anything",
                 "required": "false"
               }
@@ -123,7 +123,7 @@
           },
           {
             "type": "output",
-            "variableName": "body"
+            "variableName": "content"
           }
         ]
       },
@@ -181,35 +181,19 @@
           },
           {
             "type": "output",
-            "variableName": "subject"
+            "variableName": "invitees"
           },
           {
             "type": "output",
-            "variableName": "start"
+            "variableName": "date"
           },
           {
             "type": "output",
-            "variableName": "end"
+            "variableName": "title"
           },
           {
             "type": "output",
-            "variableName": "location"
-          },
-          {
-            "type": "output",
-            "variableName": "organizer"
-          },
-          {
-            "type": "output",
-            "variableName": "body"
-          },
-          {
-            "type": "output",
-            "variableName": "attendees"
-          },
-          {
-            "type": "output",
-            "variableName": "online_meeting_url"
+            "variableName": "description"
           }
         ]
       }
@@ -428,41 +412,31 @@
             "sectionTitle": "Repository",
             "block": [
               {
-                "name": "textEntry",
-                "sectionTitle": "Repository",
+                "name": "picker",
+                "sectionTitle": "",
                 "type": "parameter",
                 "label": "",
-                "placeholder": "Url",
+                "placeholder": "",
                 "variableName": "repository",
-                "required": "true"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "textArrayEntry",
-                "type": "condition",
-                "conditionType": "contains",
-                "label": "Author",
-                "placeholder": "email",
-                "variableName": "authors",
-                "required": "false"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "choiceTextEntry",
-                "type": "condition",
-                "conditionType": "contains",
-                "label": "Content contains",
-                "placeholder": "Anything",
-                "variableName": "content",
-                "required": "false"
+                "required": "true",
+                "options": [
+                  {
+                    "name": "Project 1",
+                    "value": "1"
+                  },
+                  {
+                    "name": "Project 2",
+                    "value": "2"
+                  },
+                  {
+                    "name": "Project 3",
+                    "value": "3"
+                  },
+                  {
+                    "name": "Project 4",
+                    "value": "4"
+                  }
+                ]
               }
             ]
           }
@@ -491,74 +465,28 @@
             "sectionTitle": "Repository",
             "block": [
               {
-                "name": "textEntry",
+                "name": "picker",
                 "type": "parameter",
                 "label": "",
-                "placeholder": "Url",
+                "placeholder": "",
                 "variableName": "repository",
-                "required": "true"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "textArrayEntry",
-                "type": "condition",
-                "conditionType": "contains",
-                "label": "Author",
-                "placeholder": "email",
-                "variableName": "authors",
-                "required": "false"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "choiceTextEntry",
-                "type": "condition",
-                "conditionType": "contains",
-                "label": "Content contains",
-                "placeholder": "Anything",
-                "variableName": "content",
-                "required": "false"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "choice",
-                "choiceType": "Single",
-                "type": "condition",
-                "conditionType": "is",
-                "label": "",
-                "variableName": "pr",
                 "required": "true",
                 "options": [
                   {
-                    "label": "Opened",
-                    "reveal": ""
+                    "name": "Project 1",
+                    "value": "1"
                   },
                   {
-                    "label": "Closed",
-                    "reveal": ""
+                    "name": "Project 2",
+                    "value": "2"
                   },
                   {
-                    "label": "Merged",
-                    "reveal": ""
+                    "name": "Project 3",
+                    "value": "3"
                   },
                   {
-                    "label": "Drafted",
-                    "reveal": ""
-                  },
-                  {
-                    "label": "Assigned",
-                    "reveal": ""
+                    "name": "Project 4",
+                    "value": "4"
                   }
                 ]
               }
@@ -593,59 +521,28 @@
             "sectionTitle": "Repository",
             "block": [
               {
-                "name": "textEntry",
+                "name": "picker",
                 "type": "parameter",
                 "label": "",
-                "placeholder": "Url",
+                "placeholder": "",
                 "variableName": "repository",
-                "required": "true"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "Issue",
-            "block": [
-              {
-                "name": "textEntry",
-                "type": "parameter",
-                "label": "",
-                "placeholder": "Url",
-                "variableName": "issue",
-                "required": "true"
-              }
-            ]
-          },
-          {
-            "sectionTitle": "",
-            "block": [
-              {
-                "name": "choice",
-                "choiceType": "Single",
-                "type": "condition",
-                "conditionType": "is",
-                "label": "",
-                "variableName": "issue_action",
                 "required": "true",
                 "options": [
                   {
-                    "label": "Created",
-                    "reveal": ""
+                    "name": "Project 1",
+                    "value": "1"
                   },
                   {
-                    "label": "Edited",
-                    "reveal": ""
+                    "name": "Project 2",
+                    "value": "2"
                   },
                   {
-                    "label": "Deleted",
-                    "reveal": ""
+                    "name": "Project 3",
+                    "value": "3"
                   },
                   {
-                    "label": "Commented",
-                    "reveal": ""
-                  },
-                  {
-                    "label": "Assigned",
-                    "reveal": ""
+                    "name": "Project 4",
+                    "value": "4"
                   }
                 ]
               }
@@ -668,32 +565,6 @@
           {
             "type": "output",
             "variableName": "assignee"
-          }
-        ]
-      },
-      {
-        "name": "Star",
-        "eg": "When your repo is starred",
-        "icon": "star",
-        "sections": [
-          {
-            "sectionTitle": "Repository",
-            "block": [
-              {
-                "name": "",
-                "type": "text",
-                "label": "",
-                "placeholder": "Url",
-                "variableName": "repository",
-                "required": "false"
-              }
-            ]
-          }
-        ],
-        "outputs": [
-          {
-            "type": "output",
-            "variableName": "user"
           }
         ]
       }
