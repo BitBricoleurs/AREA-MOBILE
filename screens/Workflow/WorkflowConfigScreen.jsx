@@ -70,7 +70,7 @@ const WorkflowConfigScreen = ({ navigation }) => {
       });
 
     if (mode === "edit") {
-      const { data } = await dispatchAPI(
+      const response = await dispatchAPI(
         "PUT",
         `/edit-workflow/${workflowInfo.id}`,
         {
@@ -80,11 +80,9 @@ const WorkflowConfigScreen = ({ navigation }) => {
           workflow: workflow.workflow,
         }
       );
-      if (data?.workflow_id) {
-        navigation.navigate("HomeStack", {
-          screen: "WorkflowInfoScreen",
-          params: { id: workflowInfo.id },
-        });
+      console.log(response);
+      if (response.status === 200) {
+        navigation.navigate("Home", { refresh: true });
       }
     } else {
       const { data } = await dispatchAPI("POST", "/create-workflow", {
@@ -93,8 +91,9 @@ const WorkflowConfigScreen = ({ navigation }) => {
         variables: workflow.variables,
         workflow: workflow.workflow,
       });
+      console.log(data);
       if (data?.workflow_id) {
-        navigation.navigate("Home");
+        navigation.navigate("Home", { refresh: true });
       }
     }
     setLoading(false);

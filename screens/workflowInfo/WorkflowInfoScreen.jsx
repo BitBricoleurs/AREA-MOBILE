@@ -37,6 +37,11 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
     return data;
   };
 
+  const deleteWorkflow = async () => {
+    const { data } = await dispatchAPI("DELETE", `/delete-workflow/${id}`);
+    return data;
+  };
+
   const handleDeletePress = () => {
     Alert.alert(
       "Delete workflow",
@@ -48,7 +53,11 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
         },
         {
           text: "Delete",
-          onPress: () => {}, // TODO : delete workflow
+          onPress: async () => {
+            setLoadingData(true);
+            await deleteWorkflow();
+            navigation.navigate("Home", { refresh: true });
+          }, // TODO : delete workflow
           style: "destructive",
         },
       ]

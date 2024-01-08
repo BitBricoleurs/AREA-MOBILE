@@ -19,6 +19,7 @@ import ChoiceEntry from "../../components/form/choiceEntry";
 import ChoiceTextEntry from "../../components/form/choiceTextEntry";
 import TextArrayEntry from "../../components/form/textArrayEntry";
 import TextEntry from "../../components/form/textEntry";
+import ChoicePicker from "../../components/form/picker";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 import services from "../../jsons/triggers.json";
@@ -77,6 +78,16 @@ const TriggerConfigScreen = ({ route, navigation }) => {
       case "textEntry":
         return (
           <TextEntry
+            data={section}
+            key={index}
+            object={trigger}
+            setObject={setTrigger}
+            editable={editable}
+          />
+        );
+      case "picker":
+        return (
+          <ChoicePicker
             data={section}
             key={index}
             object={trigger}

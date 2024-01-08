@@ -134,7 +134,7 @@ const TextArrayEntry = ({
                   style={styles.textInput}
                   onChangeText={(text) => handleChange(text, index)}
                   value={entry}
-                  placeholder="Email"
+                  placeholder={data.placeholder}
                   placeholderTextColor={dark.outline}
                   onFocus={() => handleFocus(index)}
                   ref={inputRefs.current[index]}

@@ -1,7 +1,9 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
+import io from "socket.io-client";
 import { SERVER_URL } from "@env";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const socket = io(SERVER_URL, { transports: ["websocket"] });
 
 const AuthContext = createContext({ isLoggedIn: false });
 
@@ -12,7 +14,10 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  console.log("socket", socket);
+
   const login = async (email, password) => {
+    console.log("login", SERVER_URL);
     setIsLoading(true);
     try {
       const response = await axios.post(`${SERVER_URL}/login`, {
@@ -29,7 +34,9 @@ export const AuthContextProvider = ({ children }) => {
         },
       });
       setUser(me.data);
-      return JSON.stringify(response.data);
+      socket.emit("join", response.data.token);
+      console.log("me", me);
+      return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.warn("Error Message:", error.response.data.message);
@@ -56,7 +63,7 @@ export const AuthContextProvider = ({ children }) => {
         password,
         name: fullName,
       });
-      return JSON.stringify(response.data);
+      return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.warn("Error Message:", error.response.data.message);
@@ -85,6 +92,7 @@ export const AuthContextProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      socket.emit("join", { token: token });
       setUser(response.data);
       setToken(token);
       setIsLoggedIn(true);
@@ -112,7 +120,7 @@ export const AuthContextProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      return JSON.stringify(response.data);
+      return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.warn("Error Message:", error.response.data.message);
@@ -166,7 +174,34 @@ export const AuthContextProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      return JSON.stringify(response.data);
+      return response;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.warn("Error Message:", error.response.data.message);
+        console.warn("Status Code:", error.response.status);
+        setError(error.response.data.message);
+        if (error.response.status === 401) {
+          setIsLoggedIn(false);
+        }
+        return {
+          message: error.response.data.message,
+          status: error.response.status,
+        };
+      } else {
+        console.warn("Error:", error);
+        setError("An unexpected error occurred");
+      }
+    }
+  };
+
+  const delete_ = async (url, options) => {
+    try {
+      const response = await axios.delete(`${SERVER_URL}${url}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.warn("Error Message:", error.response.data.message);
@@ -216,10 +251,28 @@ export const AuthContextProvider = ({ children }) => {
         return get(url);
       case "PUT":
         return put(url, options);
+      case "DELETE":
+        return delete_(url);
       default:
         throw new Error("Invalid dispatchAPI type");
     }
   };
+
+  useEffect(() => {
+    const onJoined = (data) => {
+      console.warn("joined", data);
+    };
+    const onError = (error) => {
+      console.warn("error", error);
+    };
+    console.log("HERE");
+    socket.on("joined", onJoined);
+    socket.on("error", onError);
+    return () => {
+      socket.off("joined");
+      socket.off("error");
+    };
+  }, [socket]);
 
   return (
     <AuthContext.Provider
@@ -232,6 +285,7 @@ export const AuthContextProvider = ({ children }) => {
         dispatchAPI,
         error,
         setError,
+        socket,
       }}
     >
       {children}
