@@ -21,12 +21,11 @@ const TextArrayEntry = ({
   const { variables } = useWorkflowContext();
 
   const updateObjectParams = (newEntries) => {
-    const emails = newEntries.filter((entry) => entry.trim() !== "");
     setObject({
       ...object,
       params: {
         ...object.params,
-        [data.variableName]: emails,
+        [data.variableName]: newEntries,
       },
     });
   };
@@ -73,7 +72,7 @@ const TextArrayEntry = ({
   };
 
   const handleEmpty = (entries) => {
-    if (entries.length === 1 && entries[0] === "") {
+    if ((entries.length === 1 && entries[0] === "") || entries.length === 0) {
       const newParams = { ...object.params };
       delete newParams[data.variableName];
       setObject({
