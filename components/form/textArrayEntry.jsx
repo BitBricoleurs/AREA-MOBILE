@@ -16,7 +16,8 @@ const TextArrayEntry = ({
   editable,
 }) => {
   const [selected, setSelected] = useState(false);
-  const [emailEntries, setEmailEntries] = useState([""]);
+  const [emailEntries, setEmailEntries] = useState([]);
+  const [displayedEntries, setDisplayedEntries] = useState([""]);
   const inputRefs = useRef([]);
   const { variables } = useWorkflowContext();
 
@@ -55,21 +56,25 @@ const TextArrayEntry = ({
   };
 
   const handleChange = (text, index) => {
-    const updatedEntries = [...emailEntries];
-    updatedEntries[index] = text;
+    let updatedDisplayEntries = [...displayedEntries];
+    updatedDisplayEntries[index] = text;
 
-    if (index === emailEntries.length - 1 && text.trim() !== "") {
-      updatedEntries.push("");
+    if (index === updatedDisplayEntries.length - 1 && text.trim() !== "") {
+      updatedDisplayEntries.push("");
     }
-    if (text === "") {
-      updatedEntries.splice(index, 1);
-    }
-    if (handleEmpty(updatedEntries)) {
-      return;
-    }
-    setEmailEntries(updatedEntries);
-    updateObjectParams(updatedEntries);
+
+    setDisplayedEntries(updatedDisplayEntries);
+
+    // Update submissionEmailEntries by filtering out the empty string
+    let updatedSubmissionEntries = updatedDisplayEntries.filter(
+      (entry) => entry.trim() !== ""
+    );
+    setEmailEntries(updatedSubmissionEntries);
+    updateObjectParams(updatedSubmissionEntries);
   };
+
+  console.log("emailEntries: ", emailEntries);
+  console.log("displayedEntries: ", displayedEntries);
 
   const handleEmpty = (entries) => {
     if ((entries.length === 1 && entries[0] === "") || entries.length === 0) {
@@ -79,7 +84,8 @@ const TextArrayEntry = ({
         ...object,
         params: newParams,
       });
-      setEmailEntries([""]);
+      setDisplayedEntries([""]);
+      setEmailEntries([]);
       return true;
     }
     return false;
@@ -102,14 +108,16 @@ const TextArrayEntry = ({
   };
 
   useEffect(() => {
-    inputRefs.current = emailEntries.map(
+    inputRefs.current = displayedEntries.map(
       (_, i) => inputRefs.current[i] || React.createRef()
     );
-  }, [emailEntries]);
+  }, [displayedEntries]);
 
   useEffect(() => {
     if (object.params && object.params[data.variableName]) {
-      setEmailEntries(object.params[data.variableName]);
+      let entries = object.params[data.variableName];
+      setEmailEntries(entries);
+      setDisplayedEntries([...entries, ""]);
     }
   }, [object.params]);
 
@@ -126,7 +134,7 @@ const TextArrayEntry = ({
       {selected && (
         <>
           <View style={{ height: 1, backgroundColor: dark.outline }} />
-          {emailEntries.map((entry, index) => (
+          {displayedEntries.map((entry, index) => (
             <View key={index} style={styles.inputRow}>
               <View style={styles.inputLine}>
                 <TextInput
@@ -139,7 +147,7 @@ const TextArrayEntry = ({
                   ref={inputRefs.current[index]}
                   editable={editable}
                 />
-                {index < emailEntries.length - 1 && (
+                {index < displayedEntries.length - 1 && (
                   <TouchableOpacity
                     onPress={() => handleRemoveEntry(index)}
                     style={{ alignSelf: "center" }}
@@ -152,7 +160,7 @@ const TextArrayEntry = ({
                   </TouchableOpacity>
                 )}
               </View>
-              {index !== emailEntries.length - 1 && (
+              {index !== displayedEntries.length - 1 && (
                 <View style={{ height: 1, backgroundColor: dark.outline }} />
               )}
             </View>
