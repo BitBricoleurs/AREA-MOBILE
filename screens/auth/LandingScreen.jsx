@@ -1,17 +1,32 @@
 import { View, Image, Text, Button, StyleSheet, Pressable } from "react-native";
 import MyText from "../../utils/myText";
 import { dark } from "../../utils/colors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import * as WebBrowser from "expo-web-browser";
 import { useAuthContext } from "../../contexts/AuthContext";
 
 const LandingScreen = ({ navigation }) => {
   const authServices = ["Create an account", "Sign in"];
+  const { dispatchAPI } = useAuthContext();
+  const [github, setGithub] = useState("");
 
-  const handleConnectionType = (service) => {
+  const handleConnectionType = async (service) => {
+    if (service === "Github") {
+      if (github === "") return;
+      let result = await WebBrowser.openBrowserAsync(github);
+      return;
+    }
     navigation.navigate("Auth", {
       method: service === "Sign in" ? "login" : "register",
     });
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await dispatchAPI("GET", "/github-login");
+      setGithub(data.authorization_url);
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -31,6 +46,12 @@ const LandingScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
+        <Pressable
+          style={styles.button}
+          onPress={() => handleConnectionType("Github")}
+        >
+          <MyText style={styles.text}>Continue with Github</MyText>
+        </Pressable>
         {authServices.map((service, index) => {
           return (
             <Pressable

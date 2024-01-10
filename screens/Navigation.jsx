@@ -1,4 +1,4 @@
-import { Image, View } from "react-native";
+import { Image, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -212,11 +212,11 @@ const App = () => {
   );
 };
 
-const Navigation = () => {
+const Navigation = ({ linking }) => {
   const { isLoggedIn } = useAuthContext();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <SafeAreaProvider>
         {isLoggedIn ? <App /> : <Authentification />}
       </SafeAreaProvider>
