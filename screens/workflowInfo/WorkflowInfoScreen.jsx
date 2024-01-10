@@ -60,7 +60,6 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
   const onToggleSwitch = async () => {
     setToggle(!toggle);
     const response = await dispatchAPI("POST", `/toggle-workflow/${id}`);
-    console.log(response);
     if (response.status > 399) {
       setToggle(toggle);
     }

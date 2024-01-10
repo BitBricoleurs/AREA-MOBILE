@@ -176,7 +176,6 @@ const WorkflowScreen = ({ navigation, route }) => {
       }
       return node;
     });
-    console.log("newWorkflow", newWorkflow);
     setWorkflow(newWorkflow);
   };
 
