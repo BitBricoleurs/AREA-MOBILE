@@ -1,8 +1,10 @@
 import { useContext, useState, createContext } from "react";
+import { useAuthContext } from "./AuthContext";
 
 const WorkflowContext = createContext();
 
 export const WorkflowContextProvider = ({ children }) => {
+  const { dispatchAPI } = useAuthContext();
   const [workflowInfo, setWorkflowInfo] = useState({});
   const [trigger, setTrigger] = useState({});
   const [workflow, setWorkflow] = useState([]);
@@ -11,10 +13,24 @@ export const WorkflowContextProvider = ({ children }) => {
   const [lastNodeId, setLastNodeId] = useState(0);
   const [editable, setEditable] = useState(true);
   const [mode, setMode] = useState("create");
+  const [triggers, setTriggers] = useState([]);
+  const [actions, setActions] = useState([]);
 
   console.log("trigger: ", trigger);
   console.log("workflow: ", workflow);
   console.log("variables: ", variables);
+
+  const getForms = async () => {
+    const response = await dispatchAPI("GET", "/get-actions");
+    const data = response.data;
+    console.log("Response", response);
+    setActions(data);
+    const response2 = await dispatchAPI("GET", "/get-triggers");
+    setTriggers(response2.data);
+    // console.log("response2", response2);
+    // console.log("data2", data2);
+    return data;
+  };
 
   const getNode = (nodeId) => {
     return workflow.find((node) => node.id === nodeId);
@@ -160,6 +176,8 @@ export const WorkflowContextProvider = ({ children }) => {
   return (
     <WorkflowContext.Provider
       value={{
+        triggers,
+        actions,
         workflowInfo,
         setWorkflowInfo,
         trigger,
@@ -181,6 +199,7 @@ export const WorkflowContextProvider = ({ children }) => {
         handleRecursiveDelete,
         parseWorkflow,
         jsonifyWorkflow,
+        getForms,
       }}
     >
       {children}

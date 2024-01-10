@@ -1,9 +1,7 @@
 import { useContext, useState, createContext, useEffect } from "react";
-import io from "socket.io-client";
 import { SERVER_URL } from "@env";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const socket = io(SERVER_URL, { transports: ["websocket"] });
 
 const AuthContext = createContext({ isLoggedIn: false });
 
@@ -13,8 +11,6 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  console.log("socket", socket);
 
   const login = async (email, password) => {
     console.log("login", SERVER_URL);
@@ -34,7 +30,6 @@ export const AuthContextProvider = ({ children }) => {
         },
       });
       setUser(me.data);
-      socket.emit("join", response.data.token);
       console.log("me", me);
       return response;
     } catch (error) {
@@ -87,12 +82,12 @@ export const AuthContextProvider = ({ children }) => {
         setIsLoggedIn(false);
         return;
       }
+      // throw new Error("test");
       const response = await axios.get(`${SERVER_URL}/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      socket.emit("join", { token: token });
       setUser(response.data);
       setToken(token);
       setIsLoggedIn(true);
@@ -258,22 +253,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const onJoined = (data) => {
-      console.warn("joined", data);
-    };
-    const onError = (error) => {
-      console.warn("error", error);
-    };
-    console.log("HERE");
-    socket.on("joined", onJoined);
-    socket.on("error", onError);
-    return () => {
-      socket.off("joined");
-      socket.off("error");
-    };
-  }, [socket]);
-
   return (
     <AuthContext.Provider
       value={{
@@ -285,7 +264,6 @@ export const AuthContextProvider = ({ children }) => {
         dispatchAPI,
         error,
         setError,
-        socket,
       }}
     >
       {children}

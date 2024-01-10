@@ -55,11 +55,11 @@ const SettingsScreen = () => {
     if (data.authorization_url) {
       setMicrosoftLink(data.authorization_url);
     }
-    // const { data: data2 } = await dispatchAPI("GET", "/github-login");
-    // console.log("data2", data2);
-    // if (data2.authorization_url) {
-    //   setGithubLink(data2.authorization_url);
-    // }
+    const data2 = await dispatchAPI("GET", "/github-login");
+    console.log("data2", data2);
+    if (data2.authorization_url) {
+      setGithubLink(data2.authorization_url);
+    }
   };
 
   const _handlePressButtonAsync = async (url) => {

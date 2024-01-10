@@ -18,6 +18,7 @@ const ServiceForm = ({ service, fields, endpoint, navigation }) => {
 
   const handleSubmitForm = async () => {
     if (endpoint === "") return;
+    console.log("serviceForm", serviceForm);
     await dispatchAPI("POST", endpoint, serviceForm);
   };
 

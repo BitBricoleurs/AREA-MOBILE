@@ -9,6 +9,8 @@ import {
   Platform,
   StatusBar,
   Pressable,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import { dark } from "../../utils/colors";
@@ -16,64 +18,88 @@ import MyText from "../../utils/myText";
 import TriggerChoice from "../../components/trigger/triggerChoice";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-import services from "../../jsons/triggers.json";
-
 const ChooseTriggerScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
-  const { setMode, setEditable } = useWorkflowContext();
+  const [loading, setLoading] = useState(false);
+  const { setMode, setEditable, getForms, triggers } = useWorkflowContext();
+
+  console.log("triggers", triggers);
 
   useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await getForms();
+      setLoading(false);
+    })();
+
     setMode("create");
     setEditable(true);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        stickyHeaderIndices={[1]}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        <View style={styles.headerContainer}>
-          <Pressable
-            style={{
-              width: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <MyText style={{ color: dark.red, fontSize: 16 }}>Cancel</MyText>
-          </Pressable>
-          <View style={styles.titleContainer}>
-            <MyText style={styles.title}>Select a trigger</MyText>
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" color={dark.text} />
+        </View>
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          stickyHeaderIndices={[1]}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          <View style={styles.headerContainer}>
+            <Pressable
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <MyText style={{ color: dark.red, fontSize: 16 }}>Cancel</MyText>
+            </Pressable>
+            <View style={styles.titleContainer}>
+              <MyText style={styles.title}>Select a trigger</MyText>
+            </View>
+            <View style={{ width: 50 }} />
           </View>
-          <View style={{ width: 50 }} />
-        </View>
-        <View style={styles.searchBarContainer}>
-          <View style={styles.searchBar}>
-            <Image
-              source={require("../../assets/search.png")}
-              style={styles.searchIcon}
-            />
-            {/* // TODO */}
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search"
-              placeholderTextColor={dark.outline}
-              onChangeText={setSearch}
-              value={search}
-              keyboardType="default"
-              autoCapitalize="none"
-            />
+          <View style={styles.searchBarContainer}>
+            <View style={styles.searchBar}>
+              <Image
+                source={require("../../assets/search.png")}
+                style={styles.searchIcon}
+              />
+              {/* // TODO */}
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search"
+                placeholderTextColor={dark.outline}
+                onChangeText={setSearch}
+                value={search}
+                keyboardType="default"
+                autoCapitalize="none"
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.triggerContainer}>
-          {services.map((service, index) => (
-            <TriggerChoice key={index} service={service} />
-          ))}
-        </View>
-      </ScrollView>
+          <View style={styles.triggerContainer}>
+            <TouchableOpacity
+              style={styles.generateButton}
+              onPress={() => {
+                navigation.navigate("GenerateInput");
+              }}
+            >
+              <MyText style={{ color: dark.text, fontSize: 18 }}>
+                Generate
+              </MyText>
+            </TouchableOpacity>
+            {triggers &&
+              triggers.map((service, index) => (
+                <TriggerChoice key={index} service={service} />
+              ))}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -136,5 +162,13 @@ const styles = StyleSheet.create({
   },
   triggerContainer: {
     flex: 1,
+  },
+  generateButton: {
+    backgroundColor: dark.secondary,
+    borderRadius: 8,
+    padding: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 8,
   },
 });

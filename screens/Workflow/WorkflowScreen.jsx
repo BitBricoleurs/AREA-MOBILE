@@ -12,9 +12,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import actions from "../../jsons/actions.json";
-import triggers from "../../jsons/triggers.json";
-
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
@@ -42,6 +39,8 @@ const WorkflowScreen = ({ navigation, route }) => {
     mode,
     setMode,
     parseWorkflow,
+    triggers,
+    actions,
   } = useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);

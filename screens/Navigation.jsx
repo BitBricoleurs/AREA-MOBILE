@@ -14,13 +14,14 @@ import AuthScreen from "./auth/AuthScreen";
 import HomeScreen from "./home/HomeScreen";
 import ListViewModalPage from "./home/ModalPage";
 import SettingsScreen from "./SettingsScreen";
-import ChooseTriggerScreen from "./workflow/ChooseTriggerScreen";
-import TriggerConfigScreen from "./workflow/TriggerConfigScreen";
-import WorkflowScreen from "./workflow/WorkflowScreen";
-import ActionsScreen from "./workflow/ActionsScreen";
-import WorkflowConfigScreen from "./workflow/WorkflowConfigScreen";
+import ChooseTriggerScreen from "./Workflow/ChooseTriggerScreen";
+import TriggerConfigScreen from "./Workflow/TriggerConfigScreen";
+import WorkflowScreen from "./Workflow/WorkflowScreen";
+import ActionsScreen from "./Workflow/ActionsScreen";
+import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
 import WorkflowInfoScreen from "./workflowInfo/WorkflowInfoScreen";
 import ActivityScreen from "./workflowInfo/ActivityScreen";
+import GenerateInputScreen from "./Workflow/GenerateInputScreen";
 
 const MainTab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -63,6 +64,11 @@ const Workflow = () => {
         options={{
           headerShown: false,
         }}
+      />
+      <WorkflowStack.Screen
+        name="GenerateInput"
+        component={GenerateInputScreen}
+        options={{ headerShown: false }}
       />
       <WorkflowStack.Screen
         name="Workflow"

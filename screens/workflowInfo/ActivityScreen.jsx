@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,34 @@ import {
 import { dark, statusColorMap } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import IconComponent from "../../utils/iconComponent";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const ActivityScreen = ({ navigation, route }) => {
   const { id } = route.params || {};
-  const runs = Array.from({ length: 23 }, (_, index) => index).reverse();
+  const [loadingData, setLoadingData] = useState(false);
+  const [runs, setRuns] = useState([]);
+  const { dispatchAPI } = useAuthContext();
+
+  // const runs = Array.from({ length: 23 }, (_, index) => index).reverse();
+
+  const getWorkflowRuns = async () => {
+    const { data } = await dispatchAPI("GET", `/workflow-executions/${id}`);
+    console.log(data);
+    return data;
+  };
+
+  const getData = async () => {
+    setLoadingData(true);
+    const runs = await getWorkflowRuns();
+    setRuns(runs);
+    setLoadingData(false);
+  };
+
+  useEffect(() => {
+    (async () => {
+      await getData();
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -27,26 +51,38 @@ const ActivityScreen = ({ navigation, route }) => {
         </View>
         <View style={{ width: 24 }} />
       </View>
-      <FlatList
-        data={runs}
-        keyExtractor={(item) => item}
-        showsVerticalScrollIndicator={false}
-        inverted={true}
-        renderItem={({ item }) => (
-          <Pressable style={styles.run}>
-            <MyText style={styles.runText}>Run #{item}</MyText>
-            <View style={styles.runDetails}>
-              <View
-                style={[
-                  styles.statusIndicator,
-                  { backgroundColor: statusColorMap["success"] },
-                ]}
-              />
-              <IconComponent name="chevron-right" style={styles.icon} />
-            </View>
-          </Pressable>
-        )}
-      />
+      {runs?.executions?.lenght === 0 ? (
+        <FlatList
+          data={runs || []}
+          keyExtractor={(item) => item}
+          showsVerticalScrollIndicator={false}
+          refreshing={loadingData}
+          onRefresh={getData}
+          inverted={true}
+          renderItem={({ item }) => (
+            <Pressable style={styles.run}>
+              <MyText style={styles.runText}>Run #{item}</MyText>
+              <View style={styles.runDetails}>
+                <View
+                  style={[
+                    styles.statusIndicator,
+                    { backgroundColor: statusColorMap["success"] },
+                  ]}
+                />
+                <IconComponent name="chevron-right" style={styles.icon} />
+              </View>
+            </Pressable>
+          )}
+        />
+      ) : (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <MyText style={{ color: dark.text }}>
+            This workflow has no runs yet.
+          </MyText>
+        </View>
+      )}
     </View>
   );
 };

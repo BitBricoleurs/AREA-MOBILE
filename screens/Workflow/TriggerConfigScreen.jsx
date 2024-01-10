@@ -22,11 +22,9 @@ import TextEntry from "../../components/form/textEntry";
 import ChoicePicker from "../../components/form/picker";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
-import services from "../../jsons/triggers.json";
-
 const TriggerConfigScreen = ({ route, navigation }) => {
   const { serviceName, triggerName, previousPage } = route.params;
-  const { trigger, setTrigger, editable } = useWorkflowContext();
+  const { trigger, setTrigger, editable, triggers } = useWorkflowContext();
   const [triggerJson, setTriggerJson] = useState({});
   const [requirementsMet, setRequirementsMet] = useState(true);
   const [service, setService] = useState(null);
@@ -131,12 +129,12 @@ const TriggerConfigScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    const serviceIndex = services.findIndex(
+    const serviceIndex = triggers.findIndex(
       (service) => service.name === serviceName
     );
-    setService(services[serviceIndex]);
+    setService(triggers[serviceIndex]);
     console.log(serviceIndex);
-    const triggerIndex = services[serviceIndex]?.triggers.findIndex(
+    const triggerIndex = triggers[serviceIndex]?.triggers.findIndex(
       (trigger) => trigger.name === triggerName
     );
     setTriggerIndex(triggerIndex);

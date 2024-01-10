@@ -20,15 +20,8 @@ import MyText from "../../utils/myText";
 const WorkflowInfoScreen = ({ navigation, route }) => {
   const [loadingData, setLoadingData] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const {
-    parseWorkflow,
-    trigger,
-    workflow,
-    variables,
-    workflowInfo,
-    setMode,
-    setEditable,
-  } = useWorkflowContext();
+  const { parseWorkflow, trigger, workflowInfo, setMode, setEditable } =
+    useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
   const { id } = route.params || {};
 

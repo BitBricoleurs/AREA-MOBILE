@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Pressable, Animated, Alert } from "react-native";
 
-import actions from "../../jsons/actions";
 import { dark, colorMap } from "../../utils/colors";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 import IconComponent from "../../utils/iconComponent";
@@ -10,8 +9,14 @@ import MyText from "../../utils/myText";
 import ActionForm from "../form/actionForm";
 
 const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
-  const { workflow, setWorkflow, deleteNode, setLastUnfolded, editable } =
-    useWorkflowContext();
+  const {
+    workflow,
+    setWorkflow,
+    deleteNode,
+    setLastUnfolded,
+    editable,
+    actions,
+  } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
   const [currentAction, setCurrentAction] = useState({});
@@ -54,6 +59,8 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
 
     return service.actions.find((a) => a.name === actionName);
   };
+
+  console.log("actionForm", actionForm);
 
   const handleUnfold = () => {
     setUnfold(!unfold);

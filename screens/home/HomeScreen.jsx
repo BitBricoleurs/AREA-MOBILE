@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { dispatchAPI, socket } = useAuthContext();
+  const { dispatchAPI } = useAuthContext();
   let { refresh } = route.params || {};
 
   const indicatorPosition = useRef(new Animated.Value(0)).current;
@@ -86,22 +86,6 @@ const HomeScreen = ({ navigation, route }) => {
       setLoading(false);
     })();
   }, [workflows.length, reload]);
-
-  useEffect(() => {
-    const onJoined = (data) => {
-      console.warn("joined", data);
-    };
-    const onError = (error) => {
-      console.warn("error", error);
-    };
-    console.log("here");
-    socket.on("joined", onJoined);
-    socket.on("error", onError);
-    return () => {
-      socket.off("joined");
-      socket.off("error");
-    };
-  }, [socket]);
 
   useEffect(() => {
     if (refresh) {

@@ -16,12 +16,12 @@ import {
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import ActionChoice from "../../components/actions/actionChoice";
-
-import actions from "../../jsons/actions.json";
+import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const ActionsScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const { prevNodeId, type } = route.params;
+  const { actions } = useWorkflowContext();
 
   return (
     <SafeAreaView style={styles.container}>
