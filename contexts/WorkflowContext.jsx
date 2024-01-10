@@ -1,4 +1,4 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 import { useAuthContext } from "./AuthContext";
 
 const WorkflowContext = createContext();
@@ -21,15 +21,13 @@ export const WorkflowContextProvider = ({ children }) => {
   console.log("variables: ", variables);
 
   const getForms = async () => {
-    const response = await dispatchAPI("GET", "/get-actions");
-    const data = response.data;
-    console.log("Response", response);
-    setActions(data);
     const response2 = await dispatchAPI("GET", "/get-triggers");
     setTriggers(response2.data);
-    // console.log("response2", response2);
-    // console.log("data2", data2);
-    return data;
+  };
+
+  const getActions = async () => {
+    const response = await dispatchAPI("GET", "/get-actions");
+    setActions(response.data);
   };
 
   const getNode = (nodeId) => {
@@ -51,7 +49,6 @@ export const WorkflowContextProvider = ({ children }) => {
   };
 
   const handleDeleteNode = (nodeId, previousNodeId, thisworkflow) => {
-    console.log("nodeId: ", nodeId);
     const currentAction = getNode(nodeId);
     const id = currentAction.next_id > 0 ? currentAction.next_id : -1;
     let newWorkflow = thisworkflow ? [...thisworkflow] : [...workflow];
@@ -77,7 +74,6 @@ export const WorkflowContextProvider = ({ children }) => {
         }
         return node;
       });
-      console.log("newWorkflow: ", newWorkflow);
     }
 
     const index = newWorkflow.findIndex((node) => node.id === nodeId);
@@ -172,6 +168,12 @@ export const WorkflowContextProvider = ({ children }) => {
     setWorkflow(actions);
     setVariables(variables);
   };
+
+  useEffect(() => {
+    (async () => {
+      await getActions();
+    })();
+  }, [triggers]);
 
   return (
     <WorkflowContext.Provider

@@ -80,7 +80,6 @@ const WorkflowConfigScreen = ({ navigation }) => {
           workflow: workflow.workflow,
         }
       );
-      console.log(response);
       if (response.status === 200) {
         navigation.navigate("Home", { refresh: true });
       }
@@ -91,7 +90,6 @@ const WorkflowConfigScreen = ({ navigation }) => {
         variables: workflow.variables,
         workflow: workflow.workflow,
       });
-      console.log(data);
       if (data?.workflow_id) {
         navigation.navigate("Home", { refresh: true });
       }

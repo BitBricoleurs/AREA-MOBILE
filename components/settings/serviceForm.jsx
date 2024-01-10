@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   View,
@@ -11,18 +11,26 @@ import MyText from "../../utils/myText";
 import { dark, colorMap } from "../../utils/colors";
 import { useAuthContext } from "../../contexts/AuthContext";
 
-const ServiceForm = ({ service, fields, endpoint, navigation }) => {
+const ServiceForm = ({ service, fields, endpoint, navigation, data }) => {
   const [serviceForm, setServiceForm] = useState({});
   const { dispatchAPI } = useAuthContext();
-  console.log(fields);
 
   const handleSubmitForm = async () => {
     if (endpoint === "") return;
-    console.log("serviceForm", serviceForm);
+    // if there is an asterix in the data prevent the user from submitting
+    for (const field in serviceForm) {
+      if (serviceForm[field].includes("*")) {
+        return;
+      }
+    }
     await dispatchAPI("POST", endpoint, serviceForm);
   };
 
-  console.log(serviceForm);
+  useEffect(() => {
+    if (data) {
+      setServiceForm(data);
+    }
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: colorMap[service] }]}>
@@ -53,6 +61,7 @@ const ServiceForm = ({ service, fields, endpoint, navigation }) => {
                     [field.variableName]: text,
                   });
                 }}
+                value={serviceForm[field.variableName] || ""}
               />
             ))}
         </View>

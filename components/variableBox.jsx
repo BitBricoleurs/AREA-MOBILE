@@ -34,7 +34,6 @@ const VariableBox = ({ id, nodeId, onFocus }) => {
 
   useEffect(() => {
     const variableToDisplay = variables.find((variable) => variable.id === id);
-    console.log("'variable'", variableToDisplay);
 
     setVariable(variableToDisplay ? variableToDisplay : {});
   }, [variables]);

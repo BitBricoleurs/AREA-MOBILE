@@ -60,8 +60,6 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
     return service.actions.find((a) => a.name === actionName);
   };
 
-  console.log("actionForm", actionForm);
-
   const handleUnfold = () => {
     setUnfold(!unfold);
     if (!unfold) {

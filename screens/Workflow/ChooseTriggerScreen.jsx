@@ -23,8 +23,6 @@ const ChooseTriggerScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const { setMode, setEditable, getForms, triggers } = useWorkflowContext();
 
-  console.log("triggers", triggers);
-
   useEffect(() => {
     (async () => {
       setLoading(true);

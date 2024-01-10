@@ -73,9 +73,6 @@ const TextArrayEntry = ({
     updateObjectParams(updatedSubmissionEntries);
   };
 
-  console.log("emailEntries: ", emailEntries);
-  console.log("displayedEntries: ", displayedEntries);
-
   const handleEmpty = (entries) => {
     if ((entries.length === 1 && entries[0] === "") || entries.length === 0) {
       const newParams = { ...object.params };

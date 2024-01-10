@@ -38,7 +38,6 @@ const HomeScreen = ({ navigation, route }) => {
   const getWorkflowIds = async () => {
     try {
       const { data } = await dispatchAPI("GET", "/get-user-workflows-ids");
-      console.log("data", data);
       return data?.workflow;
     } catch (error) {
       console.error("Failed to get workflow IDs:", error);
@@ -49,7 +48,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   const fetchData = async () => {
     const workflowsMini = await getWorkflowIds();
-    console.log("workflowsMini", workflowsMini);
     setWorkflows(chunkData(workflowsMini, 2));
   };
 

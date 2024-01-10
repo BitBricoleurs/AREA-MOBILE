@@ -155,34 +155,43 @@ const ActionForm = ({
       <>
         {sections
           ? sections.map((section, index) => (
-              <View
-                key={index}
-                style={[
-                  {
-                    flex: 1,
-                    backgroundColor: dark.secondary,
-                    borderRadius: 8,
-                  },
-                  index !== sections.length - 1 && { marginBottom: 8 },
-                ]}
-              >
-                {section?.block &&
-                  section.block.map((field, fieldIndex) => {
-                    return (
-                      <View key={fieldIndex}>
-                        {fieldIndex !== 0 && (
-                          <View
-                            style={{
-                              height: 1,
-                              backgroundColor: dark.outline,
-                              marginLeft: 16,
-                            }}
-                          />
-                        )}
-                        {sectionDispatch(field, fieldIndex)}
-                      </View>
-                    );
-                  })}
+              <View key={index}>
+                {section?.sectionTitle && (
+                  <MyText
+                    key={index}
+                    style={{ fontSize: 16, margin: 8, color: dark.white }}
+                  >
+                    {section?.sectionTitle}
+                  </MyText>
+                )}
+                <View
+                  style={[
+                    {
+                      flex: 1,
+                      backgroundColor: dark.secondary,
+                      borderRadius: 8,
+                    },
+                    index !== sections.length - 1 && { marginBottom: 8 },
+                  ]}
+                >
+                  {section?.block &&
+                    section.block.map((field, fieldIndex) => {
+                      return (
+                        <View key={fieldIndex}>
+                          {fieldIndex !== 0 && (
+                            <View
+                              style={{
+                                height: 1,
+                                backgroundColor: dark.outline,
+                                marginLeft: 16,
+                              }}
+                            />
+                          )}
+                          {sectionDispatch(field, fieldIndex)}
+                        </View>
+                      );
+                    })}
+                </View>
               </View>
             ))
           : null}

@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import {
   View,
-  Text,
   StyleSheet,
-  Button,
   Pressable,
   SafeAreaView,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import MyText from "../utils/myText";
 import IconComponent from "../utils/iconComponent";
@@ -46,9 +43,11 @@ const JenkinsFields = [
 
 const SettingsScreen = () => {
   const [microsoftLink, setMicrosoftLink] = useState("");
+  const [settings, setSettings] = useState({});
   const [githubLink, setGithubLink] = useState("");
   const [refresh, setRefresh] = useState(false); // TODO: use this to refresh the buttons
   const { dispatchAPI } = useAuthContext();
+  const [loading, setLoading] = useState(false);
 
   const getLoginButtons = async () => {
     const { data } = await dispatchAPI("GET", "/microsoft-login");
@@ -56,62 +55,99 @@ const SettingsScreen = () => {
       setMicrosoftLink(data.authorization_url);
     }
     const data2 = await dispatchAPI("GET", "/github-login");
-    console.log("data2", data2);
     if (data2.authorization_url) {
       setGithubLink(data2.authorization_url);
     }
   };
 
+  const getSettings = async () => {
+    const { data } = await dispatchAPI("GET", "/check-settings");
+    setSettings(data);
+  };
+
   const _handlePressButtonAsync = async (url) => {
     if (url === "") return;
     let result = await WebBrowser.openBrowserAsync(url);
+    console.warn(result);
   };
 
   useEffect(() => {
-    getLoginButtons();
+    (async () => {
+      setLoading(true);
+      await getSettings();
+      await getLoginButtons();
+      setLoading(false);
+    })();
   }, [refresh]);
 
   return (
-    <ScrollView style={styles.container}>
-      <SafeAreaView />
-      <View style={styles.customHeader}>
-        <MyText style={styles.headerText}>Settings</MyText>
+    <TouchableWithoutFeedback
+      onPress={Keyboard.dismiss}
+      style={styles.container}
+    >
+      <View style={{ flex: 1, backgroundColor: dark.primary }}>
+        <SafeAreaView />
+        <View style={styles.customHeader}>
+          <MyText style={styles.headerText}>Settings</MyText>
+        </View>
+        {loading ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <View style={styles.buttonContainer} behavior="padding">
+            <ServiceForm
+              service="Openai"
+              fields={OpenaiFields}
+              endpoint={"/openai-login"}
+              data={{
+                openai_token: settings?.settings?.openai_token,
+              }}
+            />
+            <ServiceForm
+              service="Jenkins"
+              fields={JenkinsFields}
+              endpoint={""}
+              data={{
+                jenkins_token: settings?.settings?.jenkins_token,
+              }}
+            />
+            <ServiceForm
+              service="Jira"
+              fields={JiraFields}
+              endpoint={"/jira-login"}
+              data={{
+                jira_username: settings?.settings?.jira_username,
+                jira_token: settings?.settings?.jira_token,
+              }}
+            />
+            <Pressable
+              onPress={() => _handlePressButtonAsync(githubLink)}
+              style={[styles.button, { backgroundColor: "#000000" }]}
+            >
+              <IconComponent name="Github" style={{ height: 45, width: 45 }} />
+              <MyText style={styles.text}>Link Github account</MyText>
+            </Pressable>
+            <Pressable
+              onPress={() => _handlePressButtonAsync(microsoftLink)}
+              style={[styles.button, { backgroundColor: "#FFFFFF" }]}
+            >
+              <MyText style={[styles.text, { color: "#000000" }]}>
+                Link Microsoft account
+              </MyText>
+            </Pressable>
+            <Pressable
+              style={styles.logoutButton}
+              onPress={() => dispatchAPI("LOGOUT")}
+            >
+              <MyText style={[styles.text, { color: "#FFFFFF" }]}>
+                Log out
+              </MyText>
+            </Pressable>
+          </View>
+        )}
       </View>
-      <View style={styles.buttonContainer} behavior="padding">
-        <Pressable
-          onPress={() => _handlePressButtonAsync(githubLink)}
-          style={[styles.button, { backgroundColor: "#000000" }]}
-        >
-          <IconComponent name="Github" style={{ height: 45, width: 45 }} />
-          <MyText style={styles.text}>Connect to Github</MyText>
-        </Pressable>
-        <Pressable
-          onPress={() => _handlePressButtonAsync(microsoftLink)}
-          style={[styles.button, { backgroundColor: "#FFFFFF" }]}
-        >
-          <MyText style={[styles.text, { color: "#000000" }]}>
-            Connect to Microsoft
-          </MyText>
-        </Pressable>
-        <ServiceForm
-          service="Openai"
-          fields={OpenaiFields}
-          endpoint={"/openai-login"}
-        />
-        <ServiceForm service="Jenkins" fields={JenkinsFields} endpoint={""} />
-        <ServiceForm
-          service="Jira"
-          fields={JiraFields}
-          endpoint={"/jira-login"}
-        />
-        <Pressable
-          style={styles.logoutButton}
-          onPress={() => dispatchAPI("LOGOUT")}
-        >
-          <MyText style={[styles.text, { color: "#FFFFFF" }]}>Log out</MyText>
-        </Pressable>
-      </View>
-    </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -120,7 +156,6 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: dark.primary,
     paddingHorizontal: 20,
   },
   customHeader: {
@@ -134,11 +169,9 @@ const styles = StyleSheet.create({
     color: dark.white,
   },
   buttonContainer: {
-    width: "100%",
     marginTop: 20,
-    height: "100%",
     paddingBottom: 146,
-    justifyContent: "flex-start",
+    marginHorizontal: 20,
   },
   button: {
     flexDirection: "row",

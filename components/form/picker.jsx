@@ -16,8 +16,6 @@ const ChoicePicker = ({ data, object, setObject, editable }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentOption, setCurrentOption] = useState(0);
 
-  console.log(data);
-
   const handlePickerChange = (itemValue) => {
     index = data.options.findIndex((option) => option.value === itemValue);
     setCurrentOption(index);

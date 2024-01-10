@@ -6,7 +6,6 @@ import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 
 const WorkflowCard = ({ workflow, status }) => {
-  console.log("workflow", workflow);
   const navigation = useNavigation();
   // console.error(workflow);
   return (

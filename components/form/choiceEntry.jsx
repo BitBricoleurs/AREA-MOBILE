@@ -57,11 +57,10 @@ const ChoiceEntry = ({ data, object, setObject, editable }) => {
       (data.required === "multi" && index !== selectedChoice)
     ) {
       if (data.options[index].variableName) {
-        newParams[data.options[index].variableName] =
-          data.options[index].label.toLowerCase();
+        newParams[data.options[index].variableName] = data.options[index].value;
       }
 
-      newParams[data.variableName] = data.options[index].label.toLowerCase();
+      newParams[data.variableName] = data.options[index].value;
     }
     setObject({
       ...object,
@@ -73,9 +72,11 @@ const ChoiceEntry = ({ data, object, setObject, editable }) => {
 
   useEffect(() => {
     const index = data.options.findIndex(
-      (option) =>
-        option.label.toLowerCase() === object.params[data.variableName]
+      (option) => option.value === object.params[data.variableName]
     );
+    if (index !== -1) {
+      setSelectedChoice(index);
+    }
     handleChoicePress(0);
   }, []);
 

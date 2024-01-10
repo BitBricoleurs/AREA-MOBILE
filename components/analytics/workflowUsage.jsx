@@ -33,20 +33,14 @@ export const UsageCard = ({ item, data }) => {
   const navigation = useNavigation();
 
   const getBarWidth = (count) => {
-    console.log(count);
     if (data[0].usage_count === 0) {
       return MAX_BAR_WIDTH;
     }
     if (count === 0) {
       return 110;
     }
-    // Find the max usage count to base other counts off of
     const maxCount = data.length > 0 ? data[0].usage_count : 1;
-    console.log(maxCount);
-    // Calculate the width as a percentage of the max width
     const newWidth = MAX_BAR_WIDTH * (count / maxCount);
-    console.log(newWidth);
-
     return newWidth < 110 ? 110 : newWidth;
   };
 
