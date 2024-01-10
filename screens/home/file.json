@@ -1,0 +1,35 @@
+{
+  "description": "Flwoopoolazuhpvouhamrou h oizrah poh zrp oguhoi ha zroih ohzroug apouefh gpou harôi goauzrh^goi poriuhgôu iôair ôih rpoihgp poerhg poierh gpouareh gpou",
+  "is_active": true,
+  "name_workflow": "Save linked files to drive iur vi iug riiue riugv ",
+  "variables": [],
+  "workflow": [
+    {
+      "conditions": [],
+      "id": 0,
+      "next_id": 20,
+      "params": [],
+      "service": "Teams",
+      "type": "trigger",
+      "type_trigger": "Mention"
+    },
+    {
+      "details_action": "",
+      "id": 1,
+      "next_id": 21,
+      "params": [],
+      "service": "Openai",
+      "type": "action",
+      "type_action": "Generate"
+    },
+    {
+      "details_action": "",
+      "id": 2,
+      "next_id": -1,
+      "params": [],
+      "service": "Outlook",
+      "type": "action",
+      "type_action": "Email"
+    }
+  ]
+}
