@@ -116,6 +116,9 @@ const TextArrayEntry = ({
       setEmailEntries(entries);
       setDisplayedEntries([...entries, ""]);
     }
+    if (!editable && object.params && object.params[data.variableName]) {
+      setSelected(true);
+    }
   }, [object.params]);
 
   return (
@@ -133,32 +136,40 @@ const TextArrayEntry = ({
           <View style={{ height: 1, backgroundColor: dark.outline }} />
           {displayedEntries.map((entry, index) => (
             <View key={index} style={styles.inputRow}>
-              <View style={styles.inputLine}>
-                <TextInput
-                  style={styles.textInput}
-                  onChangeText={(text) => handleChange(text, index)}
-                  value={entry}
-                  placeholder={data.placeholder}
-                  placeholderTextColor={dark.outline}
-                  onFocus={() => handleFocus(index)}
-                  ref={inputRefs.current[index]}
-                  editable={editable}
-                />
-                {index < displayedEntries.length - 1 && (
-                  <TouchableOpacity
-                    onPress={() => handleRemoveEntry(index)}
-                    style={{ alignSelf: "center" }}
-                    disabled={!editable}
-                  >
-                    <IconComponent
-                      name="minus"
-                      style={[styles.checkIcon, { tintColor: dark.white }]}
+              {!editable && index === emailEntries.length ? (
+                <View />
+              ) : (
+                <>
+                  <View style={styles.inputLine}>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={(text) => handleChange(text, index)}
+                      value={entry}
+                      placeholder={data.placeholder}
+                      placeholderTextColor={dark.outline}
+                      onFocus={() => handleFocus(index)}
+                      ref={inputRefs.current[index]}
+                      editable={editable}
                     />
-                  </TouchableOpacity>
-                )}
-              </View>
-              {index !== displayedEntries.length - 1 && (
-                <View style={{ height: 1, backgroundColor: dark.outline }} />
+                    {index < displayedEntries.length - 1 && editable && (
+                      <TouchableOpacity
+                        onPress={() => handleRemoveEntry(index)}
+                        style={{ alignSelf: "center" }}
+                        disabled={!editable}
+                      >
+                        <IconComponent
+                          name="minus"
+                          style={[styles.checkIcon, { tintColor: dark.white }]}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  {index !== displayedEntries.length - 1 && (
+                    <View
+                      style={{ height: 1, backgroundColor: dark.outline }}
+                    />
+                  )}
+                </>
               )}
             </View>
           ))}
