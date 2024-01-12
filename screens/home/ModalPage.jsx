@@ -8,9 +8,12 @@ import { dark } from "../../utils/colors";
 import { SuccessCard } from "../../components/analytics/successRate";
 import { UsageCard } from "../../components/analytics/workflowUsage";
 import IconComponent from "../../utils/iconComponent";
+import WorkflowCardHorizontal from "../../components/home/workflowCardHorizontal";
 
 const ListViewModalPage = ({ navigation, route }) => {
   const { data, title } = route.params;
+
+  console.log(data);
 
   const renderItem = ({ item }) => {
     switch (title) {
@@ -18,6 +21,8 @@ const ListViewModalPage = ({ navigation, route }) => {
         return <UsageCard item={item} data={data} />;
       case "Success rate":
         return <SuccessCard item={item} />;
+      case "Workflow runs":
+        return <WorkflowCardHorizontal item={item} />;
       default:
         return <MyText>Default</MyText>;
     }

@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginVertical: 10,
+    marginHorizontal: 20,
   },
   title: {
     fontSize: 28,

@@ -1,16 +1,25 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { dark, statusColorMap } from "../../utils/colors";
 import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 
-const WorkflowCard = ({ workflow, status }) => {
+const { width } = Dimensions.get("window");
+
+const WorkflowCard = ({ workflow, status, mode, style }) => {
+  console.log(workflow);
   const navigation = useNavigation();
   // console.error(workflow);
+
+  console.log("workflow", mode);
   return (
     <Pressable
-      style={styles.container}
+      style={[
+        styles.container,
+        mode === "large" ? { width: width - 40 } : { width: (width - 52) / 2 },
+        style,
+      ]}
       onPress={() =>
         navigation.navigate("HomeStack", {
           screen: "WorkflowInfoScreen",
@@ -49,7 +58,6 @@ WorkflowCard.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     height: 120,
     backgroundColor: dark.secondary,
     borderRadius: 15,

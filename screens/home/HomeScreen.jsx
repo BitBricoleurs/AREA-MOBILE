@@ -101,6 +101,7 @@ const HomeScreen = ({ navigation, route }) => {
     >
       <ScrollView
         style={styles.container}
+        nestedScroll={true}
         contentInsetAdjustmentBehavior="automatic"
         stickyHeaderIndices={[1]}
         refreshControl={
@@ -255,7 +256,6 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    paddingHorizontal: 20,
   },
 });
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import currentlyRunningWorkflow from "./file.json";
 
@@ -7,37 +8,112 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { dark } from "../../utils/colors";
 import MyText from "../../utils/myText";
 import WorkflowCard from "../../components/home/workflowCard";
+import IconComponent from "../../utils/iconComponent";
 
 const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
   const { dispatchAPI } = useAuthContext();
-  const [currentlyRunning, setCurrentlyRunning] = useState([]);
+  const [workflowExecutions, setWorkflowExecutions] = useState([]);
+  const [shortExec, setShortExec] = useState([]);
+  const navigation = useNavigation();
+
+  const getMargin = (index) => {
+    if (index === 0) {
+      return { marginLeft: 20 };
+    } else if (index === shortExec.length - 1) {
+      return { marginLeft: 10, marginRight: 20 };
+    }
+    return { marginLeft: 10 };
+  };
+
+  const getWorkflowExecutions = async () => {
+    try {
+      const { data } = await dispatchAPI("GET", "/workflow-executions");
+      return data;
+    } catch (error) {
+      console.error("Failed to get workflow executions:", error);
+      // Handle error appropriately
+      return [];
+    }
+  };
 
   useEffect(() => {
-    const arr = [];
-    arr.push(currentlyRunningWorkflow);
-    setCurrentlyRunning(arr);
-  }, []);
+    (async () => {
+      // const data = await getWorkflowExecutions();
+      const data = currentlyRunningWorkflow;
+      // sort by date
+      data.sort((a, b) => {
+        return new Date(b.start_time) - new Date(a.start_time);
+      });
+      setWorkflowExecutions(data);
+      setShortExec(data.slice(0, 5));
+    })();
+  }, [refresh]);
 
   return (
     // Your Workflows content here
     <View style={{ flex: 1 }}>
-      {currentlyRunning && currentlyRunning.length > 0 && (
+      {shortExec && shortExec.length > 0 && (
         <>
-          <MyText style={styles.sectionTitle}>Currently Running</MyText>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginHorizontal: 20,
+            }}
+          >
+            <MyText style={styles.title}>Recently finished</MyText>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 4,
+              }}
+              onPress={() => {
+                navigation.navigate("HomeStack", {
+                  screen: "ModalPage",
+                  params: { data: workflowExecutions, title: "Workflow runs" },
+                });
+              }}
+            >
+              <MyText
+                style={{ color: dark.text, fontSize: 16, marginRight: 4 }}
+              >
+                See more
+              </MyText>
+              <IconComponent name="chevron-right" style={styles.chevronIcon} />
+            </TouchableOpacity>
+          </View>
           <View style={{ flex: 1, flexDirection: "row" }}>
-            <WorkflowCard workflow={currentlyRunning[0]} status={"running"} />
-            {/* <WorkflowCard workflow={currentlyRunning[0]} status={"running"} /> */}
+            <FlatList
+              data={shortExec}
+              nestedScrollEnabled={true}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              scrollEnabled={shortExec.length > 1}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => (
+                <WorkflowCard
+                  workflow={item}
+                  status={item.status}
+                  mode={shortExec.length < 2 ? "large" : "small"}
+                  style={getMargin(index)}
+                />
+              )}
+            />
           </View>
         </>
       )}
       {workflows && workflows?.length > 0 && (
         <>
-          <MyText style={styles.sectionTitle}>Your Workflows</MyText>
+          <MyText style={[styles.title, { marginHorizontal: 20 }]}>
+            Your Workflows
+          </MyText>
           {workflows.map((pair, index) => (
             <View key={index} style={styles.row}>
               {pair.map((item) => (
                 <View style={styles.item} key={item.id}>
-                  <WorkflowCard workflow={item} />
+                  <WorkflowCard workflow={item} mode={"small"} />
                 </View>
               ))}
             </View>
@@ -51,7 +127,7 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
 export default WorkflowsContent;
 
 const styles = StyleSheet.create({
-  sectionTitle: {
+  title: {
     fontSize: 28,
     fontWeight: "bold",
     color: dark.text,
@@ -61,10 +137,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    marginHorizontal: 20,
   },
   item: {
     alignItems: "space-between",
     justifyContent: "center",
-    width: "48.3%",
+  },
+  chevronIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: "contain",
   },
 });
