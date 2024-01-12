@@ -50,7 +50,7 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
             setLoadingData(true);
             await deleteWorkflow();
             navigation.navigate("Home", { refresh: true });
-          }, // TODO : delete workflow
+          },
           style: "destructive",
         },
       ]

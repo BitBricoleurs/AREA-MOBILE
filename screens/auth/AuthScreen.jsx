@@ -74,14 +74,15 @@ const AuthScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <View style={styles.header}>
-          <View
+          <Pressable
             style={{ justifyContent: "flex-start", alignItems: "flex-start" }}
+            onPress={() => navigation.goBack()}
           >
             <Image
               source={require("../../assets/arrow.png")}
               style={styles.arrow}
             />
-          </View>
+          </Pressable>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <MyText style={styles.text}>
               {method === "login" ? "Sign In" : "Create your account"}

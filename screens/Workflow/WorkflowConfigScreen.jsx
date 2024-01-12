@@ -108,9 +108,12 @@ const WorkflowConfigScreen = ({ navigation }) => {
         >
           <SafeAreaView />
           <View style={styles.logoContainer}>
-            <View style={styles.backButton}>
+            <Pressable
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
               <IconComponent name="arrow-left" style={styles.backIcon} />
-            </View>
+            </Pressable>
             <View style={styles.logo}>
               <IconComponent name={trigger.service} style={styles.icon} />
             </View>
