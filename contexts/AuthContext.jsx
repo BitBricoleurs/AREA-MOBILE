@@ -12,6 +12,8 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  console.log("SERVER_URL", SERVER_URL);
+
   const login = async (email, password) => {
     console.log("login", SERVER_URL);
     setIsLoading(true);
@@ -222,6 +224,7 @@ export const AuthContextProvider = ({ children }) => {
       setError(null);
       setIsLoggedIn(false);
       setToken(null);
+      AsyncStorage.removeItem("token");
     } catch (error) {
       console.log(error.code, error.message);
       setError(error.message);
