@@ -92,7 +92,7 @@ const SettingsScreen = () => {
         </View>
         {loading ? (
           <View style={{ flex: 1, justifyContent: "center" }}>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#FFFFFF" />
           </View>
         ) : (
           <View style={styles.buttonContainer} behavior="padding">
@@ -103,6 +103,7 @@ const SettingsScreen = () => {
               data={{
                 openai_token: settings?.settings?.openai_token,
               }}
+              postSubmit={() => setRefresh(!refresh)}
             />
             <ServiceForm
               service="Jenkins"
@@ -111,6 +112,7 @@ const SettingsScreen = () => {
               data={{
                 jenkins_token: settings?.settings?.jenkins_token,
               }}
+              postSubmit={() => setRefresh(!refresh)}
             />
             <ServiceForm
               service="Jira"
@@ -120,6 +122,7 @@ const SettingsScreen = () => {
                 jira_username: settings?.settings?.jira_username,
                 jira_token: settings?.settings?.jira_token,
               }}
+              postSubmit={() => setRefresh(!refresh)}
             />
             <Pressable
               onPress={() => _handlePressButtonAsync(githubLink)}

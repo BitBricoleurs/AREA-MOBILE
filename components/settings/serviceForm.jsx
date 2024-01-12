@@ -5,25 +5,31 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 import { dark, colorMap } from "../../utils/colors";
 import { useAuthContext } from "../../contexts/AuthContext";
 
-const ServiceForm = ({ service, fields, endpoint, navigation, data }) => {
+const ServiceForm = ({ service, fields, endpoint, data, postSubmit }) => {
   const [serviceForm, setServiceForm] = useState({});
+  const [loading, setLoading] = useState(false);
   const { dispatchAPI } = useAuthContext();
 
   const handleSubmitForm = async () => {
+    setLoading(true);
     if (endpoint === "") return;
     // if there is an asterix in the data prevent the user from submitting
     for (const field in serviceForm) {
       if (serviceForm[field].includes("*")) {
+        setLoading(false);
         return;
       }
     }
     await dispatchAPI("POST", endpoint, serviceForm);
+    postSubmit();
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -70,9 +76,13 @@ const ServiceForm = ({ service, fields, endpoint, navigation, data }) => {
             styles.postButton,
             { height: fields.length * 37 + (fields.length - 1) * 6 },
           ]}
-          onPress={handleSubmitForm}
+          onPress={() => handleSubmitForm()}
         >
-          <IconComponent name="arrow-left" style={styles.postIcon} />
+          {loading ? (
+            <ActivityIndicator size="small" color={dark.white} />
+          ) : (
+            <IconComponent name="arrow-left" style={styles.postIcon} />
+          )}
         </TouchableOpacity>
       </View>
     </View>
