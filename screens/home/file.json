@@ -1,35 +1,92 @@
-{
-  "description": "Flwoopoolazuhpvouhamrou h oizrah poh zrp oguhoi ha zroih ohzroug apouefh gpou harôi goauzrh^goi poriuhgôu iôair ôih rpoihgp poerhg poierh gpouareh gpou",
-  "is_active": true,
-  "name_workflow": "Save linked files to drive iur vi iug riiue riugv ",
-  "variables": [],
-  "workflow": [
-    {
-      "conditions": [],
-      "id": 0,
-      "next_id": 20,
-      "params": [],
-      "service": "Teams",
-      "type": "trigger",
-      "type_trigger": "Mention"
-    },
-    {
-      "details_action": "",
-      "id": 1,
-      "next_id": 21,
-      "params": [],
-      "service": "Openai",
-      "type": "action",
-      "type_action": "Generate"
-    },
-    {
-      "details_action": "",
-      "id": 2,
-      "next_id": -1,
-      "params": [],
-      "service": "Outlook",
-      "type": "action",
-      "type_action": "Email"
-    }
-  ]
-}
+[
+  {
+    "name": "Database Sync Job",
+    "id": 1,
+    "description": "Synchronizes customer data across databases",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-10T17:45:52",
+    "duration": "311"
+  },
+  {
+    "name": "Email Notification Service",
+    "id": 2,
+    "description": "Sends out email notifications to users",
+    "service": "Teams",
+    "status": "failure",
+    "start_time": "2024-01-11T01:19:12",
+    "duration": "244"
+  },
+  {
+    "name": "Data Backup Routine",
+    "id": 3,
+    "description": "Regular backup of critical company data",
+    "service": "Outlook",
+    "status": "failure",
+    "start_time": "2024-01-10T15:47:21",
+    "duration": "258"
+  },
+  {
+    "name": "User Access Review",
+    "id": 4,
+    "description": "Quarterly audit of user access privileges",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-13T22:03:47",
+    "duration": "280"
+  },
+  {
+    "name": "Network Monitoring",
+    "id": 5,
+    "description": "Monitors network traffic and alerts on anomalies",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-12T11:47:48",
+    "duration": "23"
+  },
+  {
+    "name": "Server Health Check",
+    "id": 6,
+    "description": "Daily check of server health and performance metrics",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-13T18:38:15",
+    "duration": "254"
+  },
+  {
+    "name": "Security Patch Update",
+    "id": 7,
+    "description": "Automated update of security patches for software",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-13T19:38:00",
+    "duration": "408"
+  },
+  {
+    "name": "Code Deployment",
+    "id": 8,
+    "description": "Automated deployment of code to production servers",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-12T15:09:11",
+    "duration": "169"
+  },
+  {
+    "name": "Data Migration Process",
+    "id": 9,
+    "description": "Migrates data from old systems to new platforms",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-10T19:48:33",
+    "duration": "21"
+  },
+  {
+    "name": "System Upgrade Task",
+    "id": 10,
+    "description": "Upgrades system components to newer versions",
+    "service": "Jira",
+    "status": "success",
+    "start_time": "2024-01-10T09:21:33",
+    "duration": "187"
+  }
+]

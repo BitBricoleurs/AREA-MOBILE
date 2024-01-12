@@ -22,7 +22,7 @@ const TriggerChoice = ({ service }) => {
       type: "trigger",
       id: 0,
     });
-    const triggerVars = service.triggers[index]?.exposes?.map(
+    const triggerVars = service.triggers[index]?.outputs?.map(
       (variable, index) => {
         return {
           name: variable.variableName,
