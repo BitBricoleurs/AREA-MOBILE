@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --ext .js,.jsx --ignore-path .gitignore --quiet --fix"
   },
   "dependencies": {
+    "@expo-google-fonts/noto-sans-mono": "^0.2.3",
     "@expo-google-fonts/outfit": "^0.2.3",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
