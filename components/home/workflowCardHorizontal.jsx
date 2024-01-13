@@ -8,24 +8,27 @@ import MyText from "../../utils/myText";
 const WorkflowCardHorizontal = ({ item }) => {
   const navigation = useNavigation();
 
-  const getColor = (status) => {
-    if (success_rate >= 90) {
-      return statusColorMap["success"];
-    } else if (success_rate >= 70) {
-      return statusColorMap["running"];
-    } else {
-      return statusColorMap["failure"];
-    }
-  };
+  function formatDuration(durationStr) {
+    // Split the duration string into hours, minutes, seconds, and microseconds
+    const [hours, minutes, rest] = durationStr.split(":");
+    const [seconds] = rest.split(".");
+
+    // Convert hours to minutes and add to the existing minutes
+    const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+
+    // Format the output string
+    return `${totalMinutes}m${parseInt(seconds)}s`;
+  }
 
   return (
     <Pressable
       key={item.id}
       style={styles.workflowItem}
       onPress={() => {
+        navigation.goBack();
         navigation.navigate("HomeStack", {
-          screen: "WorkflowInfoScreen",
-          params: { id: item.id },
+          screen: "Logs",
+          params: { log_id: item.id },
         });
       }}
     >
@@ -46,7 +49,7 @@ const WorkflowCardHorizontal = ({ item }) => {
           <MyText style={{ color: dark.text, fontSize: 16 }}>
             {
               // start time in this format: 12:34
-              item.start_time.slice(11, 16)
+              item.startTime.slice(11, 16)
             }
           </MyText>
         </View>
@@ -54,14 +57,19 @@ const WorkflowCardHorizontal = ({ item }) => {
           <MyText style={{ color: dark.text, fontSize: 16 }}>
             {
               // item duration from seconds to minutes in this format: 1m24s
-              Math.floor(item.duration / 60) + "m" + (item.duration % 60) + "s"
+              formatDuration(item.duration)
             }
           </MyText>
         </View>
         <View
           style={[
             styles.statusIndicator,
-            { backgroundColor: statusColorMap[item.status] },
+            {
+              backgroundColor:
+                statusColorMap[
+                  item.status === "Success" ? "success" : "failure"
+                ],
+            },
           ]}
         />
       </View>
@@ -111,10 +119,12 @@ const styles = StyleSheet.create({
   startTime: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 2,
   },
   duration: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 2,
   },
   chevronIcon: {
     width: 18,
@@ -126,5 +136,6 @@ const styles = StyleSheet.create({
     height: 13,
     borderRadius: 100,
     marginRight: 4,
+    marginLeft: 8,
   },
 });

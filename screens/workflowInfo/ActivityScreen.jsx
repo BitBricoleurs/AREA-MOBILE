@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   FlatList,
   StyleSheet,
   SafeAreaView,
   Pressable,
+  ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { dark, statusColorMap } from "../../utils/colors";
 import MyText from "../../utils/myText";
@@ -15,15 +16,24 @@ import { useAuthContext } from "../../contexts/AuthContext";
 const ActivityScreen = ({ navigation, route }) => {
   const { id } = route.params || {};
   const [loadingData, setLoadingData] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [runs, setRuns] = useState([]);
   const { dispatchAPI } = useAuthContext();
 
   // const runs = Array.from({ length: 23 }, (_, index) => index).reverse();
 
+  console.log(runs);
+
   const getWorkflowRuns = async () => {
     const { data } = await dispatchAPI("GET", `/workflow-executions/${id}`);
-    console.log(data);
-    return data;
+    const { executions } = data;
+    const sorted = executions.sort((a, b) => {
+      return (
+        new Date(b.actions[0].timestamp) - new Date(a.actions[0].timestamp)
+      );
+    });
+    console.log("sorted", sorted);
+    return sorted;
   };
 
   const getData = async () => {
@@ -51,37 +61,63 @@ const ActivityScreen = ({ navigation, route }) => {
         </View>
         <View style={{ width: 24 }} />
       </View>
-      {runs?.executions?.lenght === 0 ? (
-        <FlatList
-          data={runs || []}
-          keyExtractor={(item) => item}
-          showsVerticalScrollIndicator={false}
-          refreshing={loadingData}
-          onRefresh={getData}
-          inverted={true}
-          renderItem={({ item }) => (
-            <Pressable style={styles.run}>
-              <MyText style={styles.runText}>Run #{item}</MyText>
-              <View style={styles.runDetails}>
-                <View
-                  style={[
-                    styles.statusIndicator,
-                    { backgroundColor: statusColorMap["success"] },
-                  ]}
-                />
-                <IconComponent name="chevron-right" style={styles.icon} />
-              </View>
-            </Pressable>
-          )}
-        />
-      ) : (
+      {loadingData ? (
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <MyText style={{ color: dark.text }}>
-            This workflow has no runs yet.
-          </MyText>
+          <ActivityIndicator color={dark.white} size="large" />
         </View>
+      ) : (
+        <>
+          {runs?.length > 0 ? (
+            <FlatList
+              data={runs || []}
+              showsVerticalScrollIndicator={false}
+              refreshing={loadingData}
+              onRefresh={getData}
+              inverted={true}
+              renderItem={({ item, index }) => (
+                <Pressable
+                  style={[styles.run, index === 0 && { marginBottom: 16 }]}
+                  key={item.execution_id}
+                  onPress={() => {
+                    navigation.navigate("Logs", { log_id: item.execution_id });
+                  }}
+                >
+                  <MyText style={styles.runText}>
+                    Run #{runs.length - index}
+                  </MyText>
+                  <View style={styles.runDetails}>
+                    <View
+                      style={[
+                        styles.statusIndicator,
+                        {
+                          backgroundColor:
+                            statusColorMap[
+                              item.success === true ? "success" : "failure"
+                            ],
+                        },
+                      ]}
+                    />
+                    <IconComponent name="chevron-right" style={styles.icon} />
+                  </View>
+                </Pressable>
+              )}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MyText style={{ color: dark.text }}>
+                This workflow has no runs yet.
+              </MyText>
+            </View>
+          )}
+        </>
       )}
     </View>
   );
@@ -111,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: dark.secondary,
+    backgroundColor: dark.outline,
     marginVertical: 4,
     borderRadius: 8,
   },

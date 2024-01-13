@@ -28,19 +28,19 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
   const getWorkflowExecutions = async () => {
     try {
       const { data } = await dispatchAPI("GET", "/workflow-executions");
-      return data;
+      return data.workflow;
     } catch (error) {
       console.error("Failed to get workflow executions:", error);
-      // Handle error appropriately
       return [];
     }
   };
 
   useEffect(() => {
     (async () => {
-      // const data = await getWorkflowExecutions();
-      const data = currentlyRunningWorkflow;
-      // sort by date
+      const data = await getWorkflowExecutions();
+      if (!data || data.length === 0) {
+        return;
+      }
       data.sort((a, b) => {
         return new Date(b.start_time) - new Date(a.start_time);
       });
@@ -95,7 +95,7 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
               renderItem={({ item, index }) => (
                 <WorkflowCard
                   workflow={item}
-                  status={item.status}
+                  status={item.status === "Success" ? "success" : "failure"}
                   mode={shortExec.length < 2 ? "large" : "small"}
                   style={getMargin(index)}
                 />
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
   },
   item: {
     alignItems: "space-between",

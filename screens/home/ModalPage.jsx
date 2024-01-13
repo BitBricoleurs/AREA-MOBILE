@@ -13,8 +13,6 @@ import WorkflowCardHorizontal from "../../components/home/workflowCardHorizontal
 const ListViewModalPage = ({ navigation, route }) => {
   const { data, title } = route.params;
 
-  console.log(data);
-
   const renderItem = ({ item }) => {
     switch (title) {
       case "Usage":
@@ -45,6 +43,8 @@ const ListViewModalPage = ({ navigation, route }) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, paddingBottom: 48 }}
       />
     </View>
   );

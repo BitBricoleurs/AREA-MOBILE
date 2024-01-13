@@ -104,6 +104,7 @@ const HomeScreen = ({ navigation, route }) => {
         nestedScroll={true}
         contentInsetAdjustmentBehavior="automatic"
         stickyHeaderIndices={[1]}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

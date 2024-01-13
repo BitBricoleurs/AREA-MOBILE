@@ -8,11 +8,12 @@ import MyText from "../../utils/myText";
 const { width } = Dimensions.get("window");
 
 const WorkflowCard = ({ workflow, status, mode, style }) => {
-  console.log(workflow);
   const navigation = useNavigation();
-  // console.error(workflow);
 
-  console.log("workflow", mode);
+  if (status !== "none") {
+    console.log("WORKFLOW", workflow.id, workflow.name);
+  }
+
   return (
     <Pressable
       style={[
@@ -20,12 +21,19 @@ const WorkflowCard = ({ workflow, status, mode, style }) => {
         mode === "large" ? { width: width - 40 } : { width: (width - 52) / 2 },
         style,
       ]}
-      onPress={() =>
-        navigation.navigate("HomeStack", {
-          screen: "WorkflowInfoScreen",
-          params: { id: workflow.id },
-        })
-      }
+      onPress={() => {
+        if (status === "none") {
+          navigation.navigate("HomeStack", {
+            screen: "WorkflowInfoScreen",
+            params: { id: workflow.id },
+          });
+        } else {
+          navigation.navigate("HomeStack", {
+            screen: "Logs",
+            params: { log_id: workflow.id },
+          });
+        }
+      }}
     >
       <View style={styles.headerContainer}>
         <View style={styles.iconContainer}>

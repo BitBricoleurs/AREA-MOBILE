@@ -21,6 +21,7 @@ import ActionsScreen from "./Workflow/ActionsScreen";
 import WorkflowConfigScreen from "./Workflow/WorkflowConfigScreen";
 import WorkflowInfoScreen from "./workflowInfo/WorkflowInfoScreen";
 import ActivityScreen from "./workflowInfo/ActivityScreen";
+import LogsScreen from "./workflowInfo/LogsScreen";
 import GenerateInputScreen from "./Workflow/GenerateInputScreen";
 
 const MainTab = createBottomTabNavigator();
@@ -187,6 +188,11 @@ const Home = () => {
       <HomeStack.Screen
         name="Activity"
         component={ActivityScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Logs"
+        component={LogsScreen}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>
