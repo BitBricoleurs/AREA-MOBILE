@@ -68,7 +68,6 @@ const SettingsScreen = () => {
   const _handlePressButtonAsync = async (url) => {
     if (url === "") return;
     let result = await WebBrowser.openBrowserAsync(url);
-    console.warn(result);
   };
 
   useEffect(() => {
