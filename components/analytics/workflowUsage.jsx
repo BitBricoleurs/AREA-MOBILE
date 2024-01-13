@@ -86,7 +86,7 @@ const WorkflowUsage = ({ refresh }) => {
 
   const getData = async () => {
     const { data } = await dispatchAPI("GET", "/workflow-usage");
-    setData(fakeData.sort((a, b) => b.usage_count - a.usage_count));
+    setData(data.sort((a, b) => b.usage_count - a.usage_count));
   };
 
   useEffect(() => {
@@ -114,6 +114,7 @@ const WorkflowUsage = ({ refresh }) => {
             marginBottom: 4,
           }}
           onPress={() => {
+            navigation.goBack();
             navigation.navigate("HomeStack", {
               screen: "ModalPage",
               params: { data, title: "Usage" },

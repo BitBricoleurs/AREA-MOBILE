@@ -38,6 +38,7 @@ export const SuccessCard = ({ item }) => {
       key={item.id}
       style={styles.workflowItem}
       onPress={() => {
+        navigation.goBack();
         navigation.navigate("HomeStack", {
           screen: "WorkflowInfoScreen",
           params: { id: item.id },
@@ -65,7 +66,12 @@ export const SuccessCard = ({ item }) => {
           },
         ]}
       >
-        <MyText style={{ color: dark.text, fontSize: 16 }}>
+        <MyText
+          style={[
+            { color: dark.text },
+            item.success_rate === 100 ? { fontSize: 12 } : { fontSize: 16 },
+          ]}
+        >
           {item.success_rate}
           {item.success_rate !== "N/A" && "%"}
         </MyText>
@@ -76,14 +82,13 @@ export const SuccessCard = ({ item }) => {
 
 const SuccessRate = ({ refresh }) => {
   const [data, setData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const { dispatchAPI } = useAuthContext();
   const navigation = useNavigation();
 
   const getData = async () => {
     const { data } = await dispatchAPI("GET", "/workflow-success-rate");
-    setData(fakeData.sort((a, b) => b.success_rate - a.success_rate));
+    setData(data.sort((a, b) => b.success_rate - a.success_rate));
   };
 
   useEffect(() => {
