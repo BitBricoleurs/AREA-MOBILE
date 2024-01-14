@@ -8,7 +8,7 @@ import ConditionBlock from "./actions/ifBlock";
 
 const RenderNode = ({ nodeId, previousNodeId, handleFocus, nodeOutputId }) => {
   const [node, setNode] = useState(null);
-  const { workflow } = useWorkflowContext();
+  const { workflow, mode } = useWorkflowContext();
 
   const nodeDispatch = (node, previousNodeId, nodeOutputId) => {
     if (!node) return null;
@@ -59,7 +59,7 @@ const RenderNode = ({ nodeId, previousNodeId, handleFocus, nodeOutputId }) => {
           />
         </>
       )}
-      {node?.next_id && node.next_id < 0 && (
+      {node?.next_id && node.next_id < 0 && mode !== "view" && (
         <AddActionButton nodeId={node.id} />
       )}
     </View>

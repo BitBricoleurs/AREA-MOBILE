@@ -41,6 +41,7 @@ const WorkflowScreen = ({ navigation, route }) => {
     parseWorkflow,
     triggers,
     actions,
+    workflowInfo,
   } = useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -324,7 +325,9 @@ const WorkflowScreen = ({ navigation, route }) => {
               )}
             </Pressable>
             <View style={styles.title}>
-              <MyText style={styles.titleText}>New workflow</MyText>
+              <MyText style={styles.titleText}>
+                {mode === "create" ? "New workflow" : workflowInfo.name}
+              </MyText>
             </View>
             <View
               style={{
