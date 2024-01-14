@@ -11,6 +11,7 @@ import { WorkflowContextProvider } from "../contexts/WorkflowContext";
 
 import LandingScreen from "./auth/LandingScreen";
 import AuthScreen from "./auth/AuthScreen";
+import ServerUrlScreen from "./auth/ServerUrlScreen";
 import HomeScreen from "./home/HomeScreen";
 import ListViewModalPage from "./home/ModalPage";
 import SettingsScreen from "./SettingsScreen";
@@ -41,6 +42,15 @@ const Authentification = () => {
         name="Landing"
         component={LandingScreen}
         options={{ headerShown: false }}
+      />
+      <AuthStack.Screen
+        name="ServerUrl"
+        component={ServerUrlScreen}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+        }}
       />
       <AuthStack.Screen
         name="Auth"

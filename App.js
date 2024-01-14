@@ -5,6 +5,7 @@ import {
   Outfit_600SemiBold,
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
+import { NotoSansMono_400Regular } from "@expo-google-fonts/noto-sans-mono";
 import * as SplashScreen from "expo-splash-screen";
 import { LogBox } from "react-native";
 import * as Linking from "expo-linking";
@@ -48,6 +49,7 @@ export default function App() {
     Outfit_500Medium,
     Outfit_600SemiBold,
     Outfit_700Bold,
+    NotoSansMono_400Regular,
   });
 
   const linking = {

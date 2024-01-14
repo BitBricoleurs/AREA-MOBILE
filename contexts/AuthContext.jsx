@@ -11,14 +11,13 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  console.log("SERVER_URL", SERVER_URL);
+  const [SERVER_URL_, setSERVER_URL] = useState(SERVER_URL);
 
   const login = async (email, password) => {
-    console.log("login", SERVER_URL);
+    console.log("login", SERVER_URL_);
     setIsLoading(true);
     try {
-      const response = await axios.post(`${SERVER_URL}/login`, {
+      const response = await axios.post(`${SERVER_URL_}/login`, {
         email,
         password,
       });
@@ -26,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
       setToken(response.data.token);
       setIsLoggedIn(true);
       setError(null);
-      const me = await axios.get(`${SERVER_URL}/me`, {
+      const me = await axios.get(`${SERVER_URL_}/me`, {
         headers: {
           Authorization: `Bearer ${response.data.token}`,
         },
@@ -53,9 +52,9 @@ export const AuthContextProvider = ({ children }) => {
 
   const register = async (email, password, fullName) => {
     try {
-      console.warn(`${SERVER_URL}/register`);
+      console.warn(`${SERVER_URL_}/register`);
       console.warn(email, password, fullName);
-      const response = await axios.post(`${SERVER_URL}/register`, {
+      const response = await axios.post(`${SERVER_URL_}/register`, {
         email,
         password,
         name: fullName,
@@ -85,7 +84,7 @@ export const AuthContextProvider = ({ children }) => {
         return;
       }
       // throw new Error("test");
-      const response = await axios.get(`${SERVER_URL}/me`, {
+      const response = await axios.get(`${SERVER_URL_}/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -112,7 +111,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const post = async (url, options) => {
     try {
-      const response = await axios.post(`${SERVER_URL}${url}`, options, {
+      const response = await axios.post(`${SERVER_URL_}${url}`, options, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,7 +138,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const get = async (url, options) => {
     try {
-      const response = await axios.get(`${SERVER_URL}${url}`, {
+      const response = await axios.get(`${SERVER_URL_}${url}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -166,7 +165,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const put = async (url, options) => {
     try {
-      const response = await axios.put(`${SERVER_URL}${url}`, options, {
+      const response = await axios.put(`${SERVER_URL_}${url}`, options, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -193,7 +192,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const delete_ = async (url, options) => {
     try {
-      const response = await axios.delete(`${SERVER_URL}${url}`, {
+      const response = await axios.delete(`${SERVER_URL_}${url}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -256,6 +255,10 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    setSERVER_URL(SERVER_URL);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -267,6 +270,9 @@ export const AuthContextProvider = ({ children }) => {
         dispatchAPI,
         error,
         setError,
+        SERVER_URL: SERVER_URL_,
+        setSERVER_URL,
+        resetServerUrl: () => setSERVER_URL(SERVER_URL),
       }}
     >
       {children}

@@ -16,6 +16,8 @@ export const icons = {
   "up-rectangle": require("../assets/triggers/up-rectangle.png"),
   camera: require("../assets/triggers/camera.png"),
 
+  settings: require("../assets/tabbarIcons/settings.png"),
+
   "chevron-right": require("../assets/chevron-right.png"),
   "arrow-left": require("../assets/arrow-left.png"),
   check: require("../assets/check.png"),

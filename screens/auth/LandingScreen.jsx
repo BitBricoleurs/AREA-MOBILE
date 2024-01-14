@@ -4,6 +4,7 @@ import { dark } from "../../utils/colors";
 import { useEffect, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { useAuthContext } from "../../contexts/AuthContext";
+import IconComponent from "../../utils/iconComponent";
 
 const LandingScreen = ({ navigation }) => {
   const authServices = ["Create an account", "Sign in"];
@@ -32,7 +33,29 @@ const LandingScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Pressable
+        style={{
+          position: "absolute",
+          top: 60,
+          right: 10,
+          height: 48,
+          width: 48,
+        }}
+        onPress={() => navigation.navigate("ServerUrl")}
+      >
+        <IconComponent
+          name="settings"
+          style={{ tintColor: dark.white, height: 32, width: 32 }}
+        />
+      </Pressable>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          with: "100%",
+        }}
+      >
         <View style={{ flex: 6, justifyContent: "flex-end", marginBottom: 24 }}>
           <Image
             source={require("../../assets/logo-color.png")}
@@ -75,6 +98,7 @@ export default LandingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     backgroundColor: dark.primary,
     alignItems: "center",
     justifyContent: "center",
