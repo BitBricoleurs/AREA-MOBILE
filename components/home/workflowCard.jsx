@@ -26,7 +26,7 @@ const WorkflowCard = ({ workflow, status, mode, style }) => {
         } else {
           navigation.navigate("HomeStack", {
             screen: "Logs",
-            params: { log_id: workflow.id },
+            params: { log_id: workflow.id, id: workflow.workflow_id },
           });
         }
       }}
