@@ -28,7 +28,6 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
   const getWorkflowExecutions = async () => {
     try {
       const { data } = await dispatchAPI("GET", "/workflow-executions");
-      console.warn(data);
       return data.workflow;
     } catch (error) {
       console.error("Failed to get workflow executions:", error);
@@ -42,12 +41,6 @@ const WorkflowsContent = ({ refresh, setRefreshing, workflows }) => {
       if (!data || data.length === 0) {
         return;
       }
-      // data.sort((a, b) => {
-      //   return (
-      //     new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
-      //   );
-      // });
-      console.log(JSON.stringify(data, null, 2));
       setWorkflowExecutions(data);
       setShortExec(data.slice(0, 5));
     })();

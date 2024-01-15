@@ -40,7 +40,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-ui-datepicker": "^1.0.10",
     "react-native-web": "~0.19.6",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "expo-updates": "~0.18.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

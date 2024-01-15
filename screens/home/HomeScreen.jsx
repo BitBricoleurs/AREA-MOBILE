@@ -47,7 +47,8 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const fetchData = async () => {
-    const workflowsMini = await getWorkflowIds();
+    let workflowsMini = await getWorkflowIds();
+    workflowsMini = workflowsMini.reverse();
     setWorkflows(chunkData(workflowsMini, 2));
   };
 

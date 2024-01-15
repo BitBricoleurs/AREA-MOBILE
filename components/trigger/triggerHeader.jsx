@@ -27,7 +27,8 @@ const debounce = (onSingle, onDouble) => {
 
 const TriggerHeader = ({ onFocus }) => {
   const [actionVariables, setActionVariables] = useState([]);
-  const { trigger, variables, setVariables, editable } = useWorkflowContext();
+  const { trigger, variables, setVariables, editable, workflow, mode } =
+    useWorkflowContext();
   const navigation = useNavigation();
 
   const onSingleTap = () => {
@@ -87,13 +88,15 @@ const TriggerHeader = ({ onFocus }) => {
           <VariableBox id={variable.id} nodeId={0} onFocus={onFocus} />
         </View>
       ))}
-      <View
-        style={{
-          height: 22,
-          width: 1,
-          backgroundColor: dark.outline,
-        }}
-      />
+      {(editable || workflow[0]) && (
+        <View
+          style={{
+            height: 22,
+            width: 1,
+            backgroundColor: dark.outline,
+          }}
+        />
+      )}
     </>
   );
 };

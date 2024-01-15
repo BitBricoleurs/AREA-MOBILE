@@ -346,12 +346,12 @@ const WorkflowScreen = ({ navigation, route }) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                disabled={!workflow[0]}
+                // disabled={!workflow[0]}
               >
                 <MyText
                   style={[
                     { color: dark.white, fontSize: 18 },
-                    !workflow[0] && { opacity: 0.4 },
+                    // !workflow[0] && { opacity: 0.4 },
                   ]}
                 >
                   {mode === "create" || mode === "edit" ? "Next" : "Edit"}
@@ -370,7 +370,7 @@ const WorkflowScreen = ({ navigation, route }) => {
               handleFocus={handleFocus}
             />
           ) : (
-            <AddActionButton nodeId={0} />
+            <>{editable && <AddActionButton nodeId={0} />}</>
           )}
         </View>
       </ScrollView>

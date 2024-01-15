@@ -19,7 +19,8 @@ import RenderNode from "../renderNode";
 import AddActionButton from "../addActionButton";
 
 const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
-  const { workflow, handleRecursiveDelete, setWorkflow } = useWorkflowContext();
+  const { workflow, handleRecursiveDelete, setWorkflow, editable } =
+    useWorkflowContext();
   const conditionOptions = [
     "is",
     "is not",
@@ -153,7 +154,6 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
         <View style={styles.config}>
           <MyText style={styles.text}>If</MyText>
           <TextInput
-            editable
             style={styles.input}
             placeholder="value"
             placeholderTextColor={"#969696"}
@@ -162,10 +162,12 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             onFocus={() => onFocus("key")}
             value={conditionNode?.key}
             onChangeText={(text) => updateCondition("key", text)}
+            editable={editable}
           />
           <Pressable
             style={styles.conditionTypeButton}
             onPress={() => setShowModal(!showModal)}
+            disabled={!editable}
           >
             <MyText style={styles.conditionText}>
               {conditionOptions[currentOption]}
@@ -180,6 +182,7 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             onFocus={() => onFocus("value")}
             value={conditionNode?.value}
             onChangeText={(text) => updateCondition("value", text)}
+            editable={editable}
           />
         </View>
       </Pressable>
@@ -197,7 +200,13 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             />
           </>
         ) : (
-          <AddActionButton nodeId={nodeId} type="success" />
+          <>
+            {editable ? (
+              <AddActionButton nodeId={nodeId} type="success" />
+            ) : (
+              <View style={{ height: 22 }} />
+            )}
+          </>
         )}
       </View>
       <View style={styles.thenContainer}>
@@ -217,7 +226,13 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             />
           </>
         ) : (
-          <AddActionButton nodeId={nodeId} type="failure" />
+          <>
+            {editable ? (
+              <AddActionButton nodeId={nodeId} type="failure" />
+            ) : (
+              <View style={{ height: 22 }} />
+            )}
+          </>
         )}
       </View>
       <View style={styles.thenContainer}>
