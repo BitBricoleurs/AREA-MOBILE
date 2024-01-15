@@ -20,8 +20,14 @@ import MyText from "../../utils/myText";
 const WorkflowInfoScreen = ({ navigation, route }) => {
   const [loadingData, setLoadingData] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const { parseWorkflow, trigger, workflowInfo, setMode, setEditable } =
-    useWorkflowContext();
+  const {
+    parseWorkflow,
+    trigger,
+    workflowInfo,
+    setMode,
+    setEditable,
+    getForms,
+  } = useWorkflowContext();
   const { dispatchAPI } = useAuthContext();
   const { id } = route.params || {};
 
@@ -76,6 +82,12 @@ const WorkflowInfoScreen = ({ navigation, route }) => {
   useEffect(() => {
     (async () => {
       await loadData();
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await getForms();
     })();
   }, []);
 

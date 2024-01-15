@@ -7,7 +7,7 @@ import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const Weekdays = ({ object, setObject, editable }) => {
   const [selectedDays, setSelectedDays] = useState([1]);
-  const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
+  const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
 
   const handlePress = (index) => {
     if (selectedDays.includes(index)) {

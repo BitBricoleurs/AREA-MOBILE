@@ -38,7 +38,17 @@ const ChoicePicker = ({ data, object, setObject, editable }) => {
       const findCurrentOption = data?.options?.findIndex(
         (option) => option.value === object.params[data.variableName]
       );
-      setCurrentOption(findCurrentOption);
+      if (findCurrentOption !== -1) {
+        setCurrentOption(findCurrentOption);
+      } else {
+        delete object.params[data.variableName];
+        setObject({
+          ...object,
+          params: {
+            ...object.params,
+          },
+        });
+      }
     }
   }, []);
 

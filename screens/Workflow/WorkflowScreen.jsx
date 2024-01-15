@@ -323,7 +323,11 @@ const WorkflowScreen = ({ navigation, route }) => {
             </Pressable>
             <View style={styles.title}>
               <MyText style={styles.titleText}>
-                {mode === "create" ? "New workflow" : workflowInfo.name}
+                {mode === "create"
+                  ? "New workflow"
+                  : workflowInfo.name?.length > 14
+                    ? workflowInfo.name.substring(0, 14) + "..."
+                    : workflowInfo.name}
               </MyText>
             </View>
             <View

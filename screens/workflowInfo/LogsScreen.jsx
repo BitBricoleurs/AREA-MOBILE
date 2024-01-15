@@ -137,15 +137,17 @@ const cardStyles = StyleSheet.create({
 });
 
 const LogsScreen = ({ navigation, route }) => {
-  const { log_id } = route.params || {};
+  const { log_id, id } = route.params || {};
   const [refreshing, setRefreshing] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [actions, setActions] = useState([]);
   const { dispatchAPI } = useAuthContext();
 
   const getWorkflowRunLogs = async () => {
-    const { data } = await dispatchAPI("GET", `/execution-details/${log_id}`);
-    console.log(data);
+    const { data } = await dispatchAPI(
+      "GET",
+      `/execution-details/${id}/${log_id}`
+    );
     return data?.execution_details;
   };
 

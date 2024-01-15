@@ -20,10 +20,6 @@ const ActivityScreen = ({ navigation, route }) => {
   const [runs, setRuns] = useState([]);
   const { dispatchAPI } = useAuthContext();
 
-  // const runs = Array.from({ length: 23 }, (_, index) => index).reverse();
-
-  console.log(runs);
-
   const getWorkflowRuns = async () => {
     const { data } = await dispatchAPI("GET", `/workflow-executions/${id}`);
     const { executions } = data;
@@ -32,7 +28,6 @@ const ActivityScreen = ({ navigation, route }) => {
         new Date(b.actions[0].timestamp) - new Date(a.actions[0].timestamp)
       );
     });
-    console.log("sorted", sorted);
     return sorted;
   };
 

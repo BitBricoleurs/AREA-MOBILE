@@ -54,7 +54,7 @@ const SettingsScreen = () => {
     if (data.authorization_url) {
       setMicrosoftLink(data.authorization_url);
     }
-    const data2 = await dispatchAPI("GET", "/github-login");
+    const { data: data2 } = await dispatchAPI("GET", "/github-login");
     if (data2.authorization_url) {
       setGithubLink(data2.authorization_url);
     }

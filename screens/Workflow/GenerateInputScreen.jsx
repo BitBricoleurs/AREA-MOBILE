@@ -26,7 +26,6 @@ const GenerateInputScreen = ({ navigation }) => {
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   const getWorkflow = async () => {
-    console.log("get workflow", SERVER_URL, token);
     const response = await fetch(`${SERVER_URL}/ai/generate`, {
       method: "POST",
       headers: {
@@ -37,9 +36,11 @@ const GenerateInputScreen = ({ navigation }) => {
         prompt: prompt,
       }),
     });
-    console.log(response);
+    if (!response.ok) {
+      console.warn("error in generate");
+      return null;
+    }
     const json_workflow = await response.json();
-    console.log(json_workflow);
     return json_workflow;
   };
 
@@ -47,7 +48,10 @@ const GenerateInputScreen = ({ navigation }) => {
     setLoading(true);
     Keyboard.dismiss();
     const data = await getWorkflow();
-    console.log(data);
+    if (!data) {
+      setLoading(false);
+      return;
+    }
     parseWorkflow(data);
     setLoading(false);
     navigation.navigate("Workflow");

@@ -42,7 +42,7 @@ const ListViewModalPage = ({ navigation, route }) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(_, index) => index}
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, paddingBottom: 48 }}
       />

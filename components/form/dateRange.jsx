@@ -17,8 +17,19 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus, editable }) => {
   const [firstDate, setFirstDate] = useState();
   const [secondDate, setSecondDate] = useState();
 
+  const convertDate = (date) => {
+    const dateArray = date.split(" ");
+    const datePart = dateArray[0];
+    const timePart = dateArray[1];
+    const timeArray = timePart.split(":");
+    const newDate = new Date(
+      datePart + "T" + timeArray[0] + ":" + timeArray[1] + ":00.000Z"
+    );
+    return newDate.toISOString();
+  };
+
   const onChange = (selectedDate) => {
-    const currentDate = selectedDate;
+    const currentDate = convertDate(selectedDate);
     if (editedValue === 1) {
       setFirstDate(currentDate);
       setObject({
@@ -46,11 +57,22 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus, editable }) => {
   };
 
   useEffect(() => {
+    const convertDateToString = (date) => {
+      const dateArray = date.split("T");
+      const datePart = dateArray[0];
+      const timePart = dateArray[1].split(".")[0];
+      const timeArray = timePart.split(":");
+      const newDate = datePart + " " + timeArray[0] + ":" + timeArray[1];
+      return newDate;
+    };
+
     if (object?.params && object.params[data?.variableNameFirst]) {
-      setFirstDate(object.params[data?.variableNameFirst]);
+      setFirstDate(convertDateToString(object.params[data?.variableNameFirst]));
     }
     if (object?.params && object.params[data?.variableNameSecond]) {
-      setSecondDate(object.params[data?.variableNameSecond]);
+      setSecondDate(
+        convertDateToString(object.params[data?.variableNameSecond])
+      );
     }
   }, [object]);
 
@@ -121,7 +143,7 @@ const DateRange = ({ data, object, setObject, nodeId, onFocus, editable }) => {
             minimumDate={
               (editedValue === 1 ? firstDate : secondDate) - 1000 * 60 * 60 * 24
             }
-            onValueChange={onChange}
+            onValueChange={(selectedDate) => onChange(selectedDate)}
             calendarTextStyle={{
               color: dark.white,
               fontFamily: "Outfit_500Medium",
@@ -202,3 +224,5 @@ const styles = StyleSheet.create({
     color: dark.white,
   },
 });
+
+//When a commit is made, sum it up and create a ticket and a meeting to discuss it

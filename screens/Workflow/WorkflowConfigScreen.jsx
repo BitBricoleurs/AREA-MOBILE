@@ -43,31 +43,12 @@ const WorkflowConfigScreen = ({ navigation }) => {
   const handleCreateWorkflowPress = async () => {
     setLoading(true);
     const workflow = jsonifyWorkflow();
-    console.log(workflow);
     const payload = {
       name_workflow: workflow.name_workflow,
       description: workflow.description,
       variables: workflow.variables,
       workflow: workflow.workflow,
     };
-
-    const fileInfo = await FileSystem.getInfoAsync(
-      FileSystem.documentDirectory + "yourfilename.json"
-    );
-    if (!fileInfo.exists) {
-      await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory, {
-        intermediates: true,
-      });
-    }
-
-    const fileUri = FileSystem.documentDirectory + "yourfilename.json";
-    FileSystem.writeAsStringAsync(fileUri, JSON.stringify(payload))
-      .then(() => {
-        console.log("File written successfully!");
-      })
-      .catch((error) => {
-        console.error("Error writing file:", error);
-      });
 
     if (mode === "edit") {
       const response = await dispatchAPI(

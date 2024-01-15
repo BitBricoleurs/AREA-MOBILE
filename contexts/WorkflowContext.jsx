@@ -16,22 +16,14 @@ export const WorkflowContextProvider = ({ children }) => {
   const [triggers, setTriggers] = useState([]);
   const [actions, setActions] = useState([]);
 
-  // console.log("trigger: ", JSON.stringify(trigger, null, 2));
-  // console.log("workflow: ", JSON.stringify(workflow, null, 2));
-  // console.log("variables: ", JSON.stringify(variables, null, 2));
-
-  console.log(mode);
-
   const getForms = async () => {
     const response2 = await dispatchAPI("GET", "/get-triggers");
     setTriggers(response2.data);
-    console.log("triggers: ", JSON.stringify(response2.data, null, 2));
   };
 
   const getActions = async () => {
     const response = await dispatchAPI("GET", "/get-actions");
     setActions(response.data);
-    console.log("actions: ", JSON.stringify(response.data, null, 2));
   };
 
   const getNode = (nodeId) => {
@@ -151,7 +143,7 @@ export const WorkflowContextProvider = ({ children }) => {
     );
     const trigger = {
       ...triggerObject,
-      trigger: triggerObject.type_trigger,
+      trigger: triggerObject.type_action || triggerObject.type_trigger,
     };
     delete trigger.type_trigger;
     const actionsToParse = workflow.workflow.slice(1);
