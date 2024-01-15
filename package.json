@@ -30,6 +30,7 @@
     "expo-linking": "~5.0.2",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "expo-updates": "~0.18.19",
     "expo-web-browser": "~12.3.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -40,8 +41,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-ui-datepicker": "^1.0.10",
     "react-native-web": "~0.19.6",
-    "socket.io-client": "^4.7.2",
-    "expo-updates": "~0.18.19"
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

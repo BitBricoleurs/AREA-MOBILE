@@ -136,13 +136,18 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const get = async (url, options) => {
+  const get = async (url, options, noToken) => {
     try {
-      const response = await axios.get(`${SERVER_URL_}${url}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      let response = null;
+      if (noToken) {
+        response = await axios.get(`${SERVER_URL_}${url}`);
+      } else {
+        response = await axios.get(`${SERVER_URL_}${url}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
       return response;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -245,11 +250,13 @@ export const AuthContextProvider = ({ children }) => {
       case "POST":
         return post(url, options);
       case "GET":
-        return get(url);
+        return get(url, options, false);
       case "PUT":
         return put(url, options);
       case "DELETE":
         return delete_(url);
+      case "GET_NO_TOKEN":
+        return get(url, null, true);
       default:
         throw new Error("Invalid dispatchAPI type");
     }

@@ -33,6 +33,12 @@
         "projectId": "6ee89139-6c97-4fec-a6ed-9a75b5914bc4"
       }
     },
-    "owner": "bitbricoleurs"
+    "owner": "bitbricoleurs",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/6ee89139-6c97-4fec-a6ed-9a75b5914bc4"
+    }
   }
 }

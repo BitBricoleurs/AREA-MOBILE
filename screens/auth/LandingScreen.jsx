@@ -24,7 +24,8 @@ const LandingScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await dispatchAPI("GET", "/github-login-link");
+      const { data } = await dispatchAPI("GET_NO_TOKEN", "/github-login-link");
+      console.log(data);
       if (data?.authorization_url) {
         setGithub(data.authorization_url);
       }

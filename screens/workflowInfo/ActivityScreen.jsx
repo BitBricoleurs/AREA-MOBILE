@@ -81,7 +81,10 @@ const ActivityScreen = ({ navigation, route }) => {
                   style={[styles.run, index === 0 && { marginBottom: 16 }]}
                   key={item.execution_id}
                   onPress={() => {
-                    navigation.navigate("Logs", { log_id: item.execution_id });
+                    navigation.navigate("Logs", {
+                      log_id: item.execution_id,
+                      id,
+                    });
                   }}
                 >
                   <MyText style={styles.runText}>
