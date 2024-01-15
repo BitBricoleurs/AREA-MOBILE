@@ -28,7 +28,7 @@ const WorkflowCardHorizontal = ({ item }) => {
         navigation.goBack();
         navigation.navigate("HomeStack", {
           screen: "Logs",
-          params: { log_id: item.id },
+          params: { log_id: item.id, id: item.workflow_id },
         });
       }}
     >

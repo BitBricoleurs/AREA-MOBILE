@@ -49,6 +49,7 @@ export const UsageCard = ({ item, data }) => {
       key={item.id}
       style={[styles.workflowItem, { width: getBarWidth(item.usage_count) }]}
       onPress={() => {
+        navigation.goBack();
         navigation.navigate("HomeStack", {
           screen: "WorkflowInfoScreen",
           params: { id: item.id },
@@ -114,7 +115,6 @@ const WorkflowUsage = ({ refresh }) => {
             marginBottom: 4,
           }}
           onPress={() => {
-            navigation.goBack();
             navigation.navigate("HomeStack", {
               screen: "ModalPage",
               params: { data, title: "Usage" },
