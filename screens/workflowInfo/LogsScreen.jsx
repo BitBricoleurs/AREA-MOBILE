@@ -75,7 +75,7 @@ const ActionCard = ({ action }) => {
       </Pressable>
       {unfolded && (
         <View style={cardStyles.logContainer}>
-          <Text style={cardStyles.logText}>
+          <Text style={cardStyles.logText} selectable>
             {parseJsonString(action.log_details)}
           </Text>
         </View>
@@ -203,7 +203,12 @@ const LogsScreen = ({ navigation, route }) => {
                   <ActionCard action={item} />
                   {index !== actions.length - 1 && (
                     <View
-                      style={{ height: 4, backgroundColor: dark.outline }}
+                      style={{
+                        height: 8,
+                        backgroundColor: dark.outline,
+                        width: 1,
+                        alignSelf: "center",
+                      }}
                     />
                   )}
                 </View>

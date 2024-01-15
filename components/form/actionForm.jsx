@@ -34,6 +34,7 @@ const ActionForm = ({
   const pickerRef = useRef();
 
   const handlePickerChange = (itemValue) => {
+    console.log(itemValue);
     setCurrentOption(itemValue);
     setShowModal(false);
     setCurrentAction({
@@ -45,23 +46,29 @@ const ActionForm = ({
   };
 
   useEffect(() => {
-    if (!actionForm?.options) return;
+    if (!actionForm?.options || !currentAction.params) return;
 
-    if (currentAction.params && currentAction.params.option) {
-      const findCurrentOption = actionForm?.options?.findIndex(
-        (option) => option.name.toLowerCase() === currentAction.params.option
-      );
+    const findCurrentOption = actionForm.options.findIndex(
+      (option) => option.name.toLowerCase() === currentAction.params.option
+    );
+
+    if (findCurrentOption === -1) {
+      const newOption = actionForm.options[0].name.toLowerCase();
+      if (currentAction.params.option !== newOption) {
+        setCurrentAction({
+          ...currentAction,
+          params: {
+            ...currentAction.params,
+            option: newOption,
+          },
+        });
+      }
+    } else if (findCurrentOption !== currentOption) {
       setCurrentOption(findCurrentOption);
-    } else {
-      setCurrentAction({
-        ...currentAction,
-        params: {
-          ...currentAction.params,
-          option: actionForm.options[0].name.toLowerCase(),
-        },
-      });
     }
-  }, [actionForm, currentAction]);
+  }, [actionForm?.options, currentAction.params]);
+
+  console.log(currentAction);
 
   const sectionDispatch = (section, index) => {
     switch (section.name) {

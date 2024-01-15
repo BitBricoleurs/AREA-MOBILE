@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -7,32 +7,79 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Touchable,
   Keyboard,
   TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 import { dark, statusColorMap } from "../../utils/colors";
 import IconComponent from "../../utils/iconComponent";
 import MyText from "../../utils/myText";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
+import TypingAnimation from "../../components/dotsAnim";
 
 const GenerateInputScreen = ({ navigation }) => {
-  const { dispatchAPI } = useAuthContext();
+  const { dispatchAPI, SERVER_URL, token } = useAuthContext();
   const { parseWorkflow } = useWorkflowContext();
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+
+  const getWorkflow = async () => {
+    console.log("get workflow", SERVER_URL, token);
+    const response = await fetch(`${SERVER_URL}/ai/generate`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+      }),
+    });
+    console.log(response);
+    const json_workflow = await response.json();
+    console.log(json_workflow);
+    return json_workflow;
+  };
 
   const handlePress = async () => {
     setLoading(true);
-    const { data } = await dispatchAPI("POST", "/generate", {
-      prompt,
-    });
+    Keyboard.dismiss();
+    const data = await getWorkflow();
+    console.log(data);
     parseWorkflow(data);
     setLoading(false);
     navigation.navigate("Workflow");
     return;
   };
+
+  const animatedStyle = {
+    opacity: pulseAnim,
+  };
+
+  useEffect(() => {
+    if (loading) {
+      const animation = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 0.3,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+
+      animation.start();
+
+      return () => animation.stop();
+    }
+  }, [loading, pulseAnim]);
 
   return (
     <KeyboardAvoidingView
@@ -77,14 +124,31 @@ const GenerateInputScreen = ({ navigation }) => {
               onPress={() => handlePress()}
               disabled={prompt.length === 0}
             >
-              <MyText
-                style={[
-                  styles.floatingButtonText,
-                  prompt.length === 0 && { opacity: 0.5 },
-                ]}
-              >
-                Generate
-              </MyText>
+              {loading ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Animated.Text
+                    style={[styles.floatingButtonText, animatedStyle]}
+                  >
+                    Doing magic stuff...
+                  </Animated.Text>
+                  <TypingAnimation />
+                </View>
+              ) : (
+                <MyText
+                  style={[
+                    styles.floatingButtonText,
+                    prompt.length === 0 && { opacity: 0.5 },
+                  ]}
+                >
+                  Generate
+                </MyText>
+              )}
             </Pressable>
           </View>
         </View>

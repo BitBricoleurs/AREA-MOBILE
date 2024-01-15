@@ -9,7 +9,10 @@ import MyText from "../../utils/myText";
 import { useWorkflowContext } from "../../contexts/WorkflowContext";
 
 const TimeEntry = ({ data, object, setObject, editable }) => {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(() => {
+    const hour = new Date();
+    return hour;
+  });
 
   const timeTo24h = (dateTime) => {
     let hours = dateTime.getHours();
@@ -29,9 +32,6 @@ const TimeEntry = ({ data, object, setObject, editable }) => {
 
   const handleTimeChange = (e, selectedTime) => {
     setTime(selectedTime);
-  };
-
-  useEffect(() => {
     const newTime = timeTo24h(time);
     const newParams = {
       ...object.params,
@@ -42,7 +42,20 @@ const TimeEntry = ({ data, object, setObject, editable }) => {
       params: newParams,
     };
     setObject(newTrigger);
-  }, [time]);
+  };
+
+  useEffect(() => {
+    const hour = new Date();
+    setTime(hour);
+    const time_ = timeTo24h(hour);
+    setObject({
+      ...object,
+      params: {
+        ...object.params,
+        [data.variableName]: time_,
+      },
+    });
+  }, []);
 
   return (
     <View style={styles.timeContainer}>

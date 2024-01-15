@@ -76,6 +76,13 @@ const ChoiceEntry = ({ data, object, setObject, editable }) => {
     );
     if (index !== -1) {
       setSelectedChoice(index);
+      setObject({
+        ...object,
+        params: {
+          ...object.params,
+          date: new Date().toISOString().split("T")[0],
+        },
+      });
     }
     handleChoicePress(0);
   }, []);

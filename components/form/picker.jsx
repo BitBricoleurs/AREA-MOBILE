@@ -14,10 +14,12 @@ import MyText from "../../utils/myText";
 
 const ChoicePicker = ({ data, object, setObject, editable }) => {
   const [showModal, setShowModal] = useState(false);
-  const [currentOption, setCurrentOption] = useState(0);
+  const [currentOption, setCurrentOption] = useState(-1);
 
   const handlePickerChange = (itemValue) => {
-    index = data.options.findIndex((option) => option.value === itemValue);
+    const index = data.options.findIndex(
+      (option) => option.value === itemValue
+    );
     setCurrentOption(index);
     setShowModal(false);
     setObject({
@@ -37,14 +39,6 @@ const ChoicePicker = ({ data, object, setObject, editable }) => {
         (option) => option.value === object.params[data.variableName]
       );
       setCurrentOption(findCurrentOption);
-    } else {
-      setObject({
-        ...object,
-        params: {
-          ...object.params,
-          [data.variableName]: data.options[0].value,
-        },
-      });
     }
   }, []);
 
@@ -52,7 +46,7 @@ const ChoicePicker = ({ data, object, setObject, editable }) => {
     <>
       <Pressable style={styles.container} onPress={() => setShowModal(true)}>
         <MyText style={styles.label}>
-          {data.options[currentOption].name || ""}
+          {data?.options[currentOption]?.name || "Pick an option"}
         </MyText>
       </Pressable>
       <Modal visible={showModal} transparent={true} animationType="slide">
@@ -70,6 +64,7 @@ const ChoicePicker = ({ data, object, setObject, editable }) => {
               style={styles.picker}
               itemStyle={styles.pickerStyleType}
             >
+              <Picker.Item label={"Select an option"} value={-1} key={-1} />
               {data.options.map((option, index) => (
                 <Picker.Item
                   label={option.name}

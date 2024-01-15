@@ -10,10 +10,6 @@ const { width } = Dimensions.get("window");
 const WorkflowCard = ({ workflow, status, mode, style }) => {
   const navigation = useNavigation();
 
-  if (status !== "none") {
-    console.log("WORKFLOW", workflow.id, workflow.name);
-  }
-
   return (
     <Pressable
       style={[

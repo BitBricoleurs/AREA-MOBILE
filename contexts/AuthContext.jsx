@@ -267,6 +267,7 @@ export const AuthContextProvider = ({ children }) => {
         attemptLogin,
         isLoggedIn,
         isLoading,
+        token,
         dispatchAPI,
         error,
         setError,

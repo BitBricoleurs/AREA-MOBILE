@@ -24,7 +24,7 @@ import AddActionButton from "../../components/addActionButton";
 
 const WorkflowScreen = ({ navigation, route }) => {
   const { id } = route.params || {};
-  const options = ["if", "delay", "variable"];
+  const options = ["condition", "variable"];
   const {
     trigger,
     setTrigger,
@@ -182,7 +182,7 @@ const WorkflowScreen = ({ navigation, route }) => {
 
   const handleOptionPress = (option) => {
     switch (option) {
-      case "if":
+      case "condition":
         const ifBlock = {
           id: findUnusedIntID(workflow),
           type: "condition",
@@ -206,9 +206,6 @@ const WorkflowScreen = ({ navigation, route }) => {
           });
         }
         setWorkflow([...newWorkflow, ifBlock]);
-        break;
-      case "delay":
-        console.log("delay");
         break;
       case "variable":
         const newVariable = {

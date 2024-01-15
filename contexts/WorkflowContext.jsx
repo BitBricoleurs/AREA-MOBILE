@@ -16,9 +16,9 @@ export const WorkflowContextProvider = ({ children }) => {
   const [triggers, setTriggers] = useState([]);
   const [actions, setActions] = useState([]);
 
-  console.log("trigger: ", trigger);
-  console.log("workflow: ", workflow);
-  console.log("variables: ", variables);
+  console.log("trigger: ", JSON.stringify(trigger, null, 2));
+  console.log("workflow: ", JSON.stringify(workflow, null, 2));
+  console.log("variables: ", JSON.stringify(variables, null, 2));
 
   const getForms = async () => {
     const response2 = await dispatchAPI("GET", "/get-triggers");
@@ -142,9 +142,12 @@ export const WorkflowContextProvider = ({ children }) => {
   };
 
   const parseWorkflow = (workflow) => {
+    const triggerObject = workflow.workflow.find(
+      (action) => action.type === "trigger"
+    );
     const trigger = {
-      ...workflow.workflow[0],
-      trigger: workflow.workflow[0].type_trigger,
+      ...triggerObject,
+      trigger: triggerObject.type_trigger,
     };
     delete trigger.type_trigger;
     const actionsToParse = workflow.workflow.slice(1);
