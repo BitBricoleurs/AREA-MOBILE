@@ -325,8 +325,8 @@ const WorkflowScreen = ({ navigation, route }) => {
               <MyText style={styles.titleText}>
                 {mode === "create"
                   ? "New workflow"
-                  : workflowInfo.name?.length > 14
-                    ? workflowInfo.name.substring(0, 14) + "..."
+                  : workflowInfo.name?.length > 18
+                    ? workflowInfo.name.substring(0, 18) + "..."
                     : workflowInfo.name}
               </MyText>
             </View>
