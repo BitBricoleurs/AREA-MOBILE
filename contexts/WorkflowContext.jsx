@@ -168,6 +168,20 @@ export const WorkflowContextProvider = ({ children }) => {
     setVariables(variables);
   };
 
+  const replacePlaceholders = (str) => {
+    if (str === undefined) return str;
+    if (str === "") return str;
+
+    const idToNameMap = variables.reduce((map, obj) => {
+      map[obj.id] = obj.name;
+      return map;
+    }, {});
+
+    const regex = /\$\{(\d+)\}/g;
+
+    return str.replace(regex, (match, id) => `\${${idToNameMap[id] || id}}`);
+  };
+
   useEffect(() => {
     (async () => {
       await getActions();
@@ -201,6 +215,7 @@ export const WorkflowContextProvider = ({ children }) => {
         parseWorkflow,
         jsonifyWorkflow,
         getForms,
+        replacePlaceholders,
       }}
     >
       {children}

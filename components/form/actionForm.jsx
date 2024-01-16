@@ -28,6 +28,7 @@ const ActionForm = ({
   previousNodeId,
   onFocus,
   editable,
+  replacePlaceholders,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentOption, setCurrentOption] = useState(0);
@@ -103,6 +104,7 @@ const ActionForm = ({
             nodeId={nodeId}
             onFocus={onFocus}
             editable={editable}
+            replacePlaceholders={replacePlaceholders}
           />
         );
       case "textArrayEntry":
@@ -129,6 +131,7 @@ const ActionForm = ({
             nodeId={nodeId}
             onFocus={onFocus}
             editable={editable}
+            replacePlaceholders={replacePlaceholders}
           />
         );
       case "dateRange":

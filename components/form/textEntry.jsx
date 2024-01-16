@@ -14,11 +14,14 @@ const TextEntry = ({
   previousNodeId,
   onFocus,
   editable,
+  replacePlaceholders,
 }) => {
   const { variables } = useWorkflowContext();
+  const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
 
   const handleChange = (text) => {
+    if (!focused) return;
     const element = data.type === "condition" ? "conditions" : "params";
     let elementData = element === "params" ? {} : [];
     if (text === "") {
@@ -67,6 +70,7 @@ const TextEntry = ({
   };
 
   const handleFocus = () => {
+    setFocused(true);
     inputRef.current.measure((x, y, width, height, pageX, pageY) => {
       onFocus(previousNodeId, nodeId, pageY, [data.variableName, -1]);
     });
@@ -77,12 +81,17 @@ const TextEntry = ({
       <TextInput
         style={styles.input}
         onChangeText={handleChange}
-        value={object?.params?.[data.variableName]}
+        value={
+          focused
+            ? object?.params?.[data.variableName]
+            : replacePlaceholders(object.params[data.variableName])
+        }
         placeholder={data.placeholder}
         placeholderTextColor={"#969696"}
         multiline={true}
         numberOfLines={4}
         onFocus={handleFocus}
+        onBlur={() => setFocused(false)}
         ref={inputRef}
         editable={editable}
       />

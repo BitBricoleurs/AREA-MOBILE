@@ -16,6 +16,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
     setLastUnfolded,
     editable,
     actions,
+    replacePlaceholders,
   } = useWorkflowContext();
   const [unfold, setUnfold] = useState(false);
   const [actionForm, setActionForm] = useState({});
@@ -139,6 +140,7 @@ const ActionBox = ({ nodeId, previousNodeId, onFocus, nodeOutputId }) => {
             nodeId={nodeId}
             onFocus={onFocus}
             editable={editable}
+            replacePlaceholders={replacePlaceholders}
           />
         </View>
       )}

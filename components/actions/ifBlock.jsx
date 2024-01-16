@@ -19,8 +19,13 @@ import RenderNode from "../renderNode";
 import AddActionButton from "../addActionButton";
 
 const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
-  const { workflow, handleRecursiveDelete, setWorkflow, editable } =
-    useWorkflowContext();
+  const {
+    workflow,
+    handleRecursiveDelete,
+    setWorkflow,
+    editable,
+    replacePlaceholders,
+  } = useWorkflowContext();
   const conditionOptions = [
     "is",
     "is not",
@@ -32,6 +37,8 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
   const [conditionNode, setConditionNode] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentOption, setCurrentOption] = useState(3);
+  const [keyFocused, setKeyFocused] = useState(false);
+  const [valueFocused, setValueFocused] = useState(false);
   const pickerRef = useRef();
   const keyRef = useRef();
   const valueRef = useRef();
@@ -143,6 +150,13 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
 
   const onFocus = (type) => {
     let ref = type === "key" ? keyRef : valueRef;
+    if (type === "key") {
+      setKeyFocused(true);
+      setValueFocused(false);
+    } else {
+      setKeyFocused(false);
+      setValueFocused(true);
+    }
     ref.current.measure((x, y, width, height, pageX, pageY) => {
       handleFocus(previousNodeId, nodeId, pageY, [type, nodeId]);
     });
@@ -160,9 +174,14 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             autoCapitalize="none"
             ref={keyRef}
             onFocus={() => onFocus("key")}
-            value={conditionNode?.key}
+            value={
+              keyFocused
+                ? conditionNode?.key
+                : replacePlaceholders(conditionNode?.key)
+            }
             onChangeText={(text) => updateCondition("key", text)}
             editable={editable}
+            onBlur={() => setKeyFocused(false)}
           />
           <Pressable
             style={styles.conditionTypeButton}
@@ -180,9 +199,14 @@ const ConditionBlock = ({ nodeId, previousNodeId, handleFocus }) => {
             autoCapitalize="none"
             ref={valueRef}
             onFocus={() => onFocus("value")}
-            value={conditionNode?.value}
+            value={
+              valueFocused
+                ? conditionNode?.value
+                : replacePlaceholders(conditionNode?.value)
+            }
             onChangeText={(text) => updateCondition("value", text)}
             editable={editable}
+            onBlur={() => setValueFocused(false)}
           />
         </View>
       </Pressable>

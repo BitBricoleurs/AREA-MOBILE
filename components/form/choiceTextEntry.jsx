@@ -20,8 +20,10 @@ const ChoiceTextEntry = ({
   previousNodeId,
   onFocus,
   editable,
+  replacePlaceholders,
 }) => {
   const [selected, setSelected] = useState(false);
+  const [focused, setFocused] = useState(false);
   const inputHeight = useRef(new Animated.Value(0)).current;
   const inputRef = useRef(null);
   const { variables } = useWorkflowContext();
@@ -52,6 +54,7 @@ const ChoiceTextEntry = ({
   };
 
   const handleChange = (text) => {
+    if (!focused) return;
     let element = data.type === "condition" ? "conditions" : "params";
     let elementData = element === "params" ? {} : [];
     if (text === "") {
@@ -105,6 +108,7 @@ const ChoiceTextEntry = ({
   };
 
   const handleFocus = () => {
+    setFocused(true);
     inputRef.current.measure((x, y, width, height, pageX, pageY) => {
       onFocus(previousNodeId, nodeId, pageY, [data.variableName, -1]);
     });
@@ -147,6 +151,12 @@ const ChoiceTextEntry = ({
             onFocus={handleFocus}
             ref={inputRef}
             editable={editable}
+            onBlur={() => setFocused(false)}
+            value={
+              focused
+                ? object?.params?.[data.variableName]
+                : replacePlaceholders(object.params[data.variableName])
+            }
           />
         )}
       </Animated.View>
